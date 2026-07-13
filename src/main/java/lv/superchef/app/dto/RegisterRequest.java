@@ -32,10 +32,11 @@ public class RegisterRequest {
     @NotBlank
     private String confirmPassword;
 
-    public RegisterRequest(String username, String password, String email){
+    public RegisterRequest(String username, String password, String email, String confirmPassword){
         setUsername(username);
         setPassword(password);
         setEmail(email);
+        setConfirmPassword(confirmPassword);
     }
 
 }
