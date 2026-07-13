@@ -104,10 +104,20 @@
                                    th:field="*{ingredients[__${i.index}__].name}"
                                    placeholder="Ingredient name"
                                    class="ingredient-name"/>
-                            <input type="text"
-                                   th:field="*{ingredients[__${i.index}__].quantity}"
-                                   placeholder="Quantity (e.g. 2 cups)"
-                                   class="ingredient-quantity"/>
+                            <input type="number"
+                                   th:field="*{ingredients[__${i.index}__].amount}"
+                                   placeholder="Quantity (e.g. 2)"
+                                   class="ingredient-quantity"
+                                   step="0.01"/>
+                            <div class="select-wrapper">
+                                <select th:field="*{ingredients[__${i.index}__].unit}"
+                                        class="ingredient-unit">
+                                    <option value="">Select unit…</option>
+                                    <option th:each="unit : ${ingredientUnits}"
+                                            th:value="${unit.name()}"
+                                            th:text="${unit}">G</option>
+                                </select>
+                            </div>
                         </div>
                         <button type="button" class="btn-remove" aria-label="Remove ingredient">✕</button>
                     </div>
