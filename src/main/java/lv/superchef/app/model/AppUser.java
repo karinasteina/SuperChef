@@ -2,6 +2,7 @@ package lv.superchef.app.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -40,11 +41,12 @@ public class AppUser {
     @Size(min = 12, message = "Password must be at least 12 characters")
     private String password;
 
-    @NotBlank
+    @NotNull
     @Column(name="Role")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public AppUser(String username, String password, String email, String role){
+    public AppUser(String username, String password, String email, Role role){
         setUsername(username);
         setPassword(password);
         setEmail(email);
