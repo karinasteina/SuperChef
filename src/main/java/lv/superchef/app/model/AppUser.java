@@ -3,10 +3,8 @@ package lv.superchef.app.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Getter
 @Setter
@@ -39,6 +37,7 @@ public class AppUser {
 
     @NotBlank
     @Column(name = "Password")
+    @Size(min = 12, message = "Password must be at least 12 characters")
     private String password;
 
     @NotBlank
