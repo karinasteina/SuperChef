@@ -40,6 +40,7 @@
             Incorrect email or password.
         </div>
 
+
         <!-- Successful logout -->
         <div class="form-message success-message" th:if="${param.logout}">
             You have been logged out successfully.
@@ -52,29 +53,41 @@
                 th:action="@{/login}"
         >
             <div class="form-field">
-                <label for="username">Email</label>
+                <label for="username">username</label>
 
                 <input
                         autocomplete="username"
                         id="username"
                         name="username"
-                        placeholder="Enter your email"
+                        placeholder="Enter your username"
                         required
-                        type="email"
+                        type="text"
                 >
             </div>
 
             <div class="form-field">
                 <label for="password">Password</label>
 
-                <input
-                        autocomplete="current-password"
-                        id="password"
-                        name="password"
-                        placeholder="Enter your password"
-                        required
-                        type="password"
-                >
+                <div class="password-input-wrapper">
+                    <input
+                            autocomplete="current-password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                            type="password"
+                    >
+
+                    <button
+                            aria-controls="password"
+                            aria-label="Show password"
+                            class="password-toggle"
+                            id="password-toggle"
+                            type="button"
+                    >
+                        Show
+                    </button>
+                </div>
             </div>
 
             <div class="login-options">
@@ -117,6 +130,21 @@
 
     </section>
 </main>
+<script>
+    const passwordInput = document.getElementById("password");
+    const passwordToggle = document.getElementById("password-toggle");
 
+    passwordToggle.addEventListener("click", () => {
+        const passwordIsHidden = passwordInput.type === "password";
+
+        passwordInput.type = passwordIsHidden ? "text" : "password";
+        passwordToggle.textContent = passwordIsHidden ? "Hide" : "Show";
+        passwordToggle.setAttribute(
+            "aria-label",
+            passwordIsHidden ? "Hide password" : "Show password"
+        );
+    });
+</script>
 </body>
+
 </html>

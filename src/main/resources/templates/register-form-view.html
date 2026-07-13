@@ -51,13 +51,12 @@
                         id="username"
                         maxlength="15"
                         minlength="5"
-                        pattern="[A-Za-z]{5,15}"
+                        pattern="[A-Za-z0-9_]{5,15}"
                         placeholder="Enter your username"
                         required
                         th:field="*{username}"
-                        title="Username must contain 5 to 15 letters"
-                        type="text"
-                >
+                        title="Username must contain 5 to 15 letters, numbers, or underscores"
+                        type="text">
 
                 <p
                         class="field-error"
@@ -88,16 +87,27 @@
             <div class="form-field">
                 <label for="password">Password</label>
 
-                <input
-                        autocomplete="new-password"
-                        id="password"
-                        minlength="12"
-                        placeholder="Create a password"
-                        required
-                        th:field="*{password}"
-                        title="Password must contain at least 12 characters"
-                        type="password"
-                >
+                <div class="password-input-wrapper">
+                    <input
+                            autocomplete="new-password"
+                            id="password"
+                            minlength="12"
+                            placeholder="Create a password"
+                            required
+                            th:field="*{password}"
+                            title="Password must contain at least 12 characters"
+                            type="password"
+                    >
+
+                    <button
+                            aria-label="Show password"
+                            class="password-toggle"
+                            data-target="password"
+                            type="button"
+                    >
+                        Show
+                    </button>
+                </div>
 
                 <p
                         class="field-error"
@@ -109,15 +119,26 @@
             <div class="form-field">
                 <label for="confirmPassword">Confirm Password</label>
 
-                <input
-                        autocomplete="new-password"
-                        id="confirmPassword"
-                        minlength="12"
-                        placeholder="Repeat your password"
-                        required
-                        th:field="*{confirmPassword}"
-                        type="password"
-                >
+                <div class="password-input-wrapper">
+                    <input
+                            autocomplete="new-password"
+                            id="confirmPassword"
+                            minlength="12"
+                            placeholder="Repeat your password"
+                            required
+                            th:field="*{confirmPassword}"
+                            type="password"
+                    >
+
+                    <button
+                            aria-label="Show confirmed password"
+                            class="password-toggle"
+                            data-target="confirmPassword"
+                            type="button"
+                    >
+                        Show
+                    </button>
+                </div>
 
                 <p
                         class="field-error"
@@ -137,7 +158,7 @@
             <span>or continue with</span>
         </div>
 
-      
+
         <div class="social-buttons">
             <a class="social-button" href="#">
                 <span class="google-icon">G</span>
@@ -159,19 +180,37 @@
 </main>
 
 <script>
-    const password = document.getElementById("password");
-    const confirmPassword = document.getElementById("confirmPassword");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
 
     function validatePasswordMatch() {
-        if (password.value !== confirmPassword.value) {
-            confirmPassword.setCustomValidity("Passwords do not match.");
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            confirmPasswordInput.setCustomValidity(
+                "Passwords do not match."
+            );
         } else {
-            confirmPassword.setCustomValidity("");
+            confirmPasswordInput.setCustomValidity("");
         }
     }
 
-    password.addEventListener("input", validatePasswordMatch);
-    confirmPassword.addEventListener("input", validatePasswordMatch);
+    passwordInput.addEventListener("input", validatePasswordMatch);
+    confirmPasswordInput.addEventListener("input", validatePasswordMatch);
+
+    document.querySelectorAll(".password-toggle").forEach(button => {
+        button.addEventListener("click", () => {
+            const targetId = button.dataset.target;
+            const targetInput = document.getElementById(targetId);
+            const isHidden = targetInput.type === "password";
+
+            targetInput.type = isHidden ? "text" : "password";
+            button.textContent = isHidden ? "Hide" : "Show";
+
+            button.setAttribute(
+                "aria-label",
+                isHidden ? "Hide password" : "Show password"
+            );
+        });
+    });
 </script>
 
 
