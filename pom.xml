@@ -57,9 +57,8 @@
 
         <!-- H2 Database -->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-h2console</artifactId>
         </dependency>
 
         <!-- PostgreSQL (Enable if needed) -->
