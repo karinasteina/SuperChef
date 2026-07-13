@@ -19,7 +19,8 @@
 
         .recipe-list {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: minmax(0, 760px);
+            justify-content: center;
             gap: 24px;
             list-style: none;
         }
@@ -122,26 +123,22 @@
 <!-- ====== MAIN PAGE ====== -->
 <main class="recipe-list-page">
     <header class="page-header">
-        <h1 class="page-title">Discover Recipes</h1>
+        <h1 class="page-title" th:text="${recipe.title}"></h1>
     </header>
 
     <ol class="recipe-list">
-        <li th:each="recipe, recipeStatus : ${recipes}">
-
+        <li>
             <article class="recipe-card">
-                <a th:href="@{/recipes/{id}(id=${recipeStatus.index})}">
-                    <img alt="Recipe"
-                         class="recipe-image"
-                         height="397"
-                         src="/images/recipes/recipe-00.webp"
-                         th:alt="|Photo of ${recipe.title}|"
-                         th:loading="${recipeStatus.first} ? 'eager' : 'lazy'"
-                         th:src="|/images/recipes/recipe-${#numbers.formatInteger(recipeStatus.index, 2)}.webp|"
-                         width="397"/>
-                </a>
-                <a th:href="@{/recipes/{id}(id=${recipeStatus.index})}">
-                    <h2 th:text="${recipe.title}">Recipe title</h2>
-                </a>
+                <img alt="Recipe"
+                     class="recipe-image"
+                     height="397"
+                     src="/images/recipes/recipe-00.webp"
+                     th:alt="|Photo of ${recipe.title}|"
+                     th:loading="${id} ? 'eager' : 'lazy'"
+                     th:src="|/images/recipes/recipe-${#numbers.formatInteger(id, 2)}.webp|"
+                     width="397"/>
+
+                <h2 th:text="${recipe.title}">Recipe title</h2>
                 <p class="recipe-description" th:text="${recipe.description}">Recipe description</p>
 
                 <div class="recipe-meta">
@@ -171,7 +168,6 @@
                     </section>
                 </div>
             </article>
-
         </li>
     </ol>
 </main>

@@ -231,6 +231,13 @@ public class RecipeController {
         return "recipe/list";
     }
 
+    @GetMapping("/{id}")
+    public String recipeDetails(@PathVariable int id, Model model) {
+        model.addAttribute("id", id);
+        model.addAttribute("recipe", recipeData.get(id));
+        return "recipe/details";
+    }
+
     @GetMapping("/create")
     public String showCreateRecipePage(Model model) {
         model.addAttribute("createRecipeDto", new CreateRecipeDto());
