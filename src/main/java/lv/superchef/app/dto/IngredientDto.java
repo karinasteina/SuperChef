@@ -1,4 +1,4 @@
-package com.superchef.dto;
+package lv.superchef.app.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
