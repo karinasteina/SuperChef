@@ -1,4 +1,4 @@
-package com.superchef.controller;
+package lv.superchef.app.controller;
 
 import com.superchef.dto.CreateRecipeDto;
 import org.springframework.stereotype.Controller;
