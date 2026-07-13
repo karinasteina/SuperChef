@@ -2,6 +2,7 @@ package lv.superchef.app.service.impl;
 
 import lv.superchef.app.dto.RegisterRequest;
 import lv.superchef.app.model.AppUser;
+import lv.superchef.app.model.Role;
 import lv.superchef.app.repository.IAppUserRepo;
 import lv.superchef.app.service.IAppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,9 @@ public class AppUserServiceImpl implements IAppUserService {
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         newUser.setEmail(registerRequest.getEmail());
-        newUser.setRole("USER");
+        newUser.setRole(Role.ROLE_USER);
 
         return userRepo.save(newUser);
     }
+
 }
