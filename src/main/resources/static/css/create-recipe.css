@@ -105,7 +105,9 @@ a:hover {
     align-items: center;
     gap: 24px;
 }
-
+.width-class{
+width:15%;
+}
 .navbar-links a {
     font-size: .9rem;
     font-weight: 500;

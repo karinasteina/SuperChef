@@ -99,15 +99,38 @@
 
                 <div id="ingredientList">
                     <div class="ingredient-row" th:each="ingredient, i : *{ingredients}">
-                        <div class="ingredient-inputs">
+                        <div class="ingredient-inputs" >
                             <input type="text"
                                    th:field="*{ingredients[__${i.index}__].name}"
                                    placeholder="Ingredient name"
                                    class="ingredient-name"/>
-                            <input type="text"
-                                   th:field="*{ingredients[__${i.index}__].quantity}"
-                                   placeholder="Quantity (e.g. 2 cups)"
-                                   class="ingredient-quantity"/>
+
+                            <input type="number"
+                                   th:field="*{ingredients[__${i.index}__].amount}"
+                                   placeholder="Amount"
+                                   min="0"
+                                   step="0.1"
+                                   class="ingredient-amount" style="width:23%"/>
+
+                            <select th:field="*{ingredients[__${i.index}__].unit}"
+                                    class="ingredient-unit width-class">
+                                <option value="G">g</option>
+                                <option value="KG">kg</option>
+                                <option value="MG">mg</option>
+                                <option value="ML">ml</option>
+                                <option value="L">l</option>
+                                <option value="TSP">tsp</option>
+                                <option value="TBSP">tbsp</option>
+                                <option value="CUP">cup</option>
+                                <option value="OZ">oz</option>
+                                <option value="LB">lb</option>
+                                <option value="PIECE">piece</option>
+                                <option value="SLICE">slice</option>
+                                <option value="CLOVE">clove</option>
+                                <option value="BUNCH">bunch</option>
+                                <option value="PINCH">pinch</option>
+                                <option value="TO_TASTE">To taste</option>
+                            </select>
                         </div>
                         <button type="button" class="btn-remove" aria-label="Remove ingredient">✕</button>
                     </div>
