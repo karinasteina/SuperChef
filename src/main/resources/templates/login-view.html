@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Log In | SuperChef</title>
+
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+
+<body>
+
+<main class="auth-page">
+    <section class="auth-card">
+
+        <!-- Logo -->
+        <a class="brand" th:href="@{/home}">
+            <img
+                    alt=""
+                    class="brand-icon"
+                    th:src="@{/images/chef-logo.png}"
+            >
+            <span>SuperChef</span>
+        </a>
+
+        <!-- Login / Sign-up tabs -->
+        <nav aria-label="Authentication navigation" class="auth-tabs">
+            <a class="auth-tab active" th:href="@{/login}">
+                Log In
+            </a>
+
+            <a class="auth-tab" th:href="@{/register}">
+                Sign Up
+            </a>
+        </nav>
+
+        <!-- Incorrect credentials -->
+        <div class="form-message error-message" th:if="${param.error}">
+            Incorrect email or password.
+        </div>
+
+
+        <!-- Successful logout -->
+        <div class="form-message success-message" th:if="${param.logout}">
+            You have been logged out successfully.
+        </div>
+
+        <!-- Login form -->
+        <form
+                class="auth-form"
+                method="post"
+                th:action="@{/login}"
+        >
+            <div class="form-field">
+                <label for="username">username</label>
+
+                <input
+                        autocomplete="username"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        required
+                        type="text"
+                >
+            </div>
+
+            <div class="form-field">
+                <label for="password">Password</label>
+
+                <div class="password-input-wrapper">
+                    <input
+                            autocomplete="current-password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                            type="password"
+                    >
+
+                    <button
+                            aria-controls="password"
+                            aria-label="Show password"
+                            class="password-toggle"
+                            id="password-toggle"
+                            type="button"
+                    >
+                        Show
+                    </button>
+                </div>
+            </div>
+
+            <div class="login-options">
+                <label class="remember-me">
+                    <input name="remember-me" type="checkbox">
+                    <span>Remember me</span>
+                </label>
+
+                <a class="forgot-password" href="#">
+                    Forgot password?
+                </a>
+            </div>
+
+            <button class="primary-button login-button" type="submit">
+                Log In
+            </button>
+        </form>
+
+        <div class="social-divider">
+            <span>or continue with</span>
+        </div>
+
+        <!-- Replace the links once OAuth is implemented -->
+        <div class="social-buttons">
+            <a class="social-button" href="#">
+                <span class="google-icon">G</span>
+                <span>Google</span>
+            </a>
+
+            <a class="social-button" href="#">
+                <span class="facebook-icon">f</span>
+                <span>Facebook</span>
+            </a>
+        </div>
+
+        <p class="auth-footer">
+            <span>Don't have an account?</span>
+            <a th:href="@{/register}">Sign up</a>
+        </p>
+
+    </section>
+</main>
+<script>
+    const passwordInput = document.getElementById("password");
+    const passwordToggle = document.getElementById("password-toggle");
+
+    passwordToggle.addEventListener("click", () => {
+        const passwordIsHidden = passwordInput.type === "password";
+
+        passwordInput.type = passwordIsHidden ? "text" : "password";
+        passwordToggle.textContent = passwordIsHidden ? "Hide" : "Show";
+        passwordToggle.setAttribute(
+            "aria-label",
+            passwordIsHidden ? "Hide password" : "Show password"
+        );
+    });
+</script>
+</body>
+
+</html>
