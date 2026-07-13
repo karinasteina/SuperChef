@@ -1,6 +1,6 @@
 package lv.superchef.app.controller;
 
-import com.superchef.dto.CreateRecipeDto;
+import lv.superchef.app.dto.CreateRecipeDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
