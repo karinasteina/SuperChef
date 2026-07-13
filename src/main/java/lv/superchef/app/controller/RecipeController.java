@@ -2,6 +2,7 @@ package lv.superchef.app.controller;
 
 import lv.superchef.app.dto.CreateRecipeDto;
 import lv.superchef.app.dto.IngredientDto;
+import lv.superchef.app.dto.IngredientUnit;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +24,10 @@ public class RecipeController {
                     .difficulty("Easy")
                     .category("Dinner")
                     .ingredients(List.of(
-                            new IngredientDto("fettuccine", "200 g"),
-                            new IngredientDto("garlic cloves", "3"),
-                            new IngredientDto("heavy cream", "150 ml"),
-                            new IngredientDto("Parmesan", "50 g")
+                            new IngredientDto("fettuccine", 200.0, IngredientUnit.G),
+                            new IngredientDto("garlic cloves", 3.0, IngredientUnit.CLOVE),
+                            new IngredientDto("heavy cream", 150.0, IngredientUnit.ML),
+                            new IngredientDto("Parmesan", 50.0, IngredientUnit.G)
                     ))
                     .steps(List.of(
                             "Cook the pasta until al dente.",
@@ -44,10 +45,10 @@ public class RecipeController {
                     .difficulty("Easy")
                     .category("Breakfast")
                     .ingredients(List.of(
-                            new IngredientDto("flour", "180 g"),
-                            new IngredientDto("milk", "250 ml"),
-                            new IngredientDto("egg", "1"),
-                            new IngredientDto("blueberries", "120 g")
+                            new IngredientDto("flour", 180.0, IngredientUnit.G),
+                            new IngredientDto("milk", 250.0, IngredientUnit.ML),
+                            new IngredientDto("egg", 1.0, IngredientUnit.PIECE),
+                            new IngredientDto("blueberries", 120.0, IngredientUnit.G)
                     ))
                     .steps(List.of(
                             "Whisk flour, milk, and egg into a batter.",
@@ -65,10 +66,10 @@ public class RecipeController {
                     .difficulty("Easy")
                     .category("Lunch")
                     .ingredients(List.of(
-                            new IngredientDto("tomatoes", "800 g"),
-                            new IngredientDto("onion", "1"),
-                            new IngredientDto("vegetable stock", "500 ml"),
-                            new IngredientDto("basil", "1 handful")
+                            new IngredientDto("tomatoes", 800.0, IngredientUnit.G),
+                            new IngredientDto("onion", 1.0, IngredientUnit.PIECE),
+                            new IngredientDto("vegetable stock", 500.0, IngredientUnit.ML),
+                            new IngredientDto("basil", 1.0, IngredientUnit.BUNCH)
                     ))
                     .steps(List.of(
                             "Roast the tomatoes and onion until caramelized.",
@@ -86,10 +87,10 @@ public class RecipeController {
                     .difficulty("Medium")
                     .category("Dinner")
                     .ingredients(List.of(
-                            new IngredientDto("salmon fillets", "2"),
-                            new IngredientDto("soy sauce", "3 tbsp"),
-                            new IngredientDto("honey", "2 tbsp"),
-                            new IngredientDto("grated ginger", "1 tsp")
+                            new IngredientDto("salmon fillets", 2.0, IngredientUnit.PIECE),
+                            new IngredientDto("soy sauce", 3.0, IngredientUnit.TBSP),
+                            new IngredientDto("honey", 2.0, IngredientUnit.TBSP),
+                            new IngredientDto("grated ginger", 1.0, IngredientUnit.TSP)
                     ))
                     .steps(List.of(
                             "Mix soy sauce, honey, and ginger.",
@@ -107,10 +108,10 @@ public class RecipeController {
                     .difficulty("Hard")
                     .category("Dessert")
                     .ingredients(List.of(
-                            new IngredientDto("dark chocolate", "100 g"),
-                            new IngredientDto("butter", "100 g"),
-                            new IngredientDto("eggs", "2"),
-                            new IngredientDto("sugar", "50 g")
+                            new IngredientDto("dark chocolate", 100.0, IngredientUnit.G),
+                            new IngredientDto("butter", 100.0, IngredientUnit.G),
+                            new IngredientDto("eggs", 2.0, IngredientUnit.PIECE),
+                            new IngredientDto("sugar", 50.0, IngredientUnit.G)
                     ))
                     .steps(List.of(
                             "Melt the chocolate and butter together.",
@@ -128,10 +129,10 @@ public class RecipeController {
                     .difficulty("Easy")
                     .category("Lunch")
                     .ingredients(List.of(
-                            new IngredientDto("flour tortillas", "2"),
-                            new IngredientDto("chicken breast", "200 g"),
-                            new IngredientDto("romaine heart", "1"),
-                            new IngredientDto("Caesar dressing", "3 tbsp")
+                            new IngredientDto("flour tortillas", 2.0, IngredientUnit.PIECE),
+                            new IngredientDto("chicken breast", 200.0, IngredientUnit.G),
+                            new IngredientDto("romaine heart", 1.0, IngredientUnit.PIECE),
+                            new IngredientDto("Caesar dressing", 3.0, IngredientUnit.TBSP)
                     ))
                     .steps(List.of(
                             "Season and cook the chicken.",
@@ -149,10 +150,10 @@ public class RecipeController {
                     .difficulty("Medium")
                     .category("Dinner")
                     .ingredients(List.of(
-                            new IngredientDto("cooked rice", "300 g"),
-                            new IngredientDto("mixed vegetables", "150 g"),
-                            new IngredientDto("eggs", "2"),
-                            new IngredientDto("soy sauce", "2 tbsp")
+                            new IngredientDto("cooked rice", 300.0, IngredientUnit.G),
+                            new IngredientDto("mixed vegetables", 150.0, IngredientUnit.G),
+                            new IngredientDto("eggs", 2.0, IngredientUnit.PIECE),
+                            new IngredientDto("soy sauce", 2.0, IngredientUnit.TBSP)
                     ))
                     .steps(List.of(
                             "Stir-fry the vegetables over high heat.",
@@ -170,10 +171,10 @@ public class RecipeController {
                     .difficulty("Easy")
                     .category("Breakfast")
                     .ingredients(List.of(
-                            new IngredientDto("Greek yogurt", "250 g"),
-                            new IngredientDto("mixed berries", "100 g"),
-                            new IngredientDto("granola", "60 g"),
-                            new IngredientDto("honey", "1 tbsp")
+                            new IngredientDto("Greek yogurt", 250.0, IngredientUnit.G),
+                            new IngredientDto("mixed berries", 100.0, IngredientUnit.G),
+                            new IngredientDto("granola", 60.0, IngredientUnit.G),
+                            new IngredientDto("honey", 1.0, IngredientUnit.TBSP)
                     ))
                     .steps(List.of(
                             "Spoon yogurt into two glasses.",
@@ -191,10 +192,10 @@ public class RecipeController {
                     .difficulty("Medium")
                     .category("Dessert")
                     .ingredients(List.of(
-                            new IngredientDto("apples", "4"),
-                            new IngredientDto("cinnamon", "1 tsp"),
-                            new IngredientDto("rolled oats", "100 g"),
-                            new IngredientDto("butter", "75 g")
+                            new IngredientDto("apples", 4.0, IngredientUnit.PIECE),
+                            new IngredientDto("cinnamon", 1.0, IngredientUnit.TSP),
+                            new IngredientDto("rolled oats", 100.0, IngredientUnit.G),
+                            new IngredientDto("butter", 75.0, IngredientUnit.G)
                     ))
                     .steps(List.of(
                             "Toss sliced apples with cinnamon.",
@@ -212,10 +213,10 @@ public class RecipeController {
                     .difficulty("Easy")
                     .category("Drinks")
                     .ingredients(List.of(
-                            new IngredientDto("ripe mango", "1"),
-                            new IngredientDto("banana", "1"),
-                            new IngredientDto("milk", "250 ml"),
-                            new IngredientDto("ice cubes", "4")
+                            new IngredientDto("ripe mango", 1.0, IngredientUnit.PIECE),
+                            new IngredientDto("banana", 1.0, IngredientUnit.PIECE),
+                            new IngredientDto("milk", 250.0, IngredientUnit.ML),
+                            new IngredientDto("ice cubes", 4.0, IngredientUnit.PIECE)
                     ))
                     .steps(List.of(
                             "Peel and chop the fruit.",
