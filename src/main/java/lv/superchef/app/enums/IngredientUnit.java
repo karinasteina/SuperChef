@@ -1,4 +1,4 @@
-package lv.superchef.app.dto;
+package lv.superchef.app.enums;
 
 public enum IngredientUnit {
     G,
