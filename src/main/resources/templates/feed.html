@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="recipe" type="lv.superchef.app.dto.CreateRecipeDto"*/-->
 <head>
     <meta charset="UTF-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -9,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
-
 </head>
 <body>
 
@@ -19,22 +19,27 @@
 <!-- ====== MAIN PAGE ====== -->
 <main class="recipe-list-page">
     <header class="page-header">
-        <h1 class="page-title" th:text="${recipe.title}"></h1>
+        <h1 class="page-title">Feed</h1>
     </header>
 
     <ol class="recipe-list recipe-list--single">
-        <li>
-            <article class="recipe-card">
-                <img alt="Recipe"
-                     class="recipe-image"
-                     height="397"
-                     src="/images/recipes/recipe-00.webp"
-                     th:alt="|Photo of ${recipe.title}|"
-                     th:loading="${id} ? 'eager' : 'lazy'"
-                     th:src="|/images/recipes/recipe-${#numbers.formatInteger(id, 2)}.webp|"
-                     width="397"/>
+        <li th:each="recipe, recipeStatus : ${recipes}">
 
-                <h2 th:text="${recipe.title}">Recipe title</h2>
+            <article class="recipe-card">
+                <a th:href="@{/recipes/{id}(id=${recipeStatus.index})}">
+
+                    <img alt="Recipe"
+                         class="recipe-image"
+                         height="397"
+                         src="/images/recipes/recipe-00.webp"
+                         th:alt="|Photo of ${recipe.title}|"
+                         th:loading="${recipeStatus.first} ? 'eager' : 'lazy'"
+                         th:src="|/images/recipes/recipe-${#numbers.formatInteger(recipeStatus.index, 2)}.webp|"
+                         width="397"/>
+                </a>
+                <a th:href="@{/recipes/{id}(id=${recipeStatus.index})}">
+                    <h2 th:text="${recipe.title}">Recipe title</h2>
+                </a>
                 <p class="recipe-description" th:text="${recipe.description}">Recipe description</p>
 
                 <div class="recipe-meta">
@@ -65,6 +70,7 @@
                     </section>
                 </div>
             </article>
+
         </li>
     </ol>
 </main>

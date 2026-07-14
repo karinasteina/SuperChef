@@ -1,0 +1,18 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="activePage" type="java.lang.String"*/-->
+<nav class="navbar" th:fragment="navbar">
+    <a class="navbar-brand" href="/">
+        <span class="brand-icon">🍳</span>
+        <span class="brand-name">SuperChef</span>
+    </a>
+    <ul class="navbar-links">
+        <li class="navbar-home">
+            <a th:classappend="${activePage == 'home' ? 'active' : ''}" th:href="@{/}">Home</a></li>
+        <li><a th:classappend="${activePage == 'recipes' ? 'active' : ''}" th:href="@{/recipes}">Recipes</a></li>
+        <li><a th:classappend="${activePage == 'feed' ? 'active' : ''}" th:href="@{/feed}">Feed</a></li>
+        <li><a th:classappend="${activePage == 'createRecipe' ? 'active' : ''}" th:href="@{/recipes/create}">Create
+            Recipe</a></li>
+        <li><a th:classappend="${activePage == 'login' ? 'active' : ''}" th:href="@{/login}">Login</a></li>
+        <li><a th:classappend="${activePage == 'profile' ? 'active' : ''}" th:href="@{/profile}">My Profile</a></li>
+    </ul>
+</nav>
