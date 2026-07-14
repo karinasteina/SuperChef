@@ -23,7 +23,7 @@ public class Profile {
     @JoinColumn(name = "UserId")
     private AppUser appUser;
 
-    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoriteRecipe> favoriteRecipes = new ArrayList<>();
 
 }

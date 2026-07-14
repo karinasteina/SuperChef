@@ -6,9 +6,12 @@ import lv.superchef.app.model.Recipe;
 import lv.superchef.app.repository.IFavoriteRecipeRepo;
 import lv.superchef.app.repository.IProfileRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
+@Service
 public class FavoriteRecipeService {
     @Autowired
     private IFavoriteRecipeRepo favoriteRecipeRepo;
@@ -32,12 +35,12 @@ public class FavoriteRecipeService {
     }
 
     public List<FavoriteRecipe> getAllFavoriteRecipesByProfile(Profile profile) {
-        return favoriteRecipeRepo.findAllByProfileId(profile.getId());
+        return favoriteRecipeRepo.findAllByProfile_Id(profile.getId());
     }
 
     public List<FavoriteRecipe> getAllFavoriteRecipesByUserId(Long userId) {
-        Profile profile = profileRepository.getProfileByUserId(userId);
+        Optional<Profile> profile = profileRepository.findByAppUser_Id(userId);
 
-        return getAllFavoriteRecipesByProfile(profile);
+        return profile.map(this::getAllFavoriteRecipesByProfile).orElse(List.of());
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/recipes/favorites")
@@ -38,7 +39,7 @@ public class FavoriteRecipesController {
     public ResponseEntity<Void> addFavoriteRecipe(@AuthenticationPrincipal AppUserDetails userDetails, @PathVariable Long recipeId) {
         Long userId = userDetails.getUserId();
 
-        Profile profile = profileService.getProfileByUserId(userId);
+        Profile profile = profileService.getProfileByUserId(userId).orElse(null);
         Recipe recipe = recipeService.getRecipeById(recipeId);
 
         favoriteRecipeService.addToFavorites(recipe, profile);
