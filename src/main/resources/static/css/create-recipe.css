@@ -66,62 +66,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* ── 3. Navbar ────────────────────────────────────────────── */
-.navbar {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: var(--color-nav-bg);
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: 0 1px 4px rgba(0,0,0,.06);
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-}
-
-.navbar-brand {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-}
-
-.brand-icon {
-    font-size: 1.6rem;
-}
-
-.brand-name {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    letter-spacing: -.3px;
-}
-
-.navbar-links {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-}
-
-.navbar-links a {
-    font-size: .9rem;
-    font-weight: 500;
-    color: var(--color-text-muted);
-    text-decoration: none;
-    transition: var(--transition);
-    padding: 4px 0;
-    border-bottom: 2px solid transparent;
-}
-
-.navbar-links a:hover,
-.navbar-links a.active {
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary);
-}
-
 /* ── 4. Page Layout ───────────────────────────────────────── */
 .create-recipe-page {
     flex: 1;
@@ -636,9 +580,6 @@ select.input-error:focus {
         grid-template-columns: 1fr;
     }
 
-    .navbar-links {
-        display: none;
-    }
 }
 
 @media (max-width: 540px) {
@@ -660,4 +601,3 @@ select.input-error:focus {
         justify-content: center;
     }
 }
-

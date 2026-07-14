@@ -11,9 +11,9 @@ html {
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #181818;
-    background-color: #fffdfb;
+    font-family: var(--font-sans);
+    color: var(--color-text);
+    background-color: var(--color-bg);
 }
 
 
@@ -46,7 +46,7 @@ body {
     font-weight: 700;
 }
 
-.brand-icon {
+.auth-card .brand-icon {
     width: 22px;
     height: 22px;
     display: block;

@@ -21,4 +21,10 @@ public class HomeController {
         model.addAttribute("recipes", RECIPE_DATA);
         return "feed";
     }
+
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        model.addAttribute("activePage", "profile");
+        return "profile";
+    }
 }
