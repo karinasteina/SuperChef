@@ -1,6 +1,7 @@
 package lv.superchef.app.controllers;
 
 
+import jakarta.validation.Valid;
 import lv.superchef.app.dtos.RecipeCreateDTO;
 import lv.superchef.app.models.Recipe;
 import lv.superchef.app.services.RecipeService;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -21,7 +21,7 @@ public class RecipeController
     private RecipeService recipeService;
 
     @PostMapping
-    public ResponseEntity<Recipe> createPost(@RequestBody RecipeCreateDTO dto)
+    public ResponseEntity<Recipe> createPost(@Valid @RequestBody RecipeCreateDTO dto)
     {
         return ResponseEntity.ok(recipeService.createRecipe(dto));
     }

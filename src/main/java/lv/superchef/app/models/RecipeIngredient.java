@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lv.superchef.app.enums.Units;
+import lv.superchef.app.enums.IngredientUnit;
 
 @Entity
 @Table(name = "recipe_ingredients")
@@ -18,7 +18,7 @@ public class RecipeIngredient
     private Long id;
     @Column(name = "ingredient_name",nullable = false)
     private String ingredientName;
-    private int quantity;
+    private double quantity;
     @Enumerated(EnumType.STRING)
-    private Units unit;
+    private IngredientUnit unit;
 }
