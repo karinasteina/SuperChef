@@ -1,15 +1,15 @@
 package lv.superchef.app.config;
 
-import lv.superchef.app.dto.CreateRecipeDto;
-import lv.superchef.app.dto.IngredientDto;
+import lv.superchef.app.dto.IngredientInputDTO;
+import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.enums.IngredientUnit;
 
 import java.util.List;
 
 public final class TempData {
 
-    public static final List<CreateRecipeDto> RECIPE_DATA = List.of(
-            CreateRecipeDto.builder()
+    public static final List<RecipeCreateDTO> RECIPE_DATA = List.of(
+            RecipeCreateDTO.builder()
                     .title("Creamy Garlic Pasta")
                     .description("Silky pasta coated in a rich garlic and Parmesan cream sauce.")
                     .calories(620)
@@ -18,10 +18,10 @@ public final class TempData {
                     .difficulty("Easy")
                     .category("Dinner")
                     .ingredients(List.of(
-                            new IngredientDto("fettuccine", 200.0, IngredientUnit.G),
-                            new IngredientDto("garlic cloves", 3.0, IngredientUnit.CLOVE),
-                            new IngredientDto("heavy cream", 150.0, IngredientUnit.ML),
-                            new IngredientDto("Parmesan", 50.0, IngredientUnit.G)
+                            new IngredientInputDTO("fettuccine", 200.0, IngredientUnit.G),
+                            new IngredientInputDTO("garlic cloves", 3.0, IngredientUnit.CLOVE),
+                            new IngredientInputDTO("heavy cream", 150.0, IngredientUnit.ML),
+                            new IngredientInputDTO("Parmesan", 50.0, IngredientUnit.G)
                     ))
                     .steps(List.of(
                             "Cook the pasta until al dente.",
@@ -30,7 +30,7 @@ public final class TempData {
                     ))
                     .build(),
 
-            CreateRecipeDto.builder()
+            RecipeCreateDTO.builder()
                     .title("Fluffy Blueberry Pancakes")
                     .description("Light breakfast pancakes bursting with fresh blueberries.")
                     .calories(410)
@@ -39,10 +39,10 @@ public final class TempData {
                     .difficulty("Easy")
                     .category("Breakfast")
                     .ingredients(List.of(
-                            new IngredientDto("flour", 180.0, IngredientUnit.G),
-                            new IngredientDto("milk", 250.0, IngredientUnit.ML),
-                            new IngredientDto("egg", 1.0, IngredientUnit.PIECE),
-                            new IngredientDto("blueberries", 120.0, IngredientUnit.G)
+                            new IngredientInputDTO("flour", 180.0, IngredientUnit.G),
+                            new IngredientInputDTO("milk", 250.0, IngredientUnit.ML),
+                            new IngredientInputDTO("egg", 1.0, IngredientUnit.PIECE),
+                            new IngredientInputDTO("blueberries", 120.0, IngredientUnit.G)
                     ))
                     .steps(List.of(
                             "Whisk flour, milk, and egg into a batter.",
@@ -51,7 +51,7 @@ public final class TempData {
                     ))
                     .build(),
 
-            CreateRecipeDto.builder()
+            RecipeCreateDTO.builder()
                     .title("Roasted Tomato Soup")
                     .description("A comforting soup made with caramelized tomatoes and fresh basil.")
                     .calories(230)
@@ -60,10 +60,10 @@ public final class TempData {
                     .difficulty("Easy")
                     .category("Lunch")
                     .ingredients(List.of(
-                            new IngredientDto("tomatoes", 800.0, IngredientUnit.G),
-                            new IngredientDto("onion", 1.0, IngredientUnit.PIECE),
-                            new IngredientDto("vegetable stock", 500.0, IngredientUnit.ML),
-                            new IngredientDto("basil", 1.0, IngredientUnit.BUNCH)
+                            new IngredientInputDTO("tomatoes", 800.0, IngredientUnit.G),
+                            new IngredientInputDTO("onion", 1.0, IngredientUnit.PIECE),
+                            new IngredientInputDTO("vegetable stock", 500.0, IngredientUnit.ML),
+                            new IngredientInputDTO("basil", 1.0, IngredientUnit.BUNCH)
                     ))
                     .steps(List.of(
                             "Roast the tomatoes and onion until caramelized.",
@@ -72,7 +72,7 @@ public final class TempData {
                     ))
                     .build(),
 
-            CreateRecipeDto.builder()
+            RecipeCreateDTO.builder()
                     .title("Honey Soy Salmon")
                     .description("Tender glazed salmon with a sweet, savory, and slightly tangy finish.")
                     .calories(540)
@@ -81,10 +81,10 @@ public final class TempData {
                     .difficulty("Medium")
                     .category("Dinner")
                     .ingredients(List.of(
-                            new IngredientDto("salmon fillets", 2.0, IngredientUnit.PIECE),
-                            new IngredientDto("soy sauce", 3.0, IngredientUnit.TBSP),
-                            new IngredientDto("honey", 2.0, IngredientUnit.TBSP),
-                            new IngredientDto("grated ginger", 1.0, IngredientUnit.TSP)
+                            new IngredientInputDTO("salmon fillets", 2.0, IngredientUnit.PIECE),
+                            new IngredientInputDTO("soy sauce", 3.0, IngredientUnit.TBSP),
+                            new IngredientInputDTO("honey", 2.0, IngredientUnit.TBSP),
+                            new IngredientInputDTO("grated ginger", 1.0, IngredientUnit.TSP)
                     ))
                     .steps(List.of(
                             "Mix soy sauce, honey, and ginger.",
@@ -93,7 +93,7 @@ public final class TempData {
                     ))
                     .build(),
 
-            CreateRecipeDto.builder()
+            RecipeCreateDTO.builder()
                     .title("Chocolate Lava Cake")
                     .description("Individual chocolate cakes with warm, flowing centers.")
                     .calories(470)
@@ -102,10 +102,10 @@ public final class TempData {
                     .difficulty("Hard")
                     .category("Dessert")
                     .ingredients(List.of(
-                            new IngredientDto("dark chocolate", 100.0, IngredientUnit.G),
-                            new IngredientDto("butter", 100.0, IngredientUnit.G),
-                            new IngredientDto("eggs", 2.0, IngredientUnit.PIECE),
-                            new IngredientDto("sugar", 50.0, IngredientUnit.G)
+                            new IngredientInputDTO("dark chocolate", 100.0, IngredientUnit.G),
+                            new IngredientInputDTO("butter", 100.0, IngredientUnit.G),
+                            new IngredientInputDTO("eggs", 2.0, IngredientUnit.PIECE),
+                            new IngredientInputDTO("sugar", 50.0, IngredientUnit.G)
                     ))
                     .steps(List.of(
                             "Melt the chocolate and butter together.",
@@ -114,7 +114,7 @@ public final class TempData {
                     ))
                     .build(),
 
-            CreateRecipeDto.builder()
+            RecipeCreateDTO.builder()
                     .title("Chicken Caesar Wrap")
                     .description("A crisp, portable lunch filled with chicken and creamy Caesar salad.")
                     .calories(490)
@@ -123,10 +123,10 @@ public final class TempData {
                     .difficulty("Easy")
                     .category("Lunch")
                     .ingredients(List.of(
-                            new IngredientDto("flour tortillas", 2.0, IngredientUnit.PIECE),
-                            new IngredientDto("chicken breast", 200.0, IngredientUnit.G),
-                            new IngredientDto("romaine heart", 1.0, IngredientUnit.PIECE),
-                            new IngredientDto("Caesar dressing", 3.0, IngredientUnit.TBSP)
+                            new IngredientInputDTO("flour tortillas", 2.0, IngredientUnit.PIECE),
+                            new IngredientInputDTO("chicken breast", 200.0, IngredientUnit.G),
+                            new IngredientInputDTO("romaine heart", 1.0, IngredientUnit.PIECE),
+                            new IngredientInputDTO("Caesar dressing", 3.0, IngredientUnit.TBSP)
                     ))
                     .steps(List.of(
                             "Season and cook the chicken.",
@@ -135,7 +135,7 @@ public final class TempData {
                     ))
                     .build(),
 
-            CreateRecipeDto.builder()
+            RecipeCreateDTO.builder()
                     .title("Vegetable Fried Rice")
                     .description("Quick wok-fried rice packed with colorful vegetables and sesame flavor.")
                     .calories(380)
@@ -144,10 +144,10 @@ public final class TempData {
                     .difficulty("Medium")
                     .category("Dinner")
                     .ingredients(List.of(
-                            new IngredientDto("cooked rice", 300.0, IngredientUnit.G),
-                            new IngredientDto("mixed vegetables", 150.0, IngredientUnit.G),
-                            new IngredientDto("eggs", 2.0, IngredientUnit.PIECE),
-                            new IngredientDto("soy sauce", 2.0, IngredientUnit.TBSP)
+                            new IngredientInputDTO("cooked rice", 300.0, IngredientUnit.G),
+                            new IngredientInputDTO("mixed vegetables", 150.0, IngredientUnit.G),
+                            new IngredientInputDTO("eggs", 2.0, IngredientUnit.PIECE),
+                            new IngredientInputDTO("soy sauce", 2.0, IngredientUnit.TBSP)
                     ))
                     .steps(List.of(
                             "Stir-fry the vegetables over high heat.",
@@ -156,7 +156,7 @@ public final class TempData {
                     ))
                     .build(),
 
-            CreateRecipeDto.builder()
+            RecipeCreateDTO.builder()
                     .title("Greek Yogurt Parfait")
                     .description("Creamy yogurt layered with berries, crunchy granola, and honey.")
                     .calories(320)
@@ -165,10 +165,10 @@ public final class TempData {
                     .difficulty("Easy")
                     .category("Breakfast")
                     .ingredients(List.of(
-                            new IngredientDto("Greek yogurt", 250.0, IngredientUnit.G),
-                            new IngredientDto("mixed berries", 100.0, IngredientUnit.G),
-                            new IngredientDto("granola", 60.0, IngredientUnit.G),
-                            new IngredientDto("honey", 1.0, IngredientUnit.TBSP)
+                            new IngredientInputDTO("Greek yogurt", 250.0, IngredientUnit.G),
+                            new IngredientInputDTO("mixed berries", 100.0, IngredientUnit.G),
+                            new IngredientInputDTO("granola", 60.0, IngredientUnit.G),
+                            new IngredientInputDTO("honey", 1.0, IngredientUnit.TBSP)
                     ))
                     .steps(List.of(
                             "Spoon yogurt into two glasses.",
@@ -177,7 +177,7 @@ public final class TempData {
                     ))
                     .build(),
 
-            CreateRecipeDto.builder()
+            RecipeCreateDTO.builder()
                     .title("Cinnamon Apple Crumble")
                     .description("Soft spiced apples beneath a crisp, buttery oat topping.")
                     .calories(390)
@@ -186,10 +186,10 @@ public final class TempData {
                     .difficulty("Medium")
                     .category("Dessert")
                     .ingredients(List.of(
-                            new IngredientDto("apples", 4.0, IngredientUnit.PIECE),
-                            new IngredientDto("cinnamon", 1.0, IngredientUnit.TSP),
-                            new IngredientDto("rolled oats", 100.0, IngredientUnit.G),
-                            new IngredientDto("butter", 75.0, IngredientUnit.G)
+                            new IngredientInputDTO("apples", 4.0, IngredientUnit.PIECE),
+                            new IngredientInputDTO("cinnamon", 1.0, IngredientUnit.TSP),
+                            new IngredientInputDTO("rolled oats", 100.0, IngredientUnit.G),
+                            new IngredientInputDTO("butter", 75.0, IngredientUnit.G)
                     ))
                     .steps(List.of(
                             "Toss sliced apples with cinnamon.",
@@ -198,7 +198,7 @@ public final class TempData {
                     ))
                     .build(),
 
-            CreateRecipeDto.builder()
+            RecipeCreateDTO.builder()
                     .title("Mango Banana Smoothie")
                     .description("A naturally sweet and refreshing tropical drink for any time of day.")
                     .calories(260)
@@ -207,10 +207,10 @@ public final class TempData {
                     .difficulty("Easy")
                     .category("Drinks")
                     .ingredients(List.of(
-                            new IngredientDto("ripe mango", 1.0, IngredientUnit.PIECE),
-                            new IngredientDto("banana", 1.0, IngredientUnit.PIECE),
-                            new IngredientDto("milk", 250.0, IngredientUnit.ML),
-                            new IngredientDto("ice cubes", 4.0, IngredientUnit.PIECE)
+                            new IngredientInputDTO("ripe mango", 1.0, IngredientUnit.PIECE),
+                            new IngredientInputDTO("banana", 1.0, IngredientUnit.PIECE),
+                            new IngredientInputDTO("milk", 250.0, IngredientUnit.ML),
+                            new IngredientInputDTO("ice cubes", 4.0, IngredientUnit.PIECE)
                     ))
                     .steps(List.of(
                             "Peel and chop the fruit.",
