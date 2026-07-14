@@ -33,7 +33,7 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login?logout")
                         .permitAll())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/register", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/register", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/h2-console/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/recipes/create").authenticated()
                         .requestMatchers(HttpMethod.POST, "/recipes/**").authenticated()

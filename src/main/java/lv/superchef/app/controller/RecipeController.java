@@ -102,4 +102,5 @@ public class RecipeController {
         System.out.println("Received recipe: " + createRecipeDto.getTitle());
         return "redirect:/recipes/create?success=true";
     }
+
 }
