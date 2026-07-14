@@ -5,27 +5,21 @@ import lv.superchef.app.dtos.RecipeCreateDTO;
 import lv.superchef.app.models.Recipe;
 import lv.superchef.app.models.RecipeIngredient;
 import lv.superchef.app.models.RecipeStep;
+import lv.superchef.app.repositories.RecipeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class RecipeService
 {
-    private final List<Recipe> mockDatabase = new ArrayList<>();
-
-    private final AtomicLong recipeIdCounter = new AtomicLong(1);
-    private final AtomicLong ingredientIdCounter = new AtomicLong(1);
-    private final AtomicLong stepIdCounter = new AtomicLong(1);
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     public Recipe createRecipe(RecipeCreateDTO dto)
     {
         Recipe recipe = new Recipe();
-        recipe.setId(recipeIdCounter.getAndIncrement());
         recipe.setTitle(dto.getTitle());
         recipe.setDescription(dto.getDescription());
         recipe.setImageUrl(dto.getImageUrl());
@@ -35,37 +29,32 @@ public class RecipeService
         recipe.setDifficulty(dto.getDifficulty());
         recipe.setCategory(dto.getCategory());
 
-        if(dto.getIngredients() != null)
-        {
-            for (IngredientInputDTO ingDto : dto.getIngredients())
-            {
-                RecipeIngredient ingredient = new RecipeIngredient(
-                        ingredientIdCounter.getAndIncrement(),
-                        ingDto.getName(),
-                        ingDto.getQuantity(),
-                        ingDto.getUnit()
-                );
+        if (dto.getIngredients() != null) {
+            for (IngredientInputDTO ingDto : dto.getIngredients()) {
+                RecipeIngredient ingredient = new RecipeIngredient();
+                ingredient.setIngredientName(ingDto.getName());
+                ingredient.setQuantity(ingDto.getQuantity());
+                ingredient.setUnit(ingDto.getUnit());
+
                 recipe.getIngredients().add(ingredient);
             }
         }
         if (dto.getSteps() != null) {
             int currentStepNum = 1;
             for (String stepInstruction : dto.getSteps()) {
-                RecipeStep step = new RecipeStep(
-                        stepIdCounter.getAndIncrement(),
-                        currentStepNum++,
-                        stepInstruction
-                );
+                RecipeStep step = new RecipeStep();
+                step.setStepNumber(currentStepNum++);
+                step.setInstruction(stepInstruction);
+
                 recipe.getSteps().add(step);
             }
         }
 
-        mockDatabase.add(recipe);
-        return recipe;
+        return recipeRepository.save(recipe);
     }
 
     public List<Recipe> getAllRecipes()
     {
-        return mockDatabase;
+        return recipeRepository.findAll();
     }
 }
