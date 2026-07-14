@@ -103,10 +103,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const ingredientList = document.getElementById('ingredientList');
     const addIngredientBtn = document.getElementById('addIngredient');
 
+    // Use one canonical option set to avoid multiplying options on each new row.
+    const ingredientUnitOptionsHtml = (() => {
+        const firstUnitSelect = ingredientList.querySelector('.ingredient-unit');
+        if (!firstUnitSelect) {
+            return '<option value="">Select unit…</option>';
+        }
+
+        return Array.from(firstUnitSelect.options)
+            .map(opt => `<option value="${opt.value}">${opt.text}</option>`)
+            .join('');
+    })();
+
     /** Build a new ingredient row DOM element */
     function createIngredientRow(index) {
         const row = document.createElement('div');
         row.className = 'ingredient-row';
+
         row.innerHTML = `
             <div class="ingredient-inputs">
                 <input type="text"
@@ -115,16 +128,24 @@ document.addEventListener('DOMContentLoaded', () => {
                        placeholder="Ingredient name"
                        class="ingredient-name"
                        autocomplete="off"/>
-                <input type="text"
-                       name="ingredients[${index}].quantity"
-                       id="ingredients${index}Quantity"
-                       placeholder="Quantity (e.g. 2 cups)"
+                <input type="number"
+                       name="ingredients[${index}].amount"
+                       id="ingredients${index}Amount"
+                       placeholder="Quantity (e.g. 2)"
                        class="ingredient-quantity"
+                       step="0.01"
                        autocomplete="off"/>
+                <div class="select-wrapper">
+                    <select name="ingredients[${index}].unit"
+                            id="ingredients${index}Unit"
+                            class="ingredient-unit">
+                        ${ingredientUnitOptionsHtml}
+                    </select>
+                </div>
             </div>
             <button type="button" class="btn-remove" aria-label="Remove ingredient">✕</button>
         `;
-        attachClearErrorListeners(row.querySelectorAll('input'));
+        attachClearErrorListeners(row.querySelectorAll('input, select'));
         return row;
     }
 
@@ -134,10 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
         rows.forEach((row, i) => {
             const nameInput     = row.querySelector('.ingredient-name');
             const quantityInput = row.querySelector('.ingredient-quantity');
+            const unitSelect    = row.querySelector('.ingredient-unit');
             nameInput.name      = `ingredients[${i}].name`;
             nameInput.id        = `ingredients${i}Name`;
-            quantityInput.name  = `ingredients[${i}].quantity`;
-            quantityInput.id    = `ingredients${i}Quantity`;
+            quantityInput.name  = `ingredients[${i}].amount`;
+            quantityInput.id    = `ingredients${i}Amount`;
+            unitSelect.name     = `ingredients[${i}].unit`;
+            unitSelect.id       = `ingredients${i}Unit`;
         });
     }
 
@@ -310,11 +334,15 @@ document.addEventListener('DOMContentLoaded', () => {
         ingredientRows.forEach((row, i) => {
             const nameInput = row.querySelector('.ingredient-name');
             const qtyInput  = row.querySelector('.ingredient-quantity');
+            const unitSelect = row.querySelector('.ingredient-unit');
             if (!nameInput.value.trim()) {
                 markError(nameInput, `Ingredient ${i + 1}: name is required.`);
             }
             if (!qtyInput.value.trim()) {
                 markError(qtyInput, `Ingredient ${i + 1}: quantity is required.`);
+            }
+            if (!unitSelect.value) {
+                markError(unitSelect, `Ingredient ${i + 1}: unit is required.`);
             }
         });
 
