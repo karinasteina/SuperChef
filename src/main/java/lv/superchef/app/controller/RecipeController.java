@@ -233,8 +233,19 @@ public class RecipeController {
     );
 
     @GetMapping
-    public String listOfRecipes(Model model) {
-        model.addAttribute("recipes", recipeData);
+    public String listOfRecipes(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String difficulty,
+            @RequestParam(required = false) Integer maxCalories,
+            @RequestParam(required = false) Integer maxPrepTime,
+            @RequestParam(required = false) Integer maxCookTime,
+            Model model){
+
+        List<Recipe> recipes = recipeService.searchRecipes(query, category,
+                difficulty, maxCalories, maxPrepTime, maxCookTime);
+
+        model.addAttribute("recipes", recipes);
         return "recipe/list";
     }
 
@@ -261,14 +272,7 @@ public class RecipeController {
         return "redirect:/recipes/create?success=true";
     }
 
-    @GetMapping("/search/{keyword}")
-    public String getControllerSearchRecipes(@PathVariable String keyword, Model model){
-        List<Recipe> recipes = recipeService.searchRecipes(keyword);
 
-        model.addAttribute("recipes", recipes);
-        model.addAttribute("keyword", keyword); // incase you need for the title
-        return "recipes-search-view"; // wtv view name will be here
-    }
 
 
 
