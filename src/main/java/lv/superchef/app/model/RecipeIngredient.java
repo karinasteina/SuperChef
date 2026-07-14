@@ -2,12 +2,14 @@ package lv.superchef.app.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lv.superchef.app.enums.IngredientUnit;
 
 @Entity
 @Table(name = "recipe_ingredients")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecipeIngredient

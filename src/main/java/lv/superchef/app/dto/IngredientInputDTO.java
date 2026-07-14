@@ -1,10 +1,14 @@
 package lv.superchef.app.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lv.superchef.app.enums.IngredientUnit;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class IngredientInputDTO
 {
     @NotBlank(message = "Ingredient name cannot be blank")
