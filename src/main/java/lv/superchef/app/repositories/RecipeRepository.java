@@ -1,7 +1,7 @@
 package lv.superchef.app.repositories;
 
 
-import lv.superchef.app.models.Recipe;
+import lv.superchef.app.model.Recipe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

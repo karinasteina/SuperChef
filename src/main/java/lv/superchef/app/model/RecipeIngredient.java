@@ -1,4 +1,4 @@
-package lv.superchef.app.models;
+package lv.superchef.app.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

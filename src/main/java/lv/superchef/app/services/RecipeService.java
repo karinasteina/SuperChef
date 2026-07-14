@@ -2,9 +2,9 @@ package lv.superchef.app.services;
 
 import lv.superchef.app.dtos.IngredientInputDTO;
 import lv.superchef.app.dtos.RecipeCreateDTO;
-import lv.superchef.app.models.Recipe;
-import lv.superchef.app.models.RecipeIngredient;
-import lv.superchef.app.models.RecipeStep;
+import lv.superchef.app.model.Recipe;
+import lv.superchef.app.model.RecipeIngredient;
+import lv.superchef.app.model.RecipeStep;
 import lv.superchef.app.repositories.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
