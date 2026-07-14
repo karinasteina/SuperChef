@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/recipes")
 @CrossOrigin(origins = "*") // so frontend can talk to this endpoint locally
-public class RecipeController
+public class RecipeApiController
 {
 
     @Autowired

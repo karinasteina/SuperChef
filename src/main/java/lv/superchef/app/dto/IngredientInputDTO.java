@@ -1,12 +1,19 @@
 package lv.superchef.app.dto;
 
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lv.superchef.app.enums.IngredientUnit;
 
 @Data
 public class IngredientInputDTO
 {
+    @NotBlank(message = "Ingredient name cannot be blank")
+    @Size(min = 2, max = 100, message = "Ingredient name must be between 2 and 100 characters")
     private String name;
+
+    @DecimalMin(value = "0.01", message = "Quantity must be greater than zero")
     private double quantity;
+
+    @NotBlank(message = "Unit of measurement is required")
     private IngredientUnit unit;
 }
