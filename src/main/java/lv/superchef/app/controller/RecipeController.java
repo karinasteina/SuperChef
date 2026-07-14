@@ -242,6 +242,7 @@ public class RecipeController {
     @GetMapping("/create")
     public String showCreateRecipePage(Model model) {
         model.addAttribute("createRecipeDto", new CreateRecipeDto());
+        model.addAttribute("ingredientUnits", IngredientUnit.values());
         return "recipe/create";
     }
 
