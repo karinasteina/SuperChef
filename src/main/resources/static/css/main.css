@@ -20,28 +20,37 @@
     text-decoration: none;
 }
 
+.navbar-brand:hover {
+    text-decoration: none;
+}
+
 .brand-icon {
     font-size: 1.6rem;
 }
 
 .brand-name {
+    padding: 4px 0;
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-primary);
+    border-bottom: 2px solid transparent;
     letter-spacing: -.3px;
+    transition: var(--transition);
+}
+
+.navbar-brand:hover .brand-name,
+.brand-name.active {
+    border-bottom-color: var(--color-primary);
 }
 
 .navbar-links {
     flex: 1;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 24px;
     margin-left: 24px;
     list-style: none;
-}
-
-.navbar-home {
-    margin-right: auto;
 }
 
 .navbar-links a {
@@ -70,16 +79,13 @@
 
     .navbar-links {
         flex-basis: 100%;
+        justify-content: flex-start;
         gap: 18px;
         margin-left: 0;
         padding: 8px 0 10px;
         overflow-x: auto;
         white-space: nowrap;
         scrollbar-width: thin;
-    }
-
-    .navbar-home {
-        margin-right: 0;
     }
 }
 
