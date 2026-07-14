@@ -1,4 +1,7 @@
 HELP.md
+superchef.db
+superchef.db-shm
+superchef.db-wal
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

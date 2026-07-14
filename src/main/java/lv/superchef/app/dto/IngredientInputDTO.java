@@ -1,6 +1,9 @@
 package lv.superchef.app.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +21,6 @@ public class IngredientInputDTO
     @DecimalMin(value = "0.01", message = "Quantity must be greater than zero")
     private double quantity;
 
-    @NotBlank(message = "Unit of measurement is required")
+    @NotNull(message = "Unit of measurement is required")
     private IngredientUnit unit;
 }

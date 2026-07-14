@@ -25,7 +25,7 @@ public class RecipeCreateDTO
     private String description;
 
     @NotBlank(message = "Image URL is required")
-    @Pattern(regexp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", message = "Must be a valid URL format")
+    @Pattern(regexp = "^(?:(?:https?|ftp|file)://\\S+|/\\S+)$", message = "Must be a valid URL format")
     private String imageUrl;
 
     @PositiveOrZero(message = "Calories cannot be negative")
