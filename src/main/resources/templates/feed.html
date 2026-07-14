@@ -23,21 +23,21 @@
     </header>
 
     <ol class="recipe-list recipe-list--single">
-        <li th:each="recipe, recipeStatus : ${recipes}">
+        <li th:each="recipe, status : ${recipes}">
 
             <article class="recipe-card">
-                <a th:href="@{/recipes/{id}(id=${recipeStatus.index})}">
+                <a th:href="@{/recipes/{id}(id=${recipe.id})}">
 
                     <img alt="Recipe"
                          class="recipe-image"
                          height="397"
                          src="/images/recipes/recipe-00.webp"
                          th:alt="|Photo of ${recipe.title}|"
-                         th:loading="${recipeStatus.first} ? 'eager' : 'lazy'"
-                         th:src="|/images/recipes/recipe-${#numbers.formatInteger(recipeStatus.index, 2)}.webp|"
+                         th:loading="${status.first} ? 'eager' : 'lazy'"
+                         th:src="${recipe.imageUrl}"
                          width="397"/>
                 </a>
-                <a th:href="@{/recipes/{id}(id=${recipeStatus.index})}">
+                <a th:href="@{/recipes/{id}(id=${recipe.id})}">
                     <h2 th:text="${recipe.title}">Recipe title</h2>
                 </a>
                 <p class="recipe-description" th:text="${recipe.description}">Recipe description</p>
@@ -57,7 +57,7 @@
                             <li th:each="ingredient : ${recipe.ingredients}">
                                 <span th:text="${#numbers.formatDecimal(ingredient.quantity, 1, 0)}">Amount</span>
                                 <span th:text="${#strings.toLowerCase(ingredient.unit.name())}">Unit</span>
-                                <span th:text="${ingredient.name}">Ingredient</span>
+                                <span th:text="${ingredient.ingredientName}">Ingredient</span>
                             </li>
                         </ul>
                     </section>
@@ -65,7 +65,7 @@
                     <section>
                         <h3>Steps</h3>
                         <ol>
-                            <li th:each="step : ${recipe.steps}" th:text="${step}">Recipe step</li>
+                            <li th:each="step : ${recipe.steps}" th:text="${step.instruction}">Recipe step</li>
                         </ol>
                     </section>
                 </div>

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="recipe" type="lv.superchef.app.dto.CreateRecipeDto"*/-->
+<!--/*@thymesVar id="ingredient" type="lv.superchef.app.dto.IngredientInputDTO"*/-->
 <head>
     <meta charset="UTF-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -9,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
+
 </head>
 <body>
 
@@ -21,21 +24,34 @@
         <h1 class="page-title">Discover Recipes</h1>
     </header>
 
-    <ol class="recipe-list">
-        <li th:each="recipe, recipeStatus : ${recipes}">
+    <div th:replace="fragments/recipe-filter :: recipe-filter"></div>
+
+    <p aria-live="polite" class="page-subtitle recipe-results-count"
+       th:text="|${#lists.size(recipes)} recipes found|">
+        0 recipes found
+    </p>
+
+    <div class="form-container" th:if="${#lists.isEmpty(recipes)}">
+        <h2>No recipes found</h2>
+        <p class="page-subtitle">Try another search or clear the selected filters.</p>
+        <a class="btn btn-cancel" th:href="@{/recipes}">Clear filters</a>
+    </div>
+
+    <ol class="recipe-list" th:unless="${#lists.isEmpty(recipes)}">
+        <li th:each="recipe, status : ${recipes}">
 
             <article class="recipe-card">
-                <a th:href="@{/recipes/{id}(id=${recipeStatus.index})}">
+                <a th:href="@{/recipes/{id}(id=${recipe.id})}">
                     <img alt="Recipe"
                          class="recipe-image"
                          height="397"
                          src="/images/recipes/recipe-00.webp"
                          th:alt="|Photo of ${recipe.title}|"
-                         th:loading="${recipeStatus.first} ? 'eager' : 'lazy'"
-                         th:src="|/images/recipes/recipe-${#numbers.formatInteger(recipeStatus.index, 2)}.webp|"
+                         th:loading="${status.first ? 'eager' : 'lazy'}"
+                         th:src="${recipe.imageUrl}"
                          width="397"/>
                 </a>
-                <a th:href="@{/recipes/{id}(id=${recipeStatus.index})}">
+                <a th:href="@{/recipes/{id}(id=${recipe.id})}">
                     <h2 th:text="${recipe.title}">Recipe title</h2>
                 </a>
                 <p class="recipe-description" th:text="${recipe.description}">Recipe description</p>
@@ -55,7 +71,7 @@
                             <li th:each="ingredient : ${recipe.ingredients}">
                                 <span th:text="${#numbers.formatDecimal(ingredient.quantity, 1, 0)}">Amount</span>
                                 <span th:text="${#strings.toLowerCase(ingredient.unit.name())}">Unit</span>
-                                <span th:text="${ingredient.name}">Ingredient</span>
+                                <span th:text="${ingredient.ingredientName}">Ingredient</span>
                             </li>
                         </ul>
                     </section>
@@ -63,7 +79,7 @@
                     <section>
                         <h3>Steps</h3>
                         <ol>
-                            <li th:each="step : ${recipe.steps}" th:text="${step}">Recipe step</li>
+                            <li th:each="step : ${recipe.steps}" th:text="${step.instruction}">Recipe step</li>
                         </ol>
                     </section>
                 </div>
