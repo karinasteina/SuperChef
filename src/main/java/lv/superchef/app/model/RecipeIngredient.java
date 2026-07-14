@@ -12,11 +12,12 @@ import lv.superchef.app.enums.IngredientUnit;
 @Table(name = "recipe_ingredients")
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 public class RecipeIngredient
 {
     //id
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)
     private Long id;
     //name

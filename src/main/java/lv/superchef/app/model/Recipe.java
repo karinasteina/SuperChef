@@ -1,5 +1,6 @@
 package lv.superchef.app.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -7,7 +8,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.*;
 
 
 @Entity
@@ -19,7 +19,7 @@ public class Recipe
 {
 //id
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)
     private Long id;
 //title
