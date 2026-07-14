@@ -2,7 +2,7 @@ package lv.superchef.app.config;
 
 import lv.superchef.app.dto.CreateRecipeDto;
 import lv.superchef.app.dto.IngredientDto;
-import lv.superchef.app.dto.IngredientUnit;
+import lv.superchef.app.enums.IngredientUnit;
 
 import java.util.List;
 
