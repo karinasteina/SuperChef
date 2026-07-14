@@ -2,12 +2,16 @@ package lv.superchef.app.service.impl;
 
 import lv.superchef.app.dto.RegisterRequest;
 import lv.superchef.app.model.AppUser;
-import lv.superchef.app.model.Role;
+import lv.superchef.app.enums.Role;
+import lv.superchef.app.model.Recipe;
 import lv.superchef.app.repository.IAppUserRepo;
+import lv.superchef.app.repository.IRecipeRepo;
 import lv.superchef.app.service.IAppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AppUserServiceImpl implements IAppUserService {
@@ -17,6 +21,7 @@ public class AppUserServiceImpl implements IAppUserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
 
     @Override
     public AppUser register(RegisterRequest registerRequest) {
@@ -50,5 +55,7 @@ public class AppUserServiceImpl implements IAppUserService {
 
         return userRepo.save(newUser);
     }
+
+
 
 }

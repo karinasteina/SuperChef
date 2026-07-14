@@ -2,7 +2,10 @@ package lv.superchef.app.controller;
 
 import lv.superchef.app.dto.CreateRecipeDto;
 import lv.superchef.app.dto.IngredientDto;
-import lv.superchef.app.dto.IngredientUnit;
+import lv.superchef.app.enums.IngredientUnit;
+import lv.superchef.app.model.Recipe;
+import lv.superchef.app.service.IRecipeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/recipes")
 public class RecipeController {
+
+    @Autowired
+    private IRecipeService recipeService;
 
     private final List<CreateRecipeDto> recipeData = List.of(
             CreateRecipeDto.builder()
@@ -254,5 +260,16 @@ public class RecipeController {
         System.out.println("Received recipe: " + createRecipeDto.getTitle());
         return "redirect:/recipes/create?success=true";
     }
+
+    @GetMapping("/search/{keyword}")
+    public String getControllerSearchRecipes(@PathVariable String keyword, Model model){
+        List<Recipe> recipes = recipeService.searchRecipes(keyword);
+
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("keyword", keyword); // incase you need for the title
+        return "recipes-search-view"; // wtv view name will be here
+    }
+
+
 
 }
