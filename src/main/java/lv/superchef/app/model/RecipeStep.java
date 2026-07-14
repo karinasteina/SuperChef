@@ -1,4 +1,4 @@
-package lv.superchef.app.models;
+package lv.superchef.app.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeStep
-{
+public class RecipeStep {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

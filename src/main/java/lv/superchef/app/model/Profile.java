@@ -5,6 +5,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -16,12 +19,11 @@ public class Profile {
     @Column(name = "ProfileId")
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "UserId")
     private AppUser appUser;
-    //
-    //    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-    //    private List<FavoriteRecipe> favoriteRecipes = new ArrayList<>();
 
-    //DO WE KEEP THIS CLASS???
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteRecipe> favoriteRecipes = new ArrayList<>();
+
 }

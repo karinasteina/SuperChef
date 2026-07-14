@@ -14,4 +14,6 @@ public interface IFavoriteRecipeRepo extends JpaRepository<FavoriteRecipe, Long>
     List<FavoriteRecipe> findAllByAppUser_Id(Long userId);
 
     long deleteByAppUser_IdAndRecipe_Id(Long userId);
+
+    List<FavoriteRecipe> findAllByProfileId(Long profileId);
 }

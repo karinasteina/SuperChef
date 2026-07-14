@@ -17,12 +17,19 @@ public class FavoriteRecipe {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "AppUserId")
-    private AppUser appUser;
+    @JoinColumn(name = "ProfileId")
+    private Profile profile;
 
     @ManyToOne
     @JoinColumn(name = "RecipeId")
     private Recipe recipe;
 
+    public FavoriteRecipe(Recipe recipe, Profile profile) {
+        this.recipe = recipe;
+        this.profile = profile;
+    }
+
+    public FavoriteRecipe() {
+    }
 
 }

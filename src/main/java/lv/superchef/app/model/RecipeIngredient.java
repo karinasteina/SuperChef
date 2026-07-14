@@ -1,4 +1,4 @@
-package lv.superchef.app.models;
+package lv.superchef.app.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,12 +11,11 @@ import lv.superchef.app.enums.IngredientUnit;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeIngredient
-{
+public class RecipeIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "ingredient_name",nullable = false)
+    @Column(name = "ingredient_name", nullable = false)
     private String ingredientName;
     private double quantity;
     @Enumerated(EnumType.STRING)
