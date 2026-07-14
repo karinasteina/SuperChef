@@ -103,16 +103,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const ingredientList = document.getElementById('ingredientList');
     const addIngredientBtn = document.getElementById('addIngredient');
 
+    // Use one canonical option set to avoid multiplying options on each new row.
+    const ingredientUnitOptionsHtml = (() => {
+        const firstUnitSelect = ingredientList.querySelector('.ingredient-unit');
+        if (!firstUnitSelect) {
+            return '<option value="">Select unit…</option>';
+        }
+
+        return Array.from(firstUnitSelect.options)
+            .map(opt => `<option value="${opt.value}">${opt.text}</option>`)
+            .join('');
+    })();
+
     /** Build a new ingredient row DOM element */
     function createIngredientRow(index) {
         const row = document.createElement('div');
         row.className = 'ingredient-row';
-
-        // Get available units from the page (from ingredientUnits model attribute)
-        const unitOptions = Array.from(document.querySelectorAll('.ingredient-unit option'))
-            .filter(opt => opt.value !== '')
-            .map(opt => opt.value)
-            .join('');
 
         row.innerHTML = `
             <div class="ingredient-inputs">
@@ -133,11 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <select name="ingredients[${index}].unit"
                             id="ingredients${index}Unit"
                             class="ingredient-unit">
-                        <option value="">Select unit…</option>
-                        ${Array.from(document.querySelectorAll('.ingredient-unit option'))
-                            .filter(opt => opt.value !== '')
-                            .map(opt => `<option value="${opt.value}">${opt.text}</option>`)
-                            .join('')}
+                        ${ingredientUnitOptionsHtml}
                     </select>
                 </div>
             </div>
