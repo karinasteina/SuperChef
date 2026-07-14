@@ -424,15 +424,24 @@ textarea::placeholder {
     display: flex;
     gap: 10px;
     flex: 1;
+    min-width: 0;
 }
 
 .ingredient-name {
-    flex: 1;
+    flex: 1 1 260px;
+    min-width: 0;
 }
 
 .ingredient-quantity {
-    width: 160px;
-    flex-shrink: 0;
+     flex: 0 0 120px;
+}
+
+.ingredient-unit {
+     width: 100%;
+}
+
+.ingredient-inputs .select-wrapper {
+     flex: 0 0 130px;
 }
 
 /* ── 16. Step Rows ────────────────────────────────────────── */
@@ -639,25 +648,34 @@ select.input-error:focus {
     .navbar-links {
         display: none;
     }
+
+    .ingredient-inputs {
+        flex-wrap: wrap;
+    }
+
+    .ingredient-name {
+        flex-basis: 100%;
+    }
 }
 
 @media (max-width: 540px) {
-    .ingredient-inputs {
-        flex-direction: column;
-    }
+     .ingredient-inputs {
+         flex-direction: column;
+     }
 
-    .ingredient-quantity {
-        width: 100%;
-    }
+     .ingredient-quantity,
+     .ingredient-unit {
+         width: 100%;
+     }
 
-    .form-actions {
-        flex-direction: column-reverse;
-        align-items: stretch;
-    }
+     .form-actions {
+         flex-direction: column-reverse;
+         align-items: stretch;
+     }
 
-    .btn {
-        width: 100%;
-        justify-content: center;
-    }
+     .btn {
+         width: 100%;
+         justify-content: center;
+     }
 }
 
