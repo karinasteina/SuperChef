@@ -20,6 +20,7 @@ public class Recipe
 //id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Long id;
 //title
     @NotBlank(message = "Recipe title cannot be blank")
