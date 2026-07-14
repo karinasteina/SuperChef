@@ -1,4 +1,4 @@
-package lv.superchef.app.dtos;
+package lv.superchef.app.dto;
 
 
 import lombok.Data;

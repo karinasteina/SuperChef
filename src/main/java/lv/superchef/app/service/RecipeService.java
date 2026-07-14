@@ -1,7 +1,7 @@
-package lv.superchef.app.services;
+package lv.superchef.app.service;
 
-import lv.superchef.app.dtos.IngredientInputDTO;
-import lv.superchef.app.dtos.RecipeCreateDTO;
+import lv.superchef.app.dto.IngredientInputDTO;
+import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.model.RecipeIngredient;
 import lv.superchef.app.model.RecipeStep;

@@ -1,7 +1,7 @@
 package lv.superchef.app;
 
 import lv.superchef.app.model.AppUser;
-import lv.superchef.app.model.Role;
+import lv.superchef.app.enums.Role;
 import lv.superchef.app.repository.IAppUserRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
