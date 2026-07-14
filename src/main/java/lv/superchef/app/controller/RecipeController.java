@@ -30,6 +30,7 @@ public class RecipeController {
     public String showCreateRecipePage(Model model) {
         model.addAttribute("activePage", "createRecipe");
         model.addAttribute("createRecipeDto", new CreateRecipeDto());
+        model.addAttribute("ingredientUnits", IngredientUnit.values());
         return "recipe/create";
     }
 
