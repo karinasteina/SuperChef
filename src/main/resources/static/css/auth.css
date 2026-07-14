@@ -1,0 +1,348 @@
+/* ---------- Reset ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #181818;
+    background-color: #fffdfb;
+}
+
+
+/* ---------- Page layout ---------- */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 34px 20px 60px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 390px;
+}
+
+
+/* ---------- Logo ---------- */
+
+.brand {
+    width: fit-content;
+    margin: 0 auto 42px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #191919;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.brand-icon {
+    width: 22px;
+    height: 22px;
+    display: block;
+    object-fit: contain;
+}
+
+
+/* ---------- Authentication tabs ---------- */
+
+.auth-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 32px;
+}
+
+.auth-tab {
+    position: relative;
+    padding: 14px 8px 16px;
+    color: #6d6d6d;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.auth-tab.active {
+    color: #ff5f00;
+}
+
+.auth-tab.active::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color: #ff5f00;
+    content: "";
+}
+
+
+/* ---------- Form ---------- */
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-field label {
+    margin-bottom: 10px;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.form-field input {
+    width: 100%;
+    height: 50px;
+    padding: 0 14px;
+    border: 1px solid #e4ddd8;
+    border-radius: 11px;
+    outline: none;
+    background-color: #ffffff;
+    color: #1c1c1c;
+    font: inherit;
+    font-size: 0.86rem;
+    transition: border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.form-field input::placeholder {
+    color: #858585;
+}
+
+.form-field input:focus {
+    border-color: #ff6500;
+    box-shadow: 0 0 0 3px rgb(255 101 0 / 12%);
+}
+
+
+/* ---------- Validation and messages ---------- */
+
+.field-error {
+    margin: 7px 0 0;
+    color: #c62828;
+    font-size: 0.75rem;
+}
+
+.form-message {
+    margin-bottom: 22px;
+    padding: 11px 13px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
+
+.error-message {
+    border: 1px solid #f3b4b4;
+    color: #a90000;
+    background-color: #fff1f1;
+}
+
+.success-message {
+    border: 1px solid #aad9b3;
+    color: #176126;
+    background-color: #effaf1;
+}
+
+
+/* ---------- Main button ---------- */
+
+.primary-button {
+    width: 100%;
+    height: 50px;
+    margin-top: 30px;
+    border: 0;
+    border-radius: 11px;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #ff6200;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: background-color 150ms ease,
+    transform 100ms ease;
+}
+
+.primary-button:hover {
+    background-color: #eb5a00;
+}
+
+.primary-button:active {
+    transform: translateY(1px);
+}
+
+.primary-button:focus-visible {
+    outline: 3px solid rgb(255 98 0 / 25%);
+    outline-offset: 2px;
+}
+
+.login-button {
+    margin-top: 18px;
+}
+
+
+/* ---------- Login options ---------- */
+
+.login-options {
+    margin-top: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.75rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #686868;
+    cursor: pointer;
+}
+
+.remember-me input {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: #ff6200;
+}
+
+.forgot-password {
+    color: #ff6200;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+
+/* ---------- Divider ---------- */
+
+.social-divider {
+    margin: 28px 0 18px;
+    color: #858585;
+    text-align: center;
+    font-size: 0.72rem;
+}
+
+
+/* ---------- Social buttons ---------- */
+
+.social-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.social-button {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 1px solid #e5ddd8;
+    border-radius: 10px;
+    color: #171717;
+    background-color: #ffffff;
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 700;
+    transition: border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.social-button:hover {
+    border-color: #cfc4bd;
+    background-color: #faf8f6;
+}
+
+.google-icon,
+.facebook-icon {
+    font-weight: 800;
+}
+
+.facebook-icon {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.85rem;
+}
+
+
+/* ---------- Bottom authentication link ---------- */
+
+.auth-footer {
+    margin: 48px 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    color: #848484;
+    font-size: 0.72rem;
+}
+
+.auth-footer a {
+    color: #ff5f00;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* ---------- Mobile adjustments ---------- */
+
+@media (max-width: 420px) {
+    .auth-page {
+        padding-right: 28px;
+        padding-left: 28px;
+    }
+
+    .brand {
+        margin-bottom: 34px;
+    }
+
+    .auth-footer {
+        gap: 20px;
+    }
+
+    .login-options {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding-right: 4.5rem;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
