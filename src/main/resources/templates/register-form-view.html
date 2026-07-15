@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Sign Up | SuperChef</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<main class="auth-page">
+    <section class="auth-card">
+
+        <!-- Logo -->
+        <a class="brand" th:href="@{/home}">
+            <img
+                    alt="SuperChef logo"
+                    class="brand-icon"
+                    th:src="@{/images/chef-logo.png}"
+            >
+
+            <span>SuperChef</span>
+        </a>
+
+        <!-- Login / Sign-up navigation -->
+        <nav aria-label="Authentication navigation" class="auth-tabs">
+            <a class="auth-tab" th:href="@{/login}">
+                Log In
+            </a>
+
+            <a class="auth-tab active" th:href="@{/register}">
+                Sign Up
+            </a>
+        </nav>
+
+        <!-- Registration form -->
+        <form
+                class="auth-form"
+                method="post"
+                th:action="@{/register}"
+                th:object="${registerRequest}"
+        >
+            <div class="form-field">
+                <label for="username">Username</label>
+
+                <input
+                        autocomplete="username"
+                        id="username"
+                        maxlength="15"
+                        minlength="5"
+                        pattern="[A-Za-z0-9_]{5,15}"
+                        placeholder="Enter your username"
+                        required
+                        th:field="*{username}"
+                        title="Username must contain 5 to 15 letters, numbers, or underscores"
+                        type="text">
+
+                <p
+                        class="field-error"
+                        th:errors="*{username}"
+                        th:if="${#fields.hasErrors('username')}"
+                ></p>
+            </div>
+
+            <div class="form-field">
+                <label for="email">Email</label>
+
+                <input
+                        autocomplete="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                        th:field="*{email}"
+                        type="email"
+                >
+
+                <p
+                        class="field-error"
+                        th:errors="*{email}"
+                        th:if="${#fields.hasErrors('email')}"
+                ></p>
+            </div>
+
+            <div class="form-field">
+                <label for="password">Password</label>
+
+                <div class="password-input-wrapper">
+                    <input
+                            autocomplete="new-password"
+                            id="password"
+                            minlength="12"
+                            placeholder="Create a password"
+                            required
+                            th:field="*{password}"
+                            title="Password must contain at least 12 characters"
+                            type="password"
+                    >
+
+                    <button
+                            aria-label="Show password"
+                            class="password-toggle"
+                            data-target="password"
+                            type="button"
+                    >
+                        Show
+                    </button>
+                </div>
+
+                <p
+                        class="field-error"
+                        th:errors="*{password}"
+                        th:if="${#fields.hasErrors('password')}"
+                ></p>
+            </div>
+
+            <div class="form-field">
+                <label for="confirmPassword">Confirm Password</label>
+
+                <div class="password-input-wrapper">
+                    <input
+                            autocomplete="new-password"
+                            id="confirmPassword"
+                            minlength="12"
+                            placeholder="Repeat your password"
+                            required
+                            th:field="*{confirmPassword}"
+                            type="password"
+                    >
+
+                    <button
+                            aria-label="Show confirmed password"
+                            class="password-toggle"
+                            data-target="confirmPassword"
+                            type="button"
+                    >
+                        Show
+                    </button>
+                </div>
+
+                <p
+                        class="field-error"
+                        id="confirmPasswordError"
+                        th:errors="*{confirmPassword}"
+                        th:if="${#fields.hasErrors('confirmPassword')}"
+                ></p>
+            </div>
+
+            <button class="primary-button" type="submit">
+                Sign Up
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="social-divider">
+            <span>or continue with</span>
+        </div>
+
+
+        <div class="social-buttons">
+            <a class="social-button" href="#">
+                <span class="google-icon">G</span>
+                <span>Google</span>
+            </a>
+
+            <a class="social-button" href="#">
+                <span class="facebook-icon">f</span>
+                <span>Facebook</span>
+            </a>
+        </div>
+
+        <p class="auth-footer">
+            <span>Already have an account?</span>
+            <a th:href="@{/login}">Log in</a>
+        </p>
+
+    </section>
+</main>
+<div th:replace="fragments/footer :: footer"></div>
+<script>
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+
+    function validatePasswordMatch() {
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            confirmPasswordInput.setCustomValidity(
+                "Passwords do not match."
+            );
+        } else {
+            confirmPasswordInput.setCustomValidity("");
+        }
+    }
+
+    passwordInput.addEventListener("input", validatePasswordMatch);
+    confirmPasswordInput.addEventListener("input", validatePasswordMatch);
+
+    document.querySelectorAll(".password-toggle").forEach(button => {
+        button.addEventListener("click", () => {
+            const targetId = button.dataset.target;
+            const targetInput = document.getElementById(targetId);
+            const isHidden = targetInput.type === "password";
+
+            targetInput.type = isHidden ? "text" : "password";
+            button.textContent = isHidden ? "Hide" : "Show";
+
+            button.setAttribute(
+                "aria-label",
+                isHidden ? "Hide password" : "Show password"
+            );
+        });
+    });
+</script>
+
+
+</body>
+</html>

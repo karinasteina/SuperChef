@@ -8,21 +8,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
 
 <!-- ====== NAVBAR ====== -->
-<nav class="navbar">
-    <a href="/" class="navbar-brand">
-        <span class="brand-icon">🍳</span>
-        <span class="brand-name">SuperChef</span>
-    </a>
-    <ul class="navbar-links">
-        <li><a href="/">Feed</a></li>
-        <li><a href="/recipes/create" class="active">Create Recipe</a></li>
-        <li><a href="/profile">My Profile</a></li>
-    </ul>
-</nav>
+<div th:replace="fragments/navbar :: navbar"></div>
 
 <!-- ====== MAIN PAGE ====== -->
 <main class="create-recipe-page">
@@ -104,10 +95,20 @@
                                    th:field="*{ingredients[__${i.index}__].name}"
                                    placeholder="Ingredient name"
                                    class="ingredient-name"/>
-                            <input type="text"
-                                   th:field="*{ingredients[__${i.index}__].quantity}"
-                                   placeholder="Quantity (e.g. 2 cups)"
-                                   class="ingredient-quantity"/>
+                            <input type="number"
+                                   th:field="*{ingredients[__${i.index}__].amount}"
+                                   placeholder="Quantity (e.g. 2)"
+                                   class="ingredient-quantity"
+                                   step="0.01"/>
+                            <div class="select-wrapper">
+                                <select th:field="*{ingredients[__${i.index}__].unit}"
+                                        class="ingredient-unit">
+                                    <option value="">Select unit…</option>
+                                    <option th:each="unit : ${ingredientUnits}"
+                                            th:value="${unit.name()}"
+                                            th:text="${unit}">G</option>
+                                </select>
+                            </div>
                         </div>
                         <button type="button" class="btn-remove" aria-label="Remove ingredient">✕</button>
                     </div>
@@ -229,9 +230,7 @@
 </main>
 
 <!-- ====== FOOTER ====== -->
-<footer class="footer">
-    <p>&copy; 2026 SuperChef. Made with ❤️ for food lovers.</p>
-</footer>
+<div th:replace="fragments/footer :: footer"></div>
 
 <script th:src="@{/js/create-recipe.js}"></script>
 </body>

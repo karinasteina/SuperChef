@@ -1,20 +1,57 @@
 package lv.superchef.app.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import lv.superchef.app.enums.Role;
 
 @Getter
 @Setter
+@Entity
+@Table(name="AppUser")
+@NoArgsConstructor
 public class AppUser {
 
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(AccessLevel.NONE)
+    @Column(name="UserId")
+    private Long id;
+
+    @Column(name="Username")
+    @NotBlank
+    @Pattern(
+            regexp = "^[a-zA-Z0-9_]{5,15}$",
+            message = "Username must be 5-15 characters and contain only letters, numbers, and underscores"
+    )
     private String username;
+
+    @Column(name="Email")
+    @NotBlank
+    @Pattern(
+            regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            message = "Please enter a valid email address"
+    )
     private String email;
-    private String password; // this will be encrypted
-    private String role;
 
-    public AppUser(){
+    @NotBlank
+    @Column(name = "Password")
+    @Size(min = 12, message = "Password must be at least 12 characters")
+    private String password;
 
+    @NotNull
+    @Column(name="Role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public AppUser(String username, String password, String email, Role role){
+        setUsername(username);
+        setPassword(password);
+        setEmail(email);
+        setRole(role);
     }
 
 }

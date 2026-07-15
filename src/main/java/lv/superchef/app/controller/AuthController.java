@@ -2,15 +2,25 @@ package lv.superchef.app.controller;
 
 import jakarta.validation.Valid;
 import lv.superchef.app.dto.RegisterRequest;
+import lv.superchef.app.service.IAppUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class AuthController {
+
+    @Autowired
+    private IAppUserService userService;
+
+    @GetMapping("/login")
+    public String getControllerShowLogInPage() {
+        return "login-view";
+    }
+
     @GetMapping("/register")
     public String getControllerRegisterUser(Model model) {
         model.addAttribute("registerRequest", new RegisterRequest());
@@ -18,12 +28,18 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String postControllerRegisterUser(@Valid @ModelAttribute("registerRequest") RegisterRequest registerRequest, BindingResult result) {
+    public String postControllerRegisterUser(@Valid RegisterRequest registerRequest, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "register-form-view";
         }
+        try {
+            userService.register(registerRequest);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "register-form-view";
+        }
 
-        return "redirect:/home";
+        return "redirect:/login?registered";
     }
 
 }
