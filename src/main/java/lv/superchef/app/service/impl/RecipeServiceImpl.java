@@ -14,23 +14,35 @@ import lv.superchef.app.service.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Validated
-public class RecipeServiceImpl implements IRecipeService {
+public class RecipeServiceImpl implements IRecipeService
+{
+
+    private static final String DEFAULT_IMAGE_URL = "/images/recipes/recipe-00.webp";
 
     @Autowired
     private IRecipeRepo recipeRepo;
 
     @Override
     @Transactional
-    public Recipe createRecipe(@Valid RecipeCreateDTO dto)
+    public Recipe createRecipe(@Valid RecipeCreateDTO dto, MultipartFile coverImage)
     {
         Recipe recipe = new Recipe();
         mapDtoToRecipe(dto, recipe);
+        String imgPath = storeCoverImage(coverImage);
+        recipe.setImageUrl(imgPath);
         return recipeRepo.save(recipe);
     }
 
@@ -106,5 +118,31 @@ public class RecipeServiceImpl implements IRecipeService {
                 recipe.getSteps().add(step);
             }
         }
+    }
+    private String storeCoverImage(MultipartFile coverImage) {
+        if (coverImage == null || coverImage.isEmpty()) {
+            return DEFAULT_IMAGE_URL;
+        }
+
+        String extension = getExtension(coverImage.getOriginalFilename());
+        String fileName = UUID.randomUUID() + extension;
+
+        Path targetDir = Paths.get("src/main/resources/static/images/recipes").toAbsolutePath().normalize();
+        Path targetFile = targetDir.resolve(fileName).normalize();
+
+        try {
+            Files.createDirectories(targetDir);
+            Files.copy(coverImage.getInputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            throw new IllegalStateException("Could not store recipe cover image", ex);
+        }
+
+        return "/images/recipes/" + fileName;
+    }
+    private String getExtension(String filename) {
+        if (filename == null || !filename.contains(".")) {
+            return ".jpg"; // fallback extension
+        }
+        return filename.substring(filename.lastIndexOf("."));
     }
 }
