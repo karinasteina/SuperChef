@@ -16,10 +16,12 @@ public interface IFavoriteRecipeRepo extends JpaRepository<FavoriteRecipe, Long>
     @Modifying
     @Query(value = """
             INSERT INTO favorite_recipe (
+                favorite_recipe_id,
                 profile_id,
                 recipe_id
             )
             VALUES (
+                NULL,
                 :profileId,
                 :recipeId
             )
