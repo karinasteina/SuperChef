@@ -1,9 +1,12 @@
 package lv.superchef.app.service.impl;
 
+import jakarta.transaction.Transactional;
 import lv.superchef.app.dto.RegisterRequest;
-import lv.superchef.app.model.AppUser;
 import lv.superchef.app.enums.Role;
+import lv.superchef.app.model.AppUser;
+import lv.superchef.app.model.Profile;
 import lv.superchef.app.repository.IAppUserRepo;
+import lv.superchef.app.repository.IProfileRepo;
 import lv.superchef.app.service.IAppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,30 +17,35 @@ public class AppUserServiceImpl implements IAppUserService {
 
     @Autowired
     private IAppUserRepo userRepo;
+    @Autowired
+    private IProfileRepo profileRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+   
     @Override
+    @Transactional
     public AppUser register(RegisterRequest registerRequest) {
-        if(registerRequest == null){
+        if (registerRequest == null) {
             throw new IllegalArgumentException("Register request is null");
         }
 
-        if(registerRequest.getUsername() == null || registerRequest.getEmail() == null || registerRequest.getPassword()
-                == null || registerRequest.getConfirmPassword() == null){
+        if (registerRequest.getUsername() == null || registerRequest.getEmail() == null || registerRequest.getPassword() == null || registerRequest.getConfirmPassword() == null) {
             throw new IllegalArgumentException("Incorrect input parameters");
         }
 
-        if(!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())){
+        if (!registerRequest
+                .getPassword()
+                .equals(registerRequest.getConfirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
-        if(userRepo.existsByUsername(registerRequest.getUsername())){
+        if (userRepo.existsByUsername(registerRequest.getUsername())) {
             throw new IllegalArgumentException("Username is already taken");
         }
 
-        if(userRepo.existsByEmail(registerRequest.getEmail())){
+        if (userRepo.existsByEmail(registerRequest.getEmail())) {
             throw new IllegalArgumentException("Account with this email already exists");
         }
 
@@ -47,8 +55,15 @@ public class AppUserServiceImpl implements IAppUserService {
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         newUser.setEmail(registerRequest.getEmail());
         newUser.setRole(Role.ROLE_USER);
+        AppUser savedUser = userRepo.save(newUser);
 
-        return userRepo.save(newUser);
+        Profile profile = new Profile();
+        profile.setAppUser(savedUser);
+
+        profileRepo.save(profile);
+
+        return savedUser;
+
     }
 
 }
