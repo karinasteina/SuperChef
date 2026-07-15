@@ -26,7 +26,7 @@ public class FollowController {
     @Autowired
     private IProfileService profileService;
 
-    // userDetails - user that follows and the id for the profile he wants to follow
+    // userDetails -- user that follows and the id for the profile he wants to follow
     @PostMapping("/follow/{followingProfileId}")
     public ResponseEntity<Void> follow(@AuthenticationPrincipal AppUserDetails userDetails, @PathVariable Long followingProfileId){
         if(userDetails == null){
