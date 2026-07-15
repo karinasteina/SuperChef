@@ -1,5 +1,6 @@
 package lv.superchef.app.controller;
 
+import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.enums.IngredientUnit;
