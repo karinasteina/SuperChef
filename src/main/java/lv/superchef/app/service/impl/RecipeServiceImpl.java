@@ -1,6 +1,8 @@
 package lv.superchef.app.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.model.Recipe;
@@ -11,28 +13,37 @@ import lv.superchef.app.repository.RecipeSpecifications;
 import lv.superchef.app.service.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.validation.annotation.Validated;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
-
 
 @Service
-public class RecipeServiceImpl implements IRecipeService {
-    private static final String DEFAULT_IMAGE_URL = "/images/recipes/recipe-00.webp";
+@Validated
+public class RecipeServiceImpl implements IRecipeService
+{
     @Autowired
     private IRecipeRepo recipeRepo;
 
+    @Override
+    @Transactional
+    public Recipe createRecipe(@Valid RecipeCreateDTO dto)
+    {
+        Recipe recipe = new Recipe();
+        mapDtoToRecipe(dto, recipe);
+        return recipeRepo.save(recipe);
+    }
 
     @Override
     public List<Recipe> searchRecipes(String keyword, String category, String difficulty, Integer maxCalories, Integer maxPrepTime, Integer maxCookTime) {
         return recipeRepo.findAll(RecipeSpecifications.recipeByFilter(keyword, category,
                 difficulty, maxCalories, maxPrepTime, maxCookTime));
+    }
+
+    @Override
+    public List<Recipe> getAllRecipes()
+    {
+        return recipeRepo.findAll();
     }
 
     @Override
@@ -42,84 +53,59 @@ public class RecipeServiceImpl implements IRecipeService {
     }
 
     @Override
-    public Recipe createRecipe(RecipeCreateDTO dto, MultipartFile coverImage) {
-        Recipe recipe = new Recipe();
+    @Transactional
+    public Recipe updateRecipe(Long id, @Valid RecipeCreateDTO dto)
+    {
+        Recipe recipe = getRecipeById(id);
+        mapDtoToRecipe(dto, recipe);
+        recipe.setUpdatedAt(LocalDateTime.now());
+        return recipeRepo.save(recipe);
+    }
+
+    @Override
+    @Transactional
+    public void deleteRecipe(Long id)
+    {
+        Recipe recipe = getRecipeById(id);
+        recipeRepo.delete(recipe);
+    }
+
+    private void mapDtoToRecipe(RecipeCreateDTO dto, Recipe recipe)
+    {
         recipe.setTitle(dto.getTitle());
         recipe.setDescription(dto.getDescription());
+        recipe.setImageUrl(dto.getImageUrl());
         recipe.setCalories(dto.getCalories());
         recipe.setPreparationTime(dto.getPreparationTime());
         recipe.setCookingTime(dto.getCookingTime());
         recipe.setDifficulty(dto.getDifficulty());
         recipe.setCategory(dto.getCategory());
-        recipe.setImageUrl(storeCoverImage(coverImage));
 
-        if (dto.getIngredients() != null) {
-            for (IngredientInputDTO ingredientDto : dto.getIngredients()) {
-                if (ingredientDto == null || ingredientDto.getName() == null || ingredientDto.getName().isBlank()) {
-                    continue;
-                }
-
+        recipe.getIngredients().clear();
+        if(dto.getIngredients() != null)
+        {
+            for (IngredientInputDTO ingDto : dto.getIngredients())
+            {
                 RecipeIngredient ingredient = new RecipeIngredient();
-                ingredient.setIngredientName(ingredientDto.getName().trim());
-                ingredient.setQuantity(ingredientDto.getQuantity());
-                ingredient.setUnit(ingredientDto.getUnit());
+                ingredient.setIngredientName(ingDto.getName());
+                ingredient.setQuantity(ingDto.getQuantity());
+                ingredient.setUnit(ingDto.getUnit());
                 recipe.getIngredients().add(ingredient);
             }
         }
 
-        if (dto.getSteps() != null) {
-            int stepNumber = 1;
-            for (String instruction : dto.getSteps()) {
-                if (instruction == null || instruction.isBlank()) {
-                    continue;
-                }
-
+        recipe.getSteps().clear();
+        if(dto.getSteps() != null)
+        {
+            int currentStepNum = 1;
+            for (String stepInstruction : dto.getSteps())
+            {
                 RecipeStep step = new RecipeStep();
-                step.setStepNumber(stepNumber++);
-                step.setInstruction(instruction.trim());
+                step.setStepNumber(currentStepNum++);
+                step.setInstruction(stepInstruction);
                 recipe.getSteps().add(step);
             }
         }
-
-        return recipeRepo.save(recipe);
     }
 
-    @Override
-    public List<Recipe> getAllRecipes() {
-        return recipeRepo.findAll();
-    }
-
-    private String storeCoverImage(MultipartFile coverImage) {
-        if (coverImage == null || coverImage.isEmpty()) {
-            return DEFAULT_IMAGE_URL;
-        }
-
-        String extension = getExtension(coverImage.getOriginalFilename());
-        String fileName = UUID.randomUUID() + extension;
-
-        Path targetDir = Paths.get("src/main/resources/static/images/recipes").toAbsolutePath().normalize();
-        Path targetFile = targetDir.resolve(fileName).normalize();
-
-        try {
-            Files.createDirectories(targetDir);
-            Files.copy(coverImage.getInputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            throw new IllegalStateException("Could not store recipe cover image", ex);
-        }
-
-        return "/images/recipes/" + fileName;
-    }
-
-    private String getExtension(String fileName) {
-        if (fileName == null) {
-            return ".webp";
-        }
-
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex < 0 || dotIndex == fileName.length() - 1) {
-            return ".webp";
-        }
-
-        return fileName.substring(dotIndex);
-    }
 }
