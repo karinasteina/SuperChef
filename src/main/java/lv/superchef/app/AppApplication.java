@@ -51,7 +51,7 @@ public class AppApplication {
 
 
                 for (var recipe : RECIPE_DATA) {
-                    recipeService.createRecipe(recipe);
+                    recipeService.createRecipe(recipe, null);
                 }
             }
 
