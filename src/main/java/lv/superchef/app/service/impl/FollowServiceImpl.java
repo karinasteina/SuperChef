@@ -8,6 +8,7 @@ import lv.superchef.app.service.IFollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -51,6 +52,7 @@ public class FollowServiceImpl implements IFollowService {
     }
 
     @Override
+    @Transactional
     public void unfollow(Long followerId, Long followingId) {
         if(followerId == null || followingId == null){
             throw new IllegalArgumentException("Parameters are null");
