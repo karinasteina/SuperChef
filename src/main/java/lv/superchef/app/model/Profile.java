@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "UserProfile")
+@Table(name = "Profile")
 @Setter
 @Getter
 @NoArgsConstructor
@@ -47,15 +47,13 @@ public class Profile {
 
     @NotNull
     @OneToOne
-    @JoinColumn(name = "AppUserId", referencedColumnName = "UserId", nullable = false, unique = true)
+    @JoinColumn(name = "UserId", referencedColumnName = "UserId", nullable = false, unique = true)
     private AppUser appUser;
 
-    @NotNull
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ProfileId")
     private List<Recipe> recipes = new ArrayList<>();
 
-    @NotNull
     @ManyToMany(mappedBy = "followedProfiles")
     private Set<Profile> followers = new HashSet<>();
 
@@ -68,10 +66,6 @@ public class Profile {
     )
     private Set<Profile> followedProfiles = new HashSet<>();
 
-    @NotNull
-    @ManyToMany
-    @JoinTable(name="SavedRecipes")
-    private Set<Recipe> savedRecipes = new HashSet<>();
 
     public Profile(String displayName, String bio, String profileImageUrl, AppUser appUser){
         setDisplayName(displayName);
@@ -80,13 +74,6 @@ public class Profile {
         setAppUser(appUser);
     }
 
-    public void saveRecipe(Recipe recipe){
-        savedRecipes.add(recipe);
-    }
-
-    public void removeRecipe(Recipe recipe){
-        savedRecipes.remove(recipe);
-    }
 
     public void followProfile(Profile profile){
         followedProfiles.add(profile);
