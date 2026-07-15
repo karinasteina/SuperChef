@@ -58,6 +58,9 @@ public class AppUserServiceImpl implements IAppUserService {
         AppUser savedUser = userRepo.save(newUser);
 
         Profile profile = new Profile();
+        profile.setDisplayName(savedUser.getUsername());
+        profile.setBio("New SuperChef member");
+        profile.setProfileImageUrl("/images/chef.jpg");
         profile.setAppUser(savedUser);
 
         profileRepo.save(profile);
