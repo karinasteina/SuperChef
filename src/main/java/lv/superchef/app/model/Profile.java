@@ -51,13 +51,54 @@ public class Profile {
     private AppUser appUser;
 
     @NotNull
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "ProfileId")
     private List<Recipe> recipes = new ArrayList<>();
 
     @NotNull
+    @ManyToMany(mappedBy = "followedProfiles")
     private Set<Profile> followers = new HashSet<>();
+
+    @NotNull
+    @ManyToMany
+    @JoinTable(
+            name = "ProfileFollows",
+            joinColumns = @JoinColumn(name="FollowerId"),
+            inverseJoinColumns = @JoinColumn(name="FollowedId")
+    )
+    private Set<Profile> followedProfiles = new HashSet<>();
 
     @NotNull
     @ManyToMany
     @JoinTable(name="SavedRecipes")
     private Set<Recipe> savedRecipes = new HashSet<>();
+
+    public Profile(String displayName, String bio, String profileImageUrl, AppUser appUser){
+        setDisplayName(displayName);
+        setBio(bio);
+        setProfileImageUrl(profileImageUrl);
+        setAppUser(appUser);
+    }
+
+    public void saveRecipe(Recipe recipe){
+        savedRecipes.add(recipe);
+    }
+
+    public void followProfile(Profile profile){
+        followedProfiles.add(profile);
+        profile.addFollower(this);
+    }
+
+    public void addFollower(Profile profile){
+        followers.add(profile);
+    }
+
+    public void removeFollower(Profile profile){
+        followers.remove(profile);
+    }
+
+    public void unfollowProfile(Profile profile){
+        followedProfiles.remove(profile);
+        profile.removeFollower(this);
+    }
 }
