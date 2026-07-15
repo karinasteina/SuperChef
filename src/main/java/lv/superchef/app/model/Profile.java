@@ -84,6 +84,10 @@ public class Profile {
         savedRecipes.add(recipe);
     }
 
+    public void removeRecipe(Recipe recipe){
+        savedRecipes.remove(recipe);
+    }
+
     public void followProfile(Profile profile){
         followedProfiles.add(profile);
         profile.addFollower(this);
