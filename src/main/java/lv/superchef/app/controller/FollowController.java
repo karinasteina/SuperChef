@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,22 @@ public class FollowController {
         }
 
         followService.follow(follower.get().getId(), followingProfileId);
+
+    }
+
+    @DeleteMapping("/unfollow/{unfollowProfileId}")
+    public void unfollow(@AuthenticationPrincipal AppUserDetails userDetails, @PathVariable Long unfollowingProfileId){
+        if(userDetails == null){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in");
+        }
+
+        Optional<Profile> unfollower = profileService.getProfileByUserId(userDetails.getUserId());
+
+        if(unfollower.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        followService.unfollow(unfollower.get().getId(), unfollowingProfileId);
 
     }
 
