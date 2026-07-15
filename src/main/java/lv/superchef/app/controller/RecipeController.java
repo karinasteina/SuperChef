@@ -1,5 +1,6 @@
 package lv.superchef.app.controller;
 
+import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.enums.IngredientUnit;
 import lv.superchef.app.model.Recipe;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -55,20 +57,23 @@ public class RecipeController {
 
     @GetMapping("/create")
     public String showCreateRecipePage(@AuthenticationPrincipal AppUserDetails userDetails, Model model) {
+        RecipeCreateDTO createRecipeDto = new RecipeCreateDTO();
+        createRecipeDto.setIngredients(new ArrayList<>(List.of(new IngredientInputDTO())));
+        createRecipeDto.setSteps(new ArrayList<>(List.of("")));
         model.addAttribute("loggedIn", userDetails != null);
         model.addAttribute("activePage", "createRecipe");
-        model.addAttribute("createRecipeDto", new RecipeCreateDTO());
+        model.addAttribute("createRecipeDto", createRecipeDto);
         model.addAttribute("ingredientUnits", IngredientUnit.values());
 
         return "recipe/create";
     }
 
     @PostMapping
-    public String handleCreateRecipe(@ModelAttribute RecipeCreateDTO createRecipeDto, @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) {
-        // TODO: Pass to service layer once backend is wired
-        System.out.println("Received recipe: " + createRecipeDto.getTitle());
-
-        return "redirect:/recipes/create?success=true";
+    public String handleCreateRecipe(
+           @Valid @ModelAttribute RecipeCreateDTO createRecipeDto,
+            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) {
+        recipeService.createRecipe(createRecipeDto, coverImage);
+        return "redirect:/recipes?success=true";
     }
 
     private void addFavoriteState(AppUserDetails userDetails, Model model) {
