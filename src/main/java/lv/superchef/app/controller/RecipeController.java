@@ -4,8 +4,8 @@ import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.enums.IngredientUnit;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.security.AppUserDetails;
+import lv.superchef.app.service.IFavoriteRecipeService;
 import lv.superchef.app.service.IRecipeService;
-import lv.superchef.app.service.impl.FavoriteRecipeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,9 +22,9 @@ import java.util.Set;
 public class RecipeController {
 
     private final IRecipeService recipeService;
-    private final FavoriteRecipeService favoriteRecipeService;
+    private final IFavoriteRecipeService favoriteRecipeService;
 
-    public RecipeController(IRecipeService recipeService, FavoriteRecipeService favoriteRecipeService) {
+    public RecipeController(IRecipeService recipeService, IFavoriteRecipeService favoriteRecipeService) {
         this.recipeService = recipeService;
         this.favoriteRecipeService = favoriteRecipeService;
     }
@@ -54,7 +54,8 @@ public class RecipeController {
     }
 
     @GetMapping("/create")
-    public String showCreateRecipePage(Model model) {
+    public String showCreateRecipePage(@AuthenticationPrincipal AppUserDetails userDetails, Model model) {
+        model.addAttribute("loggedIn", userDetails != null);
         model.addAttribute("activePage", "createRecipe");
         model.addAttribute("createRecipeDto", new RecipeCreateDTO());
         model.addAttribute("ingredientUnits", IngredientUnit.values());

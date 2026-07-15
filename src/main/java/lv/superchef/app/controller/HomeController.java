@@ -2,8 +2,8 @@ package lv.superchef.app.controller;
 
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.security.AppUserDetails;
+import lv.superchef.app.service.IFavoriteRecipeService;
 import lv.superchef.app.service.IRecipeService;
-import lv.superchef.app.service.impl.FavoriteRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ public class HomeController {
     @Autowired
     private IRecipeService recipeService;
     @Autowired
-    private FavoriteRecipeService favoriteRecipeService;
+    private IFavoriteRecipeService favoriteRecipeService;
 
     @GetMapping("/")
     public String getControllerShowHomePage(Model model) {
@@ -38,8 +38,9 @@ public class HomeController {
     }
 
     @GetMapping("/profile")
-    public String profile(Model model) {
+    public String profile(@AuthenticationPrincipal AppUserDetails userDetails, Model model) {
         model.addAttribute("activePage", "profile");
+        model.addAttribute("loggedIn", userDetails != null);
         return "profile";
     }
 

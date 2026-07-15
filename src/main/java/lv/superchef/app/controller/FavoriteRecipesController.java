@@ -4,9 +4,10 @@ import lv.superchef.app.model.FavoriteRecipe;
 import lv.superchef.app.model.Profile;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.security.AppUserDetails;
-import lv.superchef.app.service.RecipeService;
-import lv.superchef.app.service.impl.FavoriteRecipeService;
-import lv.superchef.app.service.impl.ProfileServiceImpl;
+import lv.superchef.app.service.IFavoriteRecipeService;
+import lv.superchef.app.service.IProfileService;
+import lv.superchef.app.service.IRecipeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,12 +24,14 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/recipes/favorites")
 public class FavoriteRecipesController {
+    @Autowired
+    private final IFavoriteRecipeService favoriteRecipeService;
+    @Autowired
+    private final IRecipeService recipeService;
+    @Autowired
+    private final IProfileService profileService;
 
-    private final FavoriteRecipeService favoriteRecipeService;
-    private final RecipeService recipeService;
-    private final ProfileServiceImpl profileService;
-
-    public FavoriteRecipesController(FavoriteRecipeService favoriteRecipeService, RecipeService recipeService, ProfileServiceImpl profileService) {
+    public FavoriteRecipesController(IFavoriteRecipeService favoriteRecipeService, IRecipeService recipeService, IProfileService profileService) {
         this.favoriteRecipeService = favoriteRecipeService;
         this.recipeService = recipeService;
         this.profileService = profileService;

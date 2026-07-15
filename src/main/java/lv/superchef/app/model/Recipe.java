@@ -73,6 +73,4 @@ public class Recipe {
     //updated at
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
-    @Column(name = "favorite", nullable = false)
-    private boolean favorite;
 }

@@ -1,4 +1,4 @@
-package lv.superchef.app.service;
+package lv.superchef.app.service.impl;
 
 import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
@@ -7,6 +7,7 @@ import lv.superchef.app.model.Recipe;
 import lv.superchef.app.model.RecipeIngredient;
 import lv.superchef.app.model.RecipeStep;
 import lv.superchef.app.repository.RecipeRepository;
+import lv.superchef.app.service.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;

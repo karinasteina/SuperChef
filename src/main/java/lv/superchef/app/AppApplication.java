@@ -6,7 +6,7 @@ import lv.superchef.app.model.AppUser;
 import lv.superchef.app.model.Profile;
 import lv.superchef.app.repository.IAppUserRepo;
 import lv.superchef.app.repository.IProfileRepo;
-import lv.superchef.app.service.RecipeService;
+import lv.superchef.app.service.impl.RecipeService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

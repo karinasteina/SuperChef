@@ -5,6 +5,7 @@ import lv.superchef.app.model.Profile;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.repository.IFavoriteRecipeRepo;
 import lv.superchef.app.repository.IProfileRepo;
+import lv.superchef.app.service.IFavoriteRecipeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class FavoriteRecipeService {
+public class FavoriteRecipeService implements IFavoriteRecipeService {
 
     private final IFavoriteRecipeRepo favoriteRecipeRepo;
     private final IProfileRepo profileRepository;
