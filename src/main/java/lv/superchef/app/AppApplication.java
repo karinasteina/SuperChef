@@ -3,7 +3,7 @@ package lv.superchef.app;
 import lv.superchef.app.enums.Role;
 import lv.superchef.app.model.AppUser;
 import lv.superchef.app.repository.IAppUserRepo;
-import lv.superchef.app.service.RecipeService;
+import lv.superchef.app.service.IRecipeService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +21,7 @@ public class AppApplication {
     }
 
     @Bean
-    public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder, RecipeService recipeService) {
+    public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder, IRecipeService recipeService) {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
