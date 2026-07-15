@@ -7,6 +7,7 @@ import lv.superchef.app.enums.IngredientUnit;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.security.AppUserDetails;
 import lv.superchef.app.service.IFavoriteRecipeService;
+import lv.superchef.app.service.IImageStorageService;
 import lv.superchef.app.service.IRecipeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,10 +27,13 @@ public class RecipeController {
 
     private final IRecipeService recipeService;
     private final IFavoriteRecipeService favoriteRecipeService;
+    private final IImageStorageService imageStorageService;
 
-    public RecipeController(IRecipeService recipeService, IFavoriteRecipeService favoriteRecipeService) {
+    public RecipeController(IRecipeService recipeService, IFavoriteRecipeService favoriteRecipeService, IImageStorageService imageStorageService)
+    {
         this.recipeService = recipeService;
         this.favoriteRecipeService = favoriteRecipeService;
+        this.imageStorageService = imageStorageService;
     }
 
     @GetMapping
@@ -71,9 +75,15 @@ public class RecipeController {
 
     @PostMapping
     public String handleCreateRecipe(
-           @Valid @ModelAttribute RecipeCreateDTO createRecipeDto,
+            @Valid @ModelAttribute RecipeCreateDTO createRecipeDto,
             @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) {
-        recipeService.createRecipe(createRecipeDto, coverImage);
+
+        String imageUrl = imageStorageService.storeCoverImage(coverImage);
+
+        createRecipeDto.setImageUrl(imageUrl);
+
+        recipeService.createRecipe(createRecipeDto);
+
         return "redirect:/recipes?success=true";
     }
 

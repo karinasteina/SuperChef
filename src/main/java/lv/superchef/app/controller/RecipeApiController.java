@@ -8,7 +8,6 @@ import lv.superchef.app.service.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,12 +20,11 @@ public class RecipeApiController
     @Autowired
     private IRecipeService recipeService;
 
-    @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<Recipe> createPost(
-            @Valid @ModelAttribute RecipeCreateDTO dto,
-            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage
-    ) {
-        return ResponseEntity.ok(recipeService.createRecipe(dto, coverImage));
+
+    @PostMapping
+    public ResponseEntity<Recipe> createPost(@Valid @RequestBody RecipeCreateDTO dto)
+    {
+        return ResponseEntity.ok(recipeService.createRecipe(dto));
     }
 
     @GetMapping

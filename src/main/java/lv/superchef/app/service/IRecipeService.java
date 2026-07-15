@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IRecipeService
 {
-    public Recipe createRecipe(@Valid RecipeCreateDTO dto, MultipartFile coverImage);
+    public Recipe createRecipe(@Valid RecipeCreateDTO dto);
 
     public List<Recipe> searchRecipes(String keyword, String category, String difficulty, Integer maxCalories,
                                       Integer maxPrepTime, Integer maxCookTime);
