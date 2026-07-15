@@ -60,6 +60,9 @@ public class AppApplication {
                         .findByAppUser_Id(appUser.getId())
                         .isEmpty()) {
                     Profile profile = new Profile();
+                    profile.setDisplayName(appUser.getUsername());
+                    profile.setBio("New SuperChef member");
+                    profile.setProfileImageUrl("/images/chef.jpg");
                     profile.setAppUser(appUser);
 
                     profileRepo.save(profile);
