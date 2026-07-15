@@ -15,7 +15,7 @@
 </head>
 
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 <main class="auth-page">
     <section class="auth-card">
 
@@ -139,7 +139,7 @@
 
     </section>
 </main>
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 <script>
     const loginForm = document.querySelector(".auth-form");
     const usernameInput = document.getElementById("username");

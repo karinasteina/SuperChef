@@ -25,7 +25,7 @@
 <body>
 
 <!-- ====== NAVBAR ====== -->
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- ====== MAIN PAGE ====== -->
 <main class="recipe-list-page">
@@ -34,8 +34,8 @@
         <h1 class="page-title">Discover Recipes</h1>
     </header>
 
-    <!-- Recipe filters -->
-    <div th:replace="fragments/recipe-filter :: recipe-filter"></div>
+
+    <div th:replace="~{fragments/recipe-filter :: recipe-filter}"></div>
 
     <!-- Result count -->
     <p aria-live="polite"
@@ -174,7 +174,8 @@
 </main>
 
 <!-- ====== FOOTER ====== -->
-<div th:replace="fragments/footer :: footer"></div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script defer th:src="@{/js/favorites.js}"></script>
 </body>
