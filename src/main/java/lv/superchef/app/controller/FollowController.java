@@ -10,11 +10,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/profiles")
 public class FollowController {
     @Autowired
     private IFollowService followService;
@@ -23,7 +25,7 @@ public class FollowController {
     private IProfileService profileService;
 
     // userDetails - user that follows and the id for the profile he wants to follow
-    @PostMapping
+    @PostMapping("/follow/{followingProfileId}")
     public void follow(@AuthenticationPrincipal AppUserDetails userDetails, @PathVariable Long followingProfileId){
         if(userDetails == null){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in");
@@ -38,5 +40,7 @@ public class FollowController {
         followService.follow(follower.get().getId(), followingProfileId);
 
     }
+
+
 
 }
