@@ -38,7 +38,7 @@ public class RecipeApiController
         return ResponseEntity.ok(recipeService.getRecipeById(id));
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<List<Recipe>> searchRecipes(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String category,
