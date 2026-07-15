@@ -6,6 +6,7 @@ import lv.superchef.app.service.IFollowService;
 import lv.superchef.app.service.IProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,35 +28,35 @@ public class FollowController {
 
     // userDetails - user that follows and the id for the profile he wants to follow
     @PostMapping("/follow/{followingProfileId}")
-    public void follow(@AuthenticationPrincipal AppUserDetails userDetails, @PathVariable Long followingProfileId){
+    public ResponseEntity<Void> follow(@AuthenticationPrincipal AppUserDetails userDetails, @PathVariable Long followingProfileId){
         if(userDetails == null){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in");
+            return ResponseEntity.status(401).build();
         }
 
         Optional<Profile> follower = profileService.getProfileByUserId(userDetails.getUserId());
 
         if(follower.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            return ResponseEntity.status(401).build();
         }
 
         followService.follow(follower.get().getId(), followingProfileId);
-
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/unfollow/{unfollowProfileId}")
-    public void unfollow(@AuthenticationPrincipal AppUserDetails userDetails, @PathVariable Long unfollowingProfileId){
+    @PostMapping("/unfollow/{unfollowProfileId}")
+    public ResponseEntity<Void> unfollow(@AuthenticationPrincipal AppUserDetails userDetails, @PathVariable Long unfollowProfileId){
         if(userDetails == null){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in");
+            return ResponseEntity.status(401).build();
         }
 
         Optional<Profile> unfollower = profileService.getProfileByUserId(userDetails.getUserId());
 
         if(unfollower.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+            return ResponseEntity.status(401).build();
         }
 
-        followService.unfollow(unfollower.get().getId(), unfollowingProfileId);
-
+        followService.unfollow(unfollower.get().getId(), unfollowProfileId);
+        return ResponseEntity.noContent().build();
     }
 
 
