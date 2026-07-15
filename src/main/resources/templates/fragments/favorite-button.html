@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<form class="favorite-form"
+      method="post"
+      th:action="@{/recipes/favorites/{recipeId}(recipeId=${recipeId})}"
+      th:attr="
+          data-favorite-url=@{/recipes/favorites/{recipeId}(
+              recipeId=${recipeId}
+          )},
+          data-unfavorite-url=@{/recipes/favorites/{recipeId}/unfavorite(
+              recipeId=${recipeId}
+          )}
+      "
+      th:fragment="favoriteButton(recipeId, isFavorite)">
+
+    <input th:if="${_csrf != null}"
+           th:name="${_csrf.parameterName}"
+           th:value="${_csrf.token}"
+           type="hidden"/>
+
+    <button class="favorite-button"
+            th:attr="
+                aria-pressed=${isFavorite},
+                aria-label=${isFavorite
+                    ? 'Remove recipe from favorites'
+                    : 'Add recipe to favorites'}
+            "
+            th:classappend="${isFavorite} ? 'is-favorite' : ''"
+            type="submit">
+
+        <span aria-hidden="true"
+              class="favorite-heart"
+              th:text="${isFavorite} ? '♥' : '♡'">
+            ♡
+        </span>
+
+        <span class="favorite-label"
+              th:text="${isFavorite}
+                  ? 'Remove from favorites'
+                  : 'Add to favorites'">
+            Add to favorites
+        </span>
+
+        <span aria-hidden="true"
+              class="favorite-burst">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </span>
+
+    </button>
+</form>
+
+</body>
+</html>

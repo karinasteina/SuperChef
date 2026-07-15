@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="width=device-width, initial-scale=1.0"
+          name="viewport"/>
 
-    <title>Recipes | SuperChef</title>
+    <title>Favorite Recipes | SuperChef</title>
 
-    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com"
+          rel="preconnect"/>
+
     <link crossorigin="anonymous"
           href="https://fonts.gstatic.com"
           rel="preconnect"/>
@@ -16,51 +19,60 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"/>
 
-    <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{/css/recipe-list.css}"/>
-    <link rel="stylesheet" th:href="@{/css/favorite-button.css}"/>
+    <link rel="stylesheet"
+          th:href="@{/css/create-recipe.css}"/>
+
+    <link rel="stylesheet"
+          th:href="@{/css/main.css}"/>
+
+    <link rel="stylesheet"
+          th:href="@{/css/recipe-list.css}"/>
+
+    <link rel="stylesheet"
+          th:href="@{/css/favorite-button.css}"/>
 </head>
 
 <body>
 
 <!-- ====== NAVBAR ====== -->
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- ====== MAIN PAGE ====== -->
 <main class="recipe-list-page">
 
     <header class="page-header">
-        <h1 class="page-title">Discover Recipes</h1>
+        <h1 class="page-title">Favorite Recipes</h1>
+
+        <p class="page-subtitle">
+            All the recipes you have saved in one place.
+        </p>
     </header>
 
-    <!-- Recipe filters -->
-    <div th:replace="fragments/recipe-filter :: recipe-filter"></div>
-
-    <!-- Result count -->
+    <!-- Favorite recipe count -->
     <p aria-live="polite"
        class="page-subtitle recipe-results-count"
-       th:text="|${#lists.size(recipes)} recipes found|">
-        0 recipes found
+       th:text="|${#lists.size(recipes)} favorite recipes|">
+        0 favorite recipes
     </p>
 
-    <!-- No results -->
+    <!-- No favorites -->
     <div class="form-container"
          th:if="${#lists.isEmpty(recipes)}">
 
-        <h2>No recipes found</h2>
+        <h2>No favorite recipes yet</h2>
 
         <p class="page-subtitle">
-            Try another search or clear the selected filters.
+            Browse the recipe collection and save recipes you would like
+            to prepare later.
         </p>
 
         <a class="btn btn-cancel"
            th:href="@{/recipes}">
-            Clear filters
+            Discover recipes
         </a>
     </div>
 
-    <!-- Recipe list -->
+    <!-- Favorite recipe list -->
     <ol class="recipe-list"
         th:unless="${#lists.isEmpty(recipes)}">
 
@@ -117,14 +129,15 @@
                     <span th:text="${recipe.category}">
                         Category
                     </span>
+
                 </div>
 
-                <!-- Add to favorites button -->
+                <!-- Remove from favorites button -->
                 <div th:replace="~{fragments/favorite-button
-                :: favoriteButton(
-                    ${recipe.id},
-                    ${favoriteRecipeIds.contains(recipe.id)}
-                )}">
+                    :: favoriteButton(
+                        ${recipe.id},
+                        true
+                    )}">
                 </div>
 
                 <!-- Recipe details -->
@@ -137,7 +150,9 @@
                             <li th:each="ingredient : ${recipe.ingredients}">
 
                                 <span th:text="${#numbers.formatDecimal(
-                                    ingredient.quantity, 1, 0
+                                    ingredient.quantity,
+                                    1,
+                                    0
                                 )}">
                                     Amount
                                 </span>
@@ -151,6 +166,7 @@
                                 <span th:text="${ingredient.ingredientName}">
                                     Ingredient
                                 </span>
+
                             </li>
                         </ul>
                     </section>
@@ -167,15 +183,21 @@
                     </section>
 
                 </div>
+
             </article>
 
         </li>
+
     </ol>
+
 </main>
 
 <!-- ====== FOOTER ====== -->
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
-<script defer th:src="@{/js/favorites.js}"></script>
+<script defer
+        th:src="@{/js/favorites.js}">
+</script>
+
 </body>
 </html>

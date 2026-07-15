@@ -20,7 +20,7 @@ public class Profile {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "UserId")
+    @JoinColumn(name = "UserId", nullable = false, unique = true)
     private AppUser appUser;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)

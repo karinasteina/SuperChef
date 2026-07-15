@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @Validated
-public class RecipeService {
+public class RecipeService implements IRecipeService {
     @Autowired
     private RecipeRepository recipeRepository;
 
@@ -62,9 +62,15 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 
+    @Override
     public Recipe getRecipeById(Long id) {
         return recipeRepository
                 .findById(id)
                 .orElse(null);
+    }
+
+    @Override
+    public List<Recipe> searchRecipes(String keyword, String category, String difficulty, Integer maxCalories, Integer maxPrepTime, Integer maxCookTime) {
+        return recipeRepository.findAll();
     }
 }

@@ -8,28 +8,28 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "FavoriteRecipe")
+@Table(name = "favorite_recipe", uniqueConstraints = {@UniqueConstraint(name = "uk_favorite_profile_recipe", columnNames = {"profile_id", "recipe_id"})})
 public class FavoriteRecipe {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    @Column(name = "FavoriteRecipeId")
+    @Column(name = "favorite_recipe_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "ProfileId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
 
-    @ManyToOne
-    @JoinColumn(name = "RecipeId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
+
+    protected FavoriteRecipe() {
+    }
 
     public FavoriteRecipe(Recipe recipe, Profile profile) {
         this.recipe = recipe;
         this.profile = profile;
     }
-
-    public FavoriteRecipe() {
-    }
-
 }
