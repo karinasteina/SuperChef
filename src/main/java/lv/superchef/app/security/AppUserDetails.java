@@ -18,7 +18,9 @@ public class AppUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(appUser.getRole().toString()));
+        return List.of(new SimpleGrantedAuthority(appUser
+                .getRole()
+                .toString()));
     }
 
     @Override
@@ -29,5 +31,9 @@ public class AppUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return appUser.getUsername();
+    }
+
+    public Long getUserId() {
+        return appUser.getId();
     }
 }
