@@ -1,6 +1,6 @@
 package lv.superchef.app.controller;
 
-import lv.superchef.app.dto.CreateRecipeDto;
+import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.enums.IngredientUnit;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.service.IRecipeService;
@@ -39,8 +39,8 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public String recipeDetails(@PathVariable int id, Model model) {
-        model.addAttribute("id", id);
+    public String recipeDetails(@PathVariable Long id, Model model) {
+        model.addAttribute("recipe", recipeService.getRecipeById(id));
 
         return "recipe/details";
     }
@@ -48,14 +48,14 @@ public class RecipeController {
     @GetMapping("/create")
     public String showCreateRecipePage(Model model) {
         model.addAttribute("activePage", "createRecipe");
-        model.addAttribute("createRecipeDto", new CreateRecipeDto());
+        model.addAttribute("createRecipeDto", new RecipeCreateDTO());
         model.addAttribute("ingredientUnits", IngredientUnit.values());
         return "recipe/create";
     }
 
     @PostMapping
     public String handleCreateRecipe(
-            @ModelAttribute CreateRecipeDto createRecipeDto,
+            @ModelAttribute RecipeCreateDTO createRecipeDto,
             @RequestParam(value = "coverImage", required = false) MultipartFile coverImage
     ) {
         // TODO: Pass to service layer once backend is wired

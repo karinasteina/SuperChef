@@ -1,6 +1,7 @@
 package lv.superchef.app.enums;
 
-public enum IngredientUnit {
+public enum IngredientUnit
+{
     G,
     KG,
     MG,

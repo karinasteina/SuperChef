@@ -1,22 +1,32 @@
 package lv.superchef.app.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.DecimalMin;
+import lombok.*;
 import lv.superchef.app.enums.IngredientUnit;
 
-@Data
 @Entity
-@Table(name="recipe_ingredients")
+@Table(name = "recipe_ingredients")
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 public class RecipeIngredient
 {
+    //id
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(AccessLevel.NONE)
     private Long id;
+    //name
+    @Column(name = "ingredient_name",nullable = false)
     private String ingredientName;
+    //quantity
+    @Column(nullable = false)
+    @DecimalMin(value = "0.01", message = "Quantity must be at least 0.01")
     private double quantity;
+    //unit
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private IngredientUnit unit;
 }
