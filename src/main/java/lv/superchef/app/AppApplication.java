@@ -64,7 +64,9 @@ public class AppApplication {
                     profile.setBio("New SuperChef member");
                     profile.setProfileImageUrl("/images/chef.jpg");
                     profile.setAppUser(appUser);
-
+                    profile.setDisplayName(appUser.getUsername());
+                    profile.setBio("Hey there! I'm using SuperChef.");
+                    profile.setProfileImageUrl("/images/profiles/default-avatar.jpeg");
                     profileRepo.save(profile);
                 }
             }
