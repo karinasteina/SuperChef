@@ -39,7 +39,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(authorize -> authorize
 
-                        // Allow Spring Boot to render the real error page.
+
                         .dispatcherTypeMatchers(DispatcherType.ERROR)
                         .permitAll()
 
@@ -49,15 +49,15 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**")
                         .hasRole("ADMIN")
 
-                        // Protected recipe pages must come before /recipes/**.
+
                         .requestMatchers(HttpMethod.GET, "/recipes/create", "/recipes/favorites", "/recipes/favorites/**")
                         .authenticated()
 
-                        // Adding, removing and creating recipes requires login.
+
                         .requestMatchers(HttpMethod.POST, "/recipes/**")
                         .authenticated()
 
-                        // Public recipe list and recipe details.
+                    
                         .requestMatchers(HttpMethod.GET, "/recipes/**")
                         .permitAll()
 
