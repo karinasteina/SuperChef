@@ -6,7 +6,7 @@ import lv.superchef.app.model.AppUser;
 import lv.superchef.app.model.Profile;
 import lv.superchef.app.repository.IAppUserRepo;
 import lv.superchef.app.repository.IProfileRepo;
-import lv.superchef.app.service.impl.RecipeService;
+import lv.superchef.app.service.IRecipeService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,7 +25,7 @@ public class AppApplication {
 
     @Bean
     @Transactional
-    public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder, RecipeService recipeService, IProfileRepo profileRepo) {
+    public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder, IRecipeService recipeService, IProfileRepo profileRepo) {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -51,7 +51,7 @@ public class AppApplication {
 
 
                 for (var recipe : RECIPE_DATA) {
-                    recipeService.createRecipe(recipe);
+                    recipeService.createRecipe(recipe, null);
                 }
             }
 
