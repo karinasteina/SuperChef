@@ -12,7 +12,7 @@ import lombok.Setter;
 public class FavoriteRecipe {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)
     @Column(name = "favorite_recipe_id")
     private Long id;
