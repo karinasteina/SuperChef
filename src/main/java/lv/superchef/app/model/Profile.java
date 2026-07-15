@@ -20,6 +20,7 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
+
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,25 +48,15 @@ public class Profile {
 
     @NotNull
     @OneToOne
-    @JoinColumn(name = "UserId", referencedColumnName = "UserId", nullable = false, unique = true)
+    @JoinColumn(name = "UserId", nullable = false, unique = true)
     private AppUser appUser;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ProfileId")
     private List<Recipe> recipes = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "followedProfiles")
-    private Set<Profile> followers = new HashSet<>();
-
-    @NotNull
-    @ManyToMany
-    @JoinTable(
-            name = "ProfileFollows",
-            joinColumns = @JoinColumn(name="FollowerId"),
-            inverseJoinColumns = @JoinColumn(name="FollowedId")
-    )
-    private Set<Profile> followedProfiles = new HashSet<>();
-
+  
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteRecipe> favoriteRecipes = new ArrayList<>();
 
     public Profile(String displayName, String bio, String profileImageUrl, AppUser appUser){
         setDisplayName(displayName);
@@ -73,23 +64,5 @@ public class Profile {
         setProfileImageUrl(profileImageUrl);
         setAppUser(appUser);
     }
-
-
-    public void followProfile(Profile profile){
-        followedProfiles.add(profile);
-        profile.addFollower(this);
-    }
-
-    public void addFollower(Profile profile){
-        followers.add(profile);
-    }
-
-    public void removeFollower(Profile profile){
-        followers.remove(profile);
-    }
-
-    public void unfollowProfile(Profile profile){
-        followedProfiles.remove(profile);
-        profile.removeFollower(this);
-    }
+   
 }
