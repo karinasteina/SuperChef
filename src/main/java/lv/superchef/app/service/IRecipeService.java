@@ -1,5 +1,6 @@
 package lv.superchef.app.service;
 
+import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.model.Recipe;
 
 import java.util.List;
@@ -9,4 +10,7 @@ public interface IRecipeService {
                                       Integer maxPrepTime, Integer maxCookTime);
 
     public Recipe getRecipeById(Long id);
+
+    Recipe createRecipe(RecipeCreateDTO recipe);
+    List<Recipe> getAllRecipes();
 }

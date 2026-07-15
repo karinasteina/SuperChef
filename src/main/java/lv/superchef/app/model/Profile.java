@@ -20,7 +20,6 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,15 +47,13 @@ public class Profile {
 
     @NotNull
     @OneToOne
-    @JoinColumn(name = "UserId", nullable = false, unique = true)
+    @JoinColumn(name = "UserId", referencedColumnName = "UserId", nullable = false, unique = true)
     private AppUser appUser;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ProfileId")
     private List<Recipe> recipes = new ArrayList<>();
-  
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FavoriteRecipe> favoriteRecipes = new ArrayList<>();
+
 
     public Profile(String displayName, String bio, String profileImageUrl, AppUser appUser){
         setDisplayName(displayName);
@@ -64,5 +61,5 @@ public class Profile {
         setProfileImageUrl(profileImageUrl);
         setAppUser(appUser);
     }
-   
+
 }
