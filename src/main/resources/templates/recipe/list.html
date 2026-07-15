@@ -16,7 +16,7 @@
 <body>
 
 <!-- ====== NAVBAR ====== -->
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- ====== MAIN PAGE ====== -->
 <main class="recipe-list-page">
@@ -24,7 +24,7 @@
         <h1 class="page-title">Discover Recipes</h1>
     </header>
 
-    <div th:replace="fragments/recipe-filter :: recipe-filter"></div>
+    <div th:replace="~{fragments/recipe-filter :: recipe-filter}"></div>
 
     <p aria-live="polite" class="page-subtitle recipe-results-count"
        th:text="|${#lists.size(recipes)} recipes found|">
@@ -90,6 +90,6 @@
 </main>
 
 <!-- ====== FOOTER ====== -->
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

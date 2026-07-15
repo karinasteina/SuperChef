@@ -13,7 +13,7 @@
 <body>
 
 <!-- ====== NAVBAR ====== -->
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- ====== MAIN PAGE ====== -->
 <main class="create-recipe-page">
@@ -230,7 +230,7 @@
 </main>
 
 <!-- ====== FOOTER ====== -->
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script th:src="@{/js/create-recipe.js}"></script>
 </body>
