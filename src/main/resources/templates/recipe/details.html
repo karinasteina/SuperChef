@@ -50,7 +50,7 @@
                         <h3>Ingredients</h3>
                         <ul>
                             <li th:each="ingredient : ${recipe.ingredients}">
-                                <span th:text="${#numbers.formatDecimal(ingredient.amount, 1, 0)}">Amount</span>
+                                <span th:text="${#numbers.formatDecimal(ingredient.quantity, 1, 0)}">Amount</span>
                                 <span th:text="${#strings.toLowerCase(ingredient.unit.name())}">Unit</span>
                                 <span th:text="${ingredient.name}">Ingredient</span>
                             </li>

@@ -2,7 +2,7 @@ package lv.superchef.app.service.impl;
 
 import lv.superchef.app.dto.RegisterRequest;
 import lv.superchef.app.model.AppUser;
-import lv.superchef.app.model.Role;
+import lv.superchef.app.enums.Role;
 import lv.superchef.app.repository.IAppUserRepo;
 import lv.superchef.app.service.IAppUserService;
 import org.springframework.beans.factory.annotation.Autowired;

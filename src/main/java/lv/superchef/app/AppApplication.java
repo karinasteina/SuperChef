@@ -1,13 +1,16 @@
 package lv.superchef.app;
 
+import lv.superchef.app.enums.Role;
 import lv.superchef.app.model.AppUser;
-import lv.superchef.app.model.Role;
 import lv.superchef.app.repository.IAppUserRepo;
+import lv.superchef.app.service.RecipeService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static lv.superchef.app.config.TempData.RECIPE_DATA;
 
 @SpringBootApplication
 public class AppApplication {
@@ -18,25 +21,27 @@ public class AppApplication {
     }
 
     @Bean
-    public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder) {
-        return args -> {
-            if (!userRepo.existsByUsername("testadmin")) {
-                AppUser admin = new AppUser("testadmin", passwordEncoder.encode("testadmin123"), "test@test.lv", Role.ROLE_ADMIN);
+    public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder, RecipeService recipeService) {
+        return new CommandLineRunner() {
+            @Override
+            public void run(String... args) throws Exception {
+                if (!userRepo.existsByUsername("testadmin")) {
+                    AppUser appUserAdmin = new AppUser("testadmin", passwordEncoder.encode("testadmin123"), "test@test.lv", Role.ROLE_ADMIN);
+                    userRepo.save(appUserAdmin);
+                }
 
-                userRepo.save(admin);
+                if (!userRepo.existsByUsername("testuser")) {
+                    AppUser appUser = new AppUser("testuser", passwordEncoder.encode("testuser123"), "test@user.lv", Role.ROLE_USER);
+                    userRepo.save(appUser);
+                }
+
+                for (var recipe : RECIPE_DATA) {
+                    recipeService.createRecipe(recipe);
+                }
             }
 
-            if (!userRepo.existsByUsername("testuser")) {
-                AppUser user = new AppUser("testuser", passwordEncoder.encode("testuser123"), "test@user.lv", Role.ROLE_USER);
 
-                userRepo.save(user);
-            }
-            if (!userRepo.existsByUsername("test2")) {
-                AppUser user = new AppUser("test2", passwordEncoder.encode("testuser123"), "test2@user.lv", Role.ROLE_USER);
-
-                userRepo.save(user);
-            }
         };
-    }
 
+    }
 }
