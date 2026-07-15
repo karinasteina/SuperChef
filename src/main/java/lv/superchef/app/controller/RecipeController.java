@@ -70,7 +70,7 @@ public class RecipeController {
 
     @PostMapping
     public String handleCreateRecipe(
-            @ModelAttribute RecipeCreateDTO createRecipeDto,
+           @Valid @ModelAttribute RecipeCreateDTO createRecipeDto,
             @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) {
         recipeService.createRecipe(createRecipeDto, coverImage);
         return "redirect:/recipes?success=true";
