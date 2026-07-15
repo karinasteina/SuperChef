@@ -1,0 +1,98 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form class="form-container recipe-filter-form" method="get" role="search" th:action="@{/recipes}"
+      th:fragment="recipe-filter">
+    <div class="form-group recipe-filter-search">
+        <label for="recipeSearch">Search recipes</label>
+        <input id="recipeSearch"
+               name="query"
+               placeholder="Search by title or ingredient"
+               th:value="${param.query != null ? param.query[0] : ''}"
+               type="text"/>
+    </div>
+
+    <div class="recipe-filter-grid">
+        <div class="form-group">
+            <label for="categoryFilter">Category</label>
+            <div class="select-wrapper">
+                <select id="categoryFilter" name="category">
+                    <option value="">All categories</option>
+                    <option th:selected="${param.category != null and param.category[0] == 'Breakfast'}"
+                            value="Breakfast">Breakfast
+                    </option>
+                    <option th:selected="${param.category != null and param.category[0] == 'Lunch'}"
+                            value="Lunch">Lunch
+                    </option>
+                    <option th:selected="${param.category != null and param.category[0] == 'Dinner'}"
+                            value="Dinner">Dinner
+                    </option>
+                    <option th:selected="${param.category != null and param.category[0] == 'Dessert'}"
+                            value="Dessert">Dessert
+                    </option>
+                    <option th:selected="${param.category != null and param.category[0] == 'Drinks'}"
+                            value="Drinks">Drinks
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="difficultyFilter">Difficulty</label>
+            <div class="select-wrapper">
+                <select id="difficultyFilter" name="difficulty">
+                    <option value="">All difficulties</option>
+                    <option th:selected="${param.difficulty != null and param.difficulty[0] == 'Easy'}"
+                            value="Easy">Easy
+                    </option>
+                    <option th:selected="${param.difficulty != null and param.difficulty[0] == 'Medium'}"
+                            value="Medium">Medium
+                    </option>
+                    <option th:selected="${param.difficulty != null and param.difficulty[0] == 'Hard'}"
+                            value="Hard">Hard
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="maxCaloriesFilter">Maximum calories</label>
+            <input id="maxCaloriesFilter"
+                   min="0"
+                   name="maxCalories"
+                   placeholder="Any"
+                   step="1"
+                   th:value="${param.maxCalories != null ? param.maxCalories[0] : ''}"
+                   type="number"/>
+        </div>
+
+        <div class="form-group">
+            <label for="maxPrepTimeFilter">Maximum prep time</label>
+            <input id="maxPrepTimeFilter"
+                   min="0"
+                   name="maxPrepTime"
+                   placeholder="Minutes"
+                   step="1"
+                   th:value="${param.maxPrepTime != null ? param.maxPrepTime[0] : ''}"
+                   type="number"/>
+        </div>
+
+        <div class="form-group">
+            <label for="maxCookTimeFilter">Maximum cook time</label>
+            <input id="maxCookTimeFilter"
+                   min="0"
+                   name="maxCookTime"
+                   placeholder="Minutes"
+                   step="1"
+                   th:value="${param.maxCookTime != null ? param.maxCookTime[0] : ''}"
+                   type="number"/>
+        </div>
+    </div>
+
+    <div class="form-actions recipe-filter-actions">
+        <a class="btn btn-cancel"
+           th:href="@{/recipes}"
+           th:if="${param.query != null or param.category != null or param.difficulty != null
+                       or param.maxCalories != null or param.maxPrepTime != null or param.maxCookTime != null}">Clear
+            filters</a>
+        <button class="btn btn-submit" type="submit">Search</button>
+    </div>
+</form>

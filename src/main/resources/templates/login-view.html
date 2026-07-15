@@ -109,6 +109,10 @@
             <button class="primary-button login-button" type="submit">
                 Log In
             </button>
+
+            <button class="test-login-button" id="test-user-login" type="button">
+                Log in as testuser
+            </button>
         </form>
 
         <div class="social-divider">
@@ -137,8 +141,11 @@
 </main>
 <div th:replace="fragments/footer :: footer"></div>
 <script>
+    const loginForm = document.querySelector(".auth-form");
+    const usernameInput = document.getElementById("username");
     const passwordInput = document.getElementById("password");
     const passwordToggle = document.getElementById("password-toggle");
+    const testUserLogin = document.getElementById("test-user-login");
 
     passwordToggle.addEventListener("click", () => {
         const passwordIsHidden = passwordInput.type === "password";
@@ -149,6 +156,12 @@
             "aria-label",
             passwordIsHidden ? "Hide password" : "Show password"
         );
+    });
+
+    testUserLogin.addEventListener("click", () => {
+        usernameInput.value = "testuser";
+        passwordInput.value = "testuser123";
+        loginForm.requestSubmit();
     });
 </script>
 

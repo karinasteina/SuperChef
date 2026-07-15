@@ -2,10 +2,7 @@ package lv.superchef.app.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lv.superchef.app.enums.IngredientUnit;
 
 @Entity
@@ -13,6 +10,7 @@ import lv.superchef.app.enums.IngredientUnit;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
+@Getter
 public class RecipeIngredient
 {
     //id
