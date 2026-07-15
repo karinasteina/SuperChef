@@ -13,7 +13,7 @@
 <body>
 
 <!-- ====== NAVBAR ====== -->
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- ====== MAIN PAGE ====== -->
 <main class="create-recipe-page">
@@ -96,7 +96,7 @@
                                    placeholder="Ingredient name"
                                    class="ingredient-name"/>
                             <input type="number"
-                                   th:field="*{ingredients[__${i.index}__].amount}"
+                                   th:field="*{ingredients[__${i.index}__].quantity}"
                                    placeholder="Quantity (e.g. 2)"
                                    class="ingredient-quantity"
                                    step="0.01"/>
@@ -230,7 +230,7 @@
 </main>
 
 <!-- ====== FOOTER ====== -->
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script th:src="@{/js/create-recipe.js}"></script>
 </body>

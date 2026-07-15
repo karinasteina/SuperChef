@@ -19,4 +19,5 @@ public interface IRecipeService
     public Recipe updateRecipe(Long id, @Valid RecipeCreateDTO dto);
 
     public void deleteRecipe(Long id);
+
 }

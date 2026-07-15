@@ -23,36 +23,32 @@ public class AppUserServiceImplTest {
     private AppUserServiceImpl userService;
 
     @Test
-    public void testRegisterUserWithNullParamShouldThrow(){
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> userService.register(new RegisterRequest(null, "testuser1234567", "test@test.lv", "testuser1234567")));
+    public void testRegisterUserWithNullParamShouldThrow() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest(null, "testuser1234567", "test@test.lv", "testuser1234567")));
 
         assertThat(ex.getMessage()).contains("Incorrect input parameters");
 
     }
 
     @Test
-    public void passwordIsNotTheSameAsConfirmPassword(){
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", "testuser12345")));
+    public void passwordIsNotTheSameAsConfirmPassword() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", "testuser12345")));
         assertThat(ex.getMessage()).contains("Passwords do not match");
 
     }
 
     @Test
-    public void registerFailsWithTakenUsername(){
+    public void registerFailsWithTakenUsername() {
         when(userRepo.existsByUsername("testuser")).thenReturn(true);
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", "testuser1234567")));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", "testuser1234567")));
         assertThat(ex.getMessage()).contains("Username is already taken");
         verify(userRepo, never()).save(any());
     }
 
     @Test
-    public void registerFailsWithTakenEmail(){
+    public void registerFailsWithTakenEmail() {
         when(userRepo.existsByEmail("test@test.lv")).thenReturn(true);
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", "testuser1234567")));
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", "testuser1234567")));
         assertThat(ex.getMessage()).contains("Account with this email already exists");
         verify(userRepo, never()).save(any());
     }
