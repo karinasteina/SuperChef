@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.ERROR)
                         .permitAll()
 
-                        .requestMatchers("/register", "/error", "/css/**", "/js/**", "/images/**")
+                        .requestMatchers("/", "/register", "/error", "/css/**", "/js/**", "/images/**")
                         .permitAll()
                         .requestMatchers("/.well-known/**").permitAll()
 
