@@ -9,7 +9,6 @@ import lv.superchef.app.service.IFavoriteRecipeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,10 +70,10 @@ public class FavoriteRecipeService implements IFavoriteRecipeService {
             return Set.of();
         }
 
-        Set<FavoriteRecipe> targetSet = new HashSet<>(getAllFavoriteRecipesByUserId(userId));
-        return targetSet
+        return getAllFavoriteRecipesByUserId(userId)
                 .stream()
-                .map(FavoriteRecipe::getId)
+                .map(FavoriteRecipe::getRecipe)
+                .map(Recipe::getId)
                 .collect(Collectors.toSet());
     }
 

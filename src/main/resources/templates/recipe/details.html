@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 
 <!--/*@thymesVar id="recipe" type="lv.superchef.app.model.Recipe"*/-->
 <!--/*@thymesVar id="loggedIn" type="java.lang.Boolean"*/-->
@@ -12,7 +12,18 @@
             content="width=device-width, initial-scale=1.0"
             name="viewport"
     />
-
+    <meta name="title" th:content="${recipe.title}"/>
+    <meta name="description" th:content="${recipe.description}"/>
+    <meta content="website" property="og:type"/>
+    <meta property="og:url" th:content="${currentUrl}"/>
+    <meta property="og:title" th:content="${recipe.title}"/>
+    <meta property="og:description" th:content="${recipe.description}"/>
+    <meta property="og:image" th:content="${absoluteImageUrl}"/>
+    <meta content="summary_large_image" property="twitter:card"/>
+    <meta property="twitter:url" th:content="${currentUrl}"/>
+    <meta property="twitter:title" th:content="${recipe.title}"/>
+    <meta property="twitter:description" th:content="${recipe.description}"/>
+    <meta property="twitter:image" th:content="${absoluteImageUrl}"/>
     <title th:text="${recipe.title + ' | SuperChef'}">
         Recipe | SuperChef
     </title>
@@ -70,127 +81,21 @@
 
     <ol class="recipe-list recipe-list--single">
         <li>
-            <article class="recipe-card">
-
-                <!-- Recipe image -->
-                <img
-                        alt="Recipe"
-                        class="recipe-image"
-                        height="397"
-                        loading="eager"
-                        th:alt="|Photo of ${recipe.title}|"
-                        th:src="${recipe.imageUrl}"
-                        width="397"
-                />
-
-                <!-- Recipe title -->
-                <h2 th:text="${recipe.title}">
-                    Recipe title
-                </h2>
-
-                <!-- Recipe description -->
-                <p
-                        class="recipe-description"
-                        th:text="${recipe.description}"
-                >
-                    Recipe description
-                </p>
-
-                <!-- Recipe information -->
-                <div class="recipe-meta">
-
-                    <span th:text="|${recipe.calories} kcal|">
-                        0 kcal
-                    </span>
-
-                    <span th:text="|Prep: ${recipe.preparationTime} min|">
-                        Prep: 0 min
-                    </span>
-
-                    <span th:text="|Cook: ${recipe.cookingTime} min|">
-                        Cook: 0 min
-                    </span>
-
-                    <span th:text="${recipe.difficulty}">
-                        Difficulty
-                    </span>
-
-                    <span th:text="${recipe.category}">
-                        Category
-                    </span>
-
-                </div>
-
-                <!-- Favorite button -->
-                <div th:if="${loggedIn}">
-                    <div
-                            th:replace="~{fragments/favorite-button
-                                :: favoriteButton(
-                                    ${recipe.id},
-                                    ${favoriteRecipeIds != null
-                                        and favoriteRecipeIds.contains(recipe.id)}
-                                )}"
-                    ></div>
-                </div>
-
-                <!-- Recipe details -->
-                <div class="recipe-details">
-
-                    <!-- Ingredients -->
-                    <section>
-                        <h3>Ingredients</h3>
-
-                        <ul>
-                            <li th:each="ingredient : ${recipe.ingredients}">
-
-                                <span
-                                        th:text="${#numbers.formatDecimal(
-                                            ingredient.quantity,
-                                            1,
-                                            0
-                                        )}"
-                                >
-                                    Amount
-                                </span>
-
-                                <span
-                                        th:text="${#strings.toLowerCase(
-                                            ingredient.unit.name()
-                                        )}"
-                                >
-                                    Unit
-                                </span>
-
-                                <span th:text="${ingredient.ingredientName}">
-                                    Ingredient
-                                </span>
-
-                            </li>
-                        </ul>
-                    </section>
-
-                    <!-- Steps -->
-                    <section>
-                        <h3>Steps</h3>
-
-                        <ol>
-                            <li
-                                    th:each="step : ${recipe.steps}"
-                                    th:text="${step.instruction}"
-                            >
-                                Recipe step
-                            </li>
-                        </ol>
-                    </section>
-
-                </div>
-
-            </article>
+            <div th:replace="~{fragments/recipe-card
+                :: recipeCard(
+                    ${recipe},
+                    false,
+                    'eager',
+                    ${loggedIn},
+                    ${favoriteRecipeIds != null
+                        and favoriteRecipeIds.contains(recipe.id)}
+                )}">
+            </div>
         </li>
     </ol>
 
 
-    <section class="reviews-section">
+    <section class="reviews-section" sec:authorize="isAuthenticated()">
 
         <header class="reviews-header">
             <h2>Reviews</h2>
