@@ -87,4 +87,5 @@ public class FavoriteRecipeService implements IFavoriteRecipeService {
             throw new IllegalArgumentException("Profile must be persisted");
         }
     }
+
 }
