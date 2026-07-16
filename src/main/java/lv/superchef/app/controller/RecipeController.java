@@ -1,5 +1,6 @@
 package lv.superchef.app.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
@@ -53,7 +54,7 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public String recipeDetails(@PathVariable Long id, @AuthenticationPrincipal AppUserDetails userDetails, Model model) {
+    public String recipeDetails(@PathVariable Long id, @AuthenticationPrincipal AppUserDetails userDetails, HttpServletRequest request, Model model) {
         Recipe recipe = recipeService.getRecipeById(id);
 
         if (recipe == null) {
@@ -61,6 +62,7 @@ public class RecipeController {
         }
 
         model.addAttribute("recipe", recipe);
+        model.addAttribute("currentUrl", request.getRequestURL().toString());
         model.addAttribute("reviews", reviewService.getReviewsByRecipeId(id));
         model.addAttribute("averageRating", reviewService.getAverageRating(id));
         model.addAttribute("reviewCount", reviewService.getReviewCount(id));

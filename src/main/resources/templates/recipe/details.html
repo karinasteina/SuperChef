@@ -12,7 +12,18 @@
             content="width=device-width, initial-scale=1.0"
             name="viewport"
     />
-
+    <meta name="title" th:content="${recipe.title}"/>
+    <meta name="description" th:content="${recipe.title}"/>
+    <meta content="website" property="og:type"/>
+    <meta property="og:url" th:content="${currentUrl}"/>
+    <meta property="og:title" th:content="${recipe.title}"/>
+    <meta property="og:description" th:content="${recipe.title}"/>
+    <meta property="og:image" th:content="@{__${recipe.imageUrl}__}"/>
+    <meta content="summary_large_image" property="twitter:card"/>
+    <meta property="twitter:url" th:content="${currentUrl}"/>
+    <meta property="twitter:title" th:content="${recipe.title}"/>
+    <meta property="twitter:description" th:content="${recipe.title}"/>
+    <meta property="twitter:image" th:content="@{__${recipe.imageUrl}__}"/>
     <title th:text="${recipe.title + ' | SuperChef'}">
         Recipe | SuperChef
     </title>
