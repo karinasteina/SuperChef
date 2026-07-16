@@ -227,3 +227,25 @@
         grid-template-columns: 1fr;
     }
 }
+
+.recipe-card--medium .recipe-description--preview {
+    height: 4.5rem;
+    line-height: 1.5rem;
+    overflow: hidden;
+}
+
+.recipe-card--medium .recipe-description--preview.is-shortened {
+    mask-image: linear-gradient(
+            to bottom,
+            #000 0%,
+            #000 55%,
+            transparent 100%
+    );
+
+    -webkit-mask-image: linear-gradient(
+            to bottom,
+            #000 0%,
+            #000 55%,
+            transparent 100%
+    );
+}

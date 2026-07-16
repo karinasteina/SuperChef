@@ -75,8 +75,8 @@
 
         <li th:each="recipe, status : ${recipes}">
 
-            <div th:replace="~{fragments/recipe-card
-                :: recipeCard(
+            <div th:replace="~{fragments/recipe-card-medium
+                :: recipeCard-medium(
                     ${recipe},
                     true,
                     ${status.first ? 'eager' : 'lazy'},
