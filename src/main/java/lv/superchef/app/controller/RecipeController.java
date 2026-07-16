@@ -176,7 +176,7 @@ public class RecipeController {
     public String handleUpdateRecipe(
             @PathVariable Long id,
             @Valid @ModelAttribute RecipeCreateDTO createRecipeDto,
-            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) {
+            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage, RedirectAttributes redirectAttributes) {
 
         // Only store new image if one was uploaded
         if (coverImage != null && !coverImage.isEmpty()) {
@@ -189,14 +189,19 @@ public class RecipeController {
         }
 
         recipeService.updateRecipe(id, createRecipeDto);
-
-        return "redirect:/recipes?updated=true";
+        redirectAttributes.addFlashAttribute(
+                "message", "Recipe updated successfully.");
+        redirectAttributes.addFlashAttribute("status", "success");
+        return "redirect:/recipes";
     }
 
     @PostMapping("/{id}/delete")
-    public String handleDeleteRecipe(@PathVariable Long id) {
+    public String handleDeleteRecipe(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         recipeService.deleteRecipe(id);
-        return "redirect:/recipes?deleted=true";
+        redirectAttributes.addFlashAttribute(
+                "message", "Recipe deleted successfully.");
+        redirectAttributes.addFlashAttribute("status", "success");
+        return "redirect:/recipes";
     }
 
     private void addFavoriteState(AppUserDetails userDetails, Model model) {
