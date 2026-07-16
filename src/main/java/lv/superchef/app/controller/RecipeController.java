@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,8 +62,11 @@ public class RecipeController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found");
         }
 
+        String currentUrl = request.getRequestURL().toString();
+
         model.addAttribute("recipe", recipe);
-        model.addAttribute("currentUrl", request.getRequestURL().toString());
+        model.addAttribute("currentUrl", currentUrl);
+        model.addAttribute("absoluteImageUrl", URI.create(currentUrl).resolve(recipe.getImageUrl()).toString());
         model.addAttribute("reviews", reviewService.getReviewsByRecipeId(id));
         model.addAttribute("averageRating", reviewService.getAverageRating(id));
         model.addAttribute("reviewCount", reviewService.getReviewCount(id));
