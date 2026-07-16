@@ -66,108 +66,15 @@
 
         <li th:each="recipe, status : ${recipes}">
 
-            <article class="recipe-card">
-
-                <!-- Recipe image -->
-                <a th:href="@{/recipes/{id}(id=${recipe.id})}">
-                    <img
-                            alt="Recipe"
-                            class="recipe-image"
-                            height="397"
-                            src="/images/recipes/recipe-00.webp"
-                            th:alt="|Photo of ${recipe.title}|"
-                            th:loading="${status.first ? 'eager' : 'lazy'}"
-                            th:src="${recipe.imageUrl}"
-                            width="397"
-                    />
-                </a>
-
-                <!-- Recipe title -->
-                <a th:href="@{/recipes/{id}(id=${recipe.id})}">
-                    <h2 th:text="${recipe.title}">
-                        Recipe title
-                    </h2>
-                </a>
-
-                <!-- Recipe description -->
-                <p class="recipe-description"
-                   th:text="${recipe.description}">
-                    Recipe description
-                </p>
-
-                <!-- Recipe information -->
-                <div class="recipe-meta">
-
-                    <span th:text="|${recipe.calories} kcal|">
-                        0 kcal
-                    </span>
-
-                    <span th:text="|Prep: ${recipe.preparationTime} min|">
-                        Prep: 0 min
-                    </span>
-
-                    <span th:text="|Cook: ${recipe.cookingTime} min|">
-                        Cook: 0 min
-                    </span>
-
-                    <span th:text="${recipe.difficulty}">
-                        Difficulty
-                    </span>
-
-                    <span th:text="${recipe.category}">
-                        Category
-                    </span>
-                </div>
-
-                <!-- Add to favorites button -->
-                <div th:replace="~{fragments/favorite-button
-                :: favoriteButton(
-                    ${recipe.id},
+            <div th:replace="~{fragments/recipe-card
+                :: recipeCard(
+                    ${recipe},
+                    true,
+                    ${status.first ? 'eager' : 'lazy'},
+                    true,
                     ${favoriteRecipeIds.contains(recipe.id)}
                 )}">
-                </div>
-
-                <!-- Recipe details -->
-                <div class="recipe-details">
-
-                    <section>
-                        <h3>Ingredients</h3>
-
-                        <ul>
-                            <li th:each="ingredient : ${recipe.ingredients}">
-
-                                <span th:text="${#numbers.formatDecimal(
-                                    ingredient.quantity, 1, 0
-                                )}">
-                                    Amount
-                                </span>
-
-                                <span th:text="${#strings.toLowerCase(
-                                    ingredient.unit.name()
-                                )}">
-                                    Unit
-                                </span>
-
-                                <span th:text="${ingredient.ingredientName}">
-                                    Ingredient
-                                </span>
-                            </li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h3>Steps</h3>
-
-                        <ol>
-                            <li th:each="step : ${recipe.steps}"
-                                th:text="${step.instruction}">
-                                Recipe step
-                            </li>
-                        </ol>
-                    </section>
-
-                </div>
-            </article>
+            </div>
 
         </li>
     </ol>

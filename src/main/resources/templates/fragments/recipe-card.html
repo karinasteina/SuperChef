@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+
+<!--/*@thymesVar id="recipe" type="lv.superchef.app.model.Recipe"*/-->
+
+<body>
+
+<article class="recipe-card"
+         th:fragment="recipeCard(recipe, linkToDetails, imageLoading, showFavoriteButton, isFavorite)">
+
+    <!-- Recipe image -->
+    <a th:href="@{/recipes/{id}(id=${recipe.id})}"
+       th:if="${linkToDetails}">
+        <img alt="Recipe"
+             class="recipe-image"
+             height="397"
+             src="/images/recipes/recipe-00.webp"
+             th:alt="|Photo of ${recipe.title}|"
+             th:loading="${imageLoading}"
+             th:src="${recipe.imageUrl}"
+             width="397"/>
+    </a>
+
+    <img alt="Recipe"
+         class="recipe-image"
+         height="397"
+         loading="eager"
+         src="/images/recipes/recipe-00.webp"
+         th:alt="|Photo of ${recipe.title}|"
+         th:loading="${imageLoading}"
+         th:src="${recipe.imageUrl}"
+         th:unless="${linkToDetails}"
+         width="397"/>
+
+    <!-- Recipe title -->
+    <a th:href="@{/recipes/{id}(id=${recipe.id})}"
+       th:if="${linkToDetails}">
+        <h2 th:text="${recipe.title}">Recipe title</h2>
+    </a>
+
+    <h2 th:text="${recipe.title}"
+        th:unless="${linkToDetails}">
+        Recipe title
+    </h2>
+
+    <!-- Recipe description -->
+    <p class="recipe-description"
+       th:text="${recipe.description}">
+        Recipe description
+    </p>
+
+    <!-- Recipe information -->
+    <div class="recipe-meta">
+        <span th:text="|${recipe.calories} kcal|">0 kcal</span>
+        <span th:text="|Prep: ${recipe.preparationTime} min|">Prep: 0 min</span>
+        <span th:text="|Cook: ${recipe.cookingTime} min|">Cook: 0 min</span>
+        <span th:text="${recipe.difficulty}">Difficulty</span>
+        <span th:text="${recipe.category}">Category</span>
+    </div>
+
+    <!-- Favorite button -->
+
+    <th:block sec:authorize="isAuthenticated()"
+              th:replace="~{fragments/favorite-button :: favoriteButton(${recipe.id}, ${isFavorite})}">
+    </th:block>
+
+    <!-- Recipe details -->
+    <div class="recipe-details">
+        <section>
+            <h3>Ingredients</h3>
+
+            <ul>
+                <li th:each="ingredient : ${recipe.ingredients}">
+                    <span th:text="${#numbers.formatDecimal(ingredient.quantity, 1, 0)}">
+                        Amount
+                    </span>
+                    <span th:text="${#strings.toLowerCase(ingredient.unit.name())}">
+                        Unit
+                    </span>
+                    <span th:text="${ingredient.ingredientName}">
+                        Ingredient
+                    </span>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Steps</h3>
+
+            <ol>
+                <li th:each="step : ${recipe.steps}"
+                    th:text="${step.instruction}">
+                    Recipe step
+                </li>
+            </ol>
+        </section>
+    </div>
+
+</article>
+
+</body>
+</html>
