@@ -73,7 +73,7 @@
     </div>
 
     <!-- Favorite recipe list -->
-    <ol class="recipe-list"
+    <ol class="recipe-list recipe-list--single"
         th:unless="${#lists.isEmpty(recipes)}">
 
         <li th:each="recipe, status : ${recipes}">
