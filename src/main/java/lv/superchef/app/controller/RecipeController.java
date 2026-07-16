@@ -3,12 +3,13 @@ package lv.superchef.app.controller;
 import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
+import lv.superchef.app.dto.ReviewFormDTO;
 import lv.superchef.app.enums.IngredientUnit;
+import lv.superchef.app.model.Profile;
 import lv.superchef.app.model.Recipe;
+import lv.superchef.app.model.Review;
 import lv.superchef.app.security.AppUserDetails;
-import lv.superchef.app.service.IFavoriteRecipeService;
-import lv.superchef.app.service.IImageStorageService;
-import lv.superchef.app.service.IRecipeService;
+import lv.superchef.app.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -28,12 +30,16 @@ public class RecipeController {
     private final IRecipeService recipeService;
     private final IFavoriteRecipeService favoriteRecipeService;
     private final IImageStorageService imageStorageService;
+    private final IReviewService reviewService;
+    private final IProfileService profileService;
 
-    public RecipeController(IRecipeService recipeService, IFavoriteRecipeService favoriteRecipeService, IImageStorageService imageStorageService)
-    {
+    public RecipeController(IRecipeService recipeService, IFavoriteRecipeService favoriteRecipeService, IImageStorageService imageStorageService, IReviewService reviewService, IProfileService profileService) {
         this.recipeService = recipeService;
         this.favoriteRecipeService = favoriteRecipeService;
         this.imageStorageService = imageStorageService;
+        this.reviewService = reviewService;
+        this.profileService = profileService;
+
     }
 
     @GetMapping
@@ -55,6 +61,33 @@ public class RecipeController {
         }
 
         model.addAttribute("recipe", recipe);
+        model.addAttribute("reviews", reviewService.getReviewsByRecipeId(id));
+        model.addAttribute("averageRating", reviewService.getAverageRating(id));
+        model.addAttribute("reviewCount", reviewService.getReviewCount(id));
+
+        Optional<Review> existingReview = Optional.empty();
+
+        if (userDetails != null) {
+            Profile profile = profileService
+                    .getProfileByUserId(userDetails.getUserId())
+                    .orElseThrow(() -> new IllegalStateException("Profile not found for user ID: " + userDetails.getUserId()));
+
+            existingReview = reviewService.getReviewByProfileAndRecipe(profile.getId(), id);
+        }
+
+        if (!model.containsAttribute("reviewForm")) {
+            ReviewFormDTO reviewForm = new ReviewFormDTO();
+
+            existingReview.ifPresent(review -> {
+                reviewForm.setRating(review.getRating());
+                reviewForm.setComment(review.getComment());
+            });
+
+            model.addAttribute("reviewForm", reviewForm);
+        }
+
+        model.addAttribute("editingReview", existingReview.isPresent());
+
         addFavoriteState(userDetails, model);
 
         return "recipe/details";
@@ -74,9 +107,7 @@ public class RecipeController {
     }
 
     @PostMapping
-    public String handleCreateRecipe(
-            @Valid @ModelAttribute RecipeCreateDTO createRecipeDto,
-            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) {
+    public String handleCreateRecipe(@Valid @ModelAttribute RecipeCreateDTO createRecipeDto, @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) {
 
         String imageUrl = imageStorageService.storeCoverImage(coverImage);
 
