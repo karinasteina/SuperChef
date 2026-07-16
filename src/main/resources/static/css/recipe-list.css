@@ -61,12 +61,24 @@
 }
 
 .recipe-meta span {
+    display: inline-block;
     padding: 5px 10px;
     background: var(--color-primary-light);
     border-radius: var(--radius-full);
     color: var(--color-primary-dark);
     font-size: 0.8rem;
     font-weight: 600;
+}
+
+.recipe-meta-link {
+    border-radius: var(--radius-full);
+    text-decoration: none;
+}
+
+.recipe-meta-link:hover span,
+.recipe-meta-link:focus-visible span {
+    background: var(--color-primary);
+    color: #fff;
 }
 
 

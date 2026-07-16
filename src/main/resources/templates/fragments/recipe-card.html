@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 
-<!--/*@thymesVar id="recipe" type="lv.superchef.app.model.Recipe"*/-->
+<!--/*@thymesVar id="recipe" type="lv.superchef.app.model.RecipeCreateDTO"*/-->
 
 <body>
 
@@ -51,11 +51,30 @@
 
     <!-- Recipe information -->
     <div class="recipe-meta">
-        <span th:text="|${recipe.calories} kcal|">0 kcal</span>
-        <span th:text="|Prep: ${recipe.preparationTime} min|">Prep: 0 min</span>
-        <span th:text="|Cook: ${recipe.cookingTime} min|">Cook: 0 min</span>
-        <span th:text="${recipe.difficulty}">Difficulty</span>
-        <span th:text="${recipe.category}">Category</span>
+        <a class="recipe-meta-link"
+           th:href="@{/recipes(query='', category='', difficulty='', maxCalories=${recipe.calories}, maxPrepTime='', maxCookTime='')}">
+            <span th:text="|${recipe.calories} kcal|">0 kcal</span>
+        </a>
+
+        <a class="recipe-meta-link"
+           th:href="@{/recipes(query='', category='', difficulty='', maxCalories='', maxPrepTime=${recipe.preparationTime}, maxCookTime='')}">
+            <span th:text="|Prep: ${recipe.preparationTime} min|">Prep: 0 min</span>
+        </a>
+
+        <a class="recipe-meta-link"
+           th:href="@{/recipes(query='', category='', difficulty='', maxCalories='', maxPrepTime='', maxCookTime=${recipe.cookingTime})}">
+            <span th:text="|Cook: ${recipe.cookingTime} min|">Cook: 0 min</span>
+        </a>
+
+        <a class="recipe-meta-link"
+           th:href="@{/recipes(query='', category='', difficulty=${recipe.difficulty}, maxCalories='', maxPrepTime='', maxCookTime='')}">
+            <span th:text="${recipe.difficulty}">Difficulty</span>
+        </a>
+
+        <a class="recipe-meta-link"
+           th:href="@{/recipes(query='', category=${recipe.category}, difficulty='', maxCalories='', maxPrepTime='', maxCookTime='')}">
+            <span th:text="${recipe.category}">Category</span>
+        </a>
     </div>
 
     <!-- Favorite button -->
