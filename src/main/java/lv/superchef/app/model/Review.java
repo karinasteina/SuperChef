@@ -32,14 +32,14 @@ public class Review {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    @NotBlank(message = "Review comment cannot be blank")
-    @Size(max = 2000, message = "Review cannot exceed 2000 characters")
+    @NotBlank(message = "The comment cannot be blank")
+    @Size(max = 2000, message = "Review length cannot exceed 2000 symbols")
     @Column(nullable = false, length = 2000)
     private String comment;
 
     @NotNull
-    @Min(value = 1, message = "Rating must be at least 1")
-    @Max(value = 5, message = "Rating cannot be greater than 5")
+    @Min(value = 1, message = "Review rating must be at least 1")
+    @Max(value = 5, message = "Review rating cannot be greater than 5")
     @Column(nullable = false)
     private Integer rating;
 

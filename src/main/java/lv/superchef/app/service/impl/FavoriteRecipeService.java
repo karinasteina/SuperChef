@@ -9,6 +9,7 @@ import lv.superchef.app.service.IFavoriteRecipeService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,10 +49,14 @@ public class FavoriteRecipeService implements IFavoriteRecipeService {
             return List.of();
         }
 
-        return profileRepository
+        Profile profile = profileRepository
                 .findByAppUser_Id(userId)
-                .map(profile -> favoriteRecipeRepo.findAllByProfile_Id(profile.getId()))
-                .orElseGet(List::of);
+                .orElse(null);
+        if (profile == null) {
+            return List.of();
+        }
+        return favoriteRecipeRepo.findAllByProfile_Id(profile.getId());
+
     }
 
     @Transactional(readOnly = true)
@@ -59,11 +64,17 @@ public class FavoriteRecipeService implements IFavoriteRecipeService {
         if (userId == null) {
             return Set.of();
         }
+        Profile profile = profileRepository
+                .findByAppUser_Id(userId)
+                .orElse(null);
+        if (profile == null) {
+            return Set.of();
+        }
 
-        return getAllFavoriteRecipesByUserId(userId)
+        Set<FavoriteRecipe> targetSet = new HashSet<>(getAllFavoriteRecipesByUserId(userId));
+        return targetSet
                 .stream()
-                .map(FavoriteRecipe::getRecipe)
-                .map(Recipe::getId)
+                .map(FavoriteRecipe::getId)
                 .collect(Collectors.toSet());
     }
 

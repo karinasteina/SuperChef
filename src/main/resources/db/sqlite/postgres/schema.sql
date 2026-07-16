@@ -15,7 +15,7 @@ CREATE SEQUENCE favorite_recipe_id_seq
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
-    CACHE 1;
+    CACHE 10;
 
 
 
