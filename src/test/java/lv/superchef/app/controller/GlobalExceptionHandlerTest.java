@@ -24,7 +24,7 @@ class GlobalExceptionHandlerTest {
                 model
         );
 
-        assertThat(view).isEqualTo("error-view");
+        assertThat(view).isEqualTo("error");
         assertThat(response.getStatus()).isEqualTo(400);
         assertThat(response.getContentType()).isEqualTo("text/html");
         assertThat(model.getAttribute("status")).isEqualTo(400);
