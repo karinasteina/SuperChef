@@ -144,7 +144,7 @@ public class RecipeServiceImplTest
         verify(recipeRepo, never()).save(any(Recipe.class));
     }
     @Test
-    @DisplayName("🗑Delete Recipe: Should invoke repository delete sequence when valid ID is provided")
+    @DisplayName("Delete Recipe: Should invoke repository delete sequence when valid ID is provided")
     void deleteRecipe_ShouldCallRepositoryDelete_WhenRecipeExists()
     {
         Long recipeId = 5L;
