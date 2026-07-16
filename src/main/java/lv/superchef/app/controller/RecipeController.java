@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -122,6 +123,80 @@ public class RecipeController {
         recipeService.createRecipe(createRecipeDto);
 
         return "redirect:/recipes?success=true";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String showEditRecipePage(@PathVariable Long id, @AuthenticationPrincipal AppUserDetails userDetails, Model model) {
+        Recipe recipe = recipeService.getRecipeById(id);
+
+        if (recipe == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found");
+        }
+
+        // Convert Recipe to RecipeCreateDTO for form binding
+        RecipeCreateDTO editDto = new RecipeCreateDTO();
+        editDto.setTitle(recipe.getTitle());
+        editDto.setDescription(recipe.getDescription());
+        editDto.setImageUrl(recipe.getImageUrl());
+        editDto.setCalories(recipe.getCalories());
+        editDto.setPreparationTime(recipe.getPreparationTime());
+        editDto.setCookingTime(recipe.getCookingTime());
+        editDto.setDifficulty(recipe.getDifficulty());
+        editDto.setCategory(recipe.getCategory());
+
+        // Map ingredients
+        List<IngredientInputDTO> ingredientDtos = new ArrayList<>();
+        for (var ingredient : recipe.getIngredients()) {
+            IngredientInputDTO dto = new IngredientInputDTO();
+            dto.setName(ingredient.getIngredientName());
+            dto.setQuantity(ingredient.getQuantity());
+            dto.setUnit(ingredient.getUnit());
+            ingredientDtos.add(dto);
+        }
+        editDto.setIngredients(ingredientDtos);
+
+        // Map steps
+        List<String> steps = new ArrayList<>();
+        for (var step : recipe.getSteps()) {
+            steps.add(step.getInstruction());
+        }
+        editDto.setSteps(steps);
+
+        model.addAttribute("recipeId", id);
+        model.addAttribute("loggedIn", userDetails != null);
+        model.addAttribute("activePage", "editRecipe");
+        model.addAttribute("createRecipeDto", editDto);
+        model.addAttribute("ingredientUnits", IngredientUnit.values());
+        model.addAttribute("isEditMode", true);
+
+        return "recipe/edit";
+    }
+
+    @PostMapping("/{id}/update")
+    public String handleUpdateRecipe(
+            @PathVariable Long id,
+            @Valid @ModelAttribute RecipeCreateDTO createRecipeDto,
+            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) {
+
+        // Only store new image if one was uploaded
+        if (coverImage != null && !coverImage.isEmpty()) {
+            String imageUrl = imageStorageService.storeCoverImage(coverImage);
+            createRecipeDto.setImageUrl(imageUrl);
+        } else {
+            // Keep existing image
+            Recipe existingRecipe = recipeService.getRecipeById(id);
+            createRecipeDto.setImageUrl(existingRecipe.getImageUrl());
+        }
+
+        recipeService.updateRecipe(id, createRecipeDto);
+
+        return "redirect:/recipes?updated=true";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String handleDeleteRecipe(@PathVariable Long id) {
+        recipeService.deleteRecipe(id);
+        return "redirect:/recipes?deleted=true";
     }
 
     private void addFavoriteState(AppUserDetails userDetails, Model model) {
