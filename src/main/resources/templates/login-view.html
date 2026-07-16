@@ -113,6 +113,9 @@
             <button class="test-login-button" id="test-user-login" type="button">
                 Log in as testuser
             </button>
+            <button class="test-login-button" id="test-admin-login" type="button">
+                Log in as testadmin
+            </button>
         </form>
 
         <div class="social-divider">
@@ -146,6 +149,7 @@
     const passwordInput = document.getElementById("password");
     const passwordToggle = document.getElementById("password-toggle");
     const testUserLogin = document.getElementById("test-user-login");
+    const testAdminLogin = document.getElementById("test-admin-login");
 
     passwordToggle.addEventListener("click", () => {
         const passwordIsHidden = passwordInput.type === "password";
@@ -161,6 +165,11 @@
     testUserLogin.addEventListener("click", () => {
         usernameInput.value = "testuser";
         passwordInput.value = "testuser123";
+        loginForm.requestSubmit();
+    });
+    testAdminLogin.addEventListener("click", () => {
+        usernameInput.value = "testadmin";
+        passwordInput.value = "testadmin123";
         loginForm.requestSubmit();
     });
 </script>
