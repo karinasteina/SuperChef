@@ -17,5 +17,11 @@
                                                  th:href="@{/profile}">My Profile</a></li>
         <li sec:authorize="isAuthenticated()"><a th:classappend="${activePage == 'recipes/favorites' ? 'active' : ''}"
                                                  th:href="@{/recipes/favorites}">Favorites</a></li>
+        <li sec:authorize="isAuthenticated()">
+            <form class="navbar-logout-form" method="post" th:action="@{/logout}">
+                <input name="_csrf" th:value="${_csrf.token}" type="hidden"/>
+                <button class="navbar-logout-btn" type="submit">Logout</button>
+            </form>
+        </li>
     </ul>
 </nav>
