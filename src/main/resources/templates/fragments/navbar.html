@@ -19,6 +19,6 @@
         <li sec:authorize="isAuthenticated()"><a th:classappend="${activePage == 'profile' ? 'active' : ''}"
                                                  th:href="@{/profile}">My Profile</a></li>
         <li sec:authorize="isAuthenticated()"><a th:classappend="${activePage == 'recipes/favorites' ? 'active' : ''}"
-                                                 th:href="@{recipes/favorites}">Favorites</a></li>
+                                                 th:href="@{/recipes/favorites}">Favorites</a></li>
     </ul>
 </nav>

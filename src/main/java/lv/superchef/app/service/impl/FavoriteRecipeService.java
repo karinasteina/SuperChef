@@ -48,15 +48,25 @@ public class FavoriteRecipeService implements IFavoriteRecipeService {
             return List.of();
         }
 
-        return profileRepository
+        Profile profile = profileRepository
                 .findByAppUser_Id(userId)
-                .map(profile -> favoriteRecipeRepo.findAllByProfile_Id(profile.getId()))
-                .orElseGet(List::of);
+                .orElse(null);
+        if (profile == null) {
+            return List.of();
+        }
+        return favoriteRecipeRepo.findAllByProfile_Id(profile.getId());
+
     }
 
     @Transactional(readOnly = true)
     public Set<Long> getFavoriteRecipeIdsByUserId(Long userId) {
         if (userId == null) {
+            return Set.of();
+        }
+        Profile profile = profileRepository
+                .findByAppUser_Id(userId)
+                .orElse(null);
+        if (profile == null) {
             return Set.of();
         }
 
@@ -76,4 +86,5 @@ public class FavoriteRecipeService implements IFavoriteRecipeService {
             throw new IllegalArgumentException("Profile must be persisted");
         }
     }
+
 }

@@ -194,6 +194,15 @@
 
                 </div>
             </article>
+            <div th:replace="~{fragments/recipe-card
+                :: recipeCard(
+                    ${recipe},
+                    true,
+                    ${status.first ? 'eager' : 'lazy'},
+                    true,
+                    ${favoriteRecipeIds.contains(recipe.id)}
+                )}">
+            </div>
 
         </li>
     </ol>

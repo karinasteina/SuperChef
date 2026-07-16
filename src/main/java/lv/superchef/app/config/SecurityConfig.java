@@ -45,6 +45,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/register", "/error", "/css/**", "/js/**", "/images/**")
                         .permitAll()
+                        .requestMatchers("/.well-known/**").permitAll()
 
                         .requestMatchers("/h2-console/**")
                         .hasRole("ADMIN")
