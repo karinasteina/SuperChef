@@ -2,6 +2,8 @@ package lv.superchef.app.security;
 
 import lv.superchef.app.model.AppUser;
 import lv.superchef.app.repository.IAppUserRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,7 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AppUserDetailsSerivce implements UserDetailsService {
+public class AppUserDetailsService implements UserDetailsService {
+    private static final Logger logger = LoggerFactory.getLogger(AppUserDetailsService.class);
+
     @Autowired
     private IAppUserRepo userRepo;
 
@@ -19,7 +23,8 @@ public class AppUserDetailsSerivce implements UserDetailsService {
             throw new UsernameNotFoundException("Incorrect credentials");
         }
         AppUser appUser = userRepo.findByUsername(username);
-        System.out.println(">>> Found user: " + appUser.getUsername() + " | stored hash: " + appUser.getPassword());
+
+        logger.debug("Found user: " + appUser.getUsername());
         return new AppUserDetails(appUser);
     }
 }
