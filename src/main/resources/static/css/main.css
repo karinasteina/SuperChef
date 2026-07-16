@@ -70,6 +70,29 @@
     border-bottom-color: var(--color-primary);
 }
 
+.navbar-logout-form {
+    margin: 0;
+}
+
+.navbar-logout-btn {
+    padding: 4px 0;
+    color: var(--color-text-muted);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    font-size: .9rem;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.navbar-logout-btn:hover,
+.navbar-logout-btn:focus-visible {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
 @media (max-width: 768px) {
     .navbar {
         height: auto;
