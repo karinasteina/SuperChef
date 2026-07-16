@@ -318,9 +318,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ── Cover Image ─────────────────────────────────────────
         const coverImageEl = document.getElementById('coverImage');
-        if (!coverImageEl.files || coverImageEl.files.length === 0) {
+        const isEditMode = form.action.includes('/update'); // Check if we're in edit mode
+
+        // Only require image for create mode, not edit mode
+        if (!isEditMode && (!coverImageEl.files || coverImageEl.files.length === 0)) {
             markError(coverImageEl, 'Please upload a cover image.');
-        } else {
+        } else if (coverImageEl.files && coverImageEl.files.length > 0) {
+            // If a new image is being uploaded (create or edit), validate it
             const file = coverImageEl.files[0];
             if (!ALLOWED_TYPES.includes(file.type)) {
                 markError(coverImageEl, 'Please upload a valid image (JPG, PNG, WEBP).');
