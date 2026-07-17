@@ -42,6 +42,7 @@
         </nav>
 
         <!-- Registration form -->
+        <div class="form-message error-message" th:if="${error}" th:text="${error}"></div>
         <form
                 class="auth-form"
                 method="post"
