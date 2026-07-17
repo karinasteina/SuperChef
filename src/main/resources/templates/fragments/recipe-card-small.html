@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!--/*@thymesVar id="recipe" type="lv.superchef.app.model.Recipe"*/-->
+
+<body>
+
+<article class="recipe-card recipe-card-small"
+         th:fragment="recipeCard-small(recipe, linkToDetails, imageLoading, showFavoriteButton, isFavorite)"
+         th:with="result=${@textService.shorten(recipe.description, 150)}">
+
+    <div class="recipe-card-small__media">
+        <a class="recipe-card-small__image-link"
+           th:href="@{/recipes/{id}(id=${recipe.id})}"
+           th:if="${linkToDetails}">
+            <img class="recipe-image"
+                 height="180"
+                 th:alt="|Photo of ${recipe.title}|"
+                 th:loading="${imageLoading}"
+                 th:src="${recipe.imageUrl}"
+                 width="320"/>
+        </a>
+
+        <img class="recipe-image"
+             height="180"
+             th:alt="|Photo of ${recipe.title}|"
+             th:loading="${imageLoading}"
+             th:src="${recipe.imageUrl}"
+             th:unless="${linkToDetails}"
+             width="320"/>
+
+        <div class="recipe-card-small__favorite"
+             sec:authorize="isAuthenticated()"
+             th:if="${showFavoriteButton}">
+            <th:block th:replace="~{fragments/favorite-button :: favoriteButton(${recipe.id}, ${isFavorite})}">
+            </th:block>
+        </div>
+
+        <div class="recipe-card-small__actions" sec:authorize="isAuthenticated()">
+            <a aria-label="Edit recipe"
+               class="recipe-card-small__action recipe-card-small__action--edit"
+               th:href="@{/recipes/{id}/edit(id=${recipe.id})}"
+               title="Edit recipe">
+                <span aria-hidden="true">✎</span>
+            </a>
+            <form class="recipe-delete-form"
+                  method="post"
+                  onsubmit="return confirm('Are you sure you want to delete this recipe? This action cannot be undone.');"
+                  th:action="@{/recipes/{id}/delete(id=${recipe.id})}">
+                <button aria-label="Delete recipe"
+                        class="recipe-card-small__action recipe-card-small__action--delete"
+                        title="Delete recipe"
+                        type="submit">
+                    <span aria-hidden="true">🗑</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="recipe-card-small__content">
+        <a th:href="@{/recipes/{id}(id=${recipe.id})}"
+           th:if="${linkToDetails}">
+            <h2 th:text="${recipe.title}">Recipe title</h2>
+        </a>
+
+        <h2 th:text="${recipe.title}"
+            th:unless="${linkToDetails}">
+            Recipe title
+        </h2>
+
+        <p class="recipe-description recipe-card-small__description"
+           th:classappend="${result.shortened}
+                ? ' is-shortened'
+                : ''"
+           th:text="${result.text}">
+            Recipe description
+        </p>
+
+        <div class="recipe-meta recipe-card-small__meta">
+            <a class="recipe-meta-link"
+               th:href="@{/recipes(query='', category='', difficulty='', maxCalories=${recipe.calories}, maxPrepTime='', maxCookTime='')}">
+                <span th:text="|${recipe.calories} kcal|">0 kcal</span>
+            </a>
+
+            <a class="recipe-meta-link"
+               th:href="@{/recipes(query='', category='', difficulty='', maxCalories='', maxPrepTime=${recipe.preparationTime}, maxCookTime='')}">
+                <span th:text="|Prep: ${recipe.preparationTime} min|">Prep: 0 min</span>
+            </a>
+
+            <a class="recipe-meta-link"
+               th:href="@{/recipes(query='', category='', difficulty='', maxCalories='', maxPrepTime='', maxCookTime=${recipe.cookingTime})}">
+                <span th:text="|Cook: ${recipe.cookingTime} min|">Cook: 0 min</span>
+            </a>
+
+            <a class="recipe-meta-link"
+               th:href="@{/recipes(query='', category='', difficulty=${recipe.difficulty}, maxCalories='', maxPrepTime='', maxCookTime='')}">
+                <span th:text="${recipe.difficulty}">Difficulty</span>
+            </a>
+
+            <a class="recipe-meta-link"
+               th:href="@{/recipes(query='', category=${recipe.category}, difficulty='', maxCalories='', maxPrepTime='', maxCookTime='')}">
+                <span th:text="${recipe.category}">Category</span>
+            </a>
+        </div>
+    </div>
+</article>
+
+</body>
+</html>

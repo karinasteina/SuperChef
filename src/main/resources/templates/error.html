@@ -20,7 +20,7 @@
     <link rel="stylesheet" th:href="@{/css/favorite-button.css}"/>
     <link rel="stylesheet" th:href="@{/css/error.css}"/>
 
-    <title th:text="|${statusCode} Error - SuperChef|">Error - SuperChef</title>
+    <title th:text="|${status} Error - SuperChef|">Error - SuperChef</title>
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -32,7 +32,7 @@
              src="/images/error-chef.webp"
              th:src="@{/images/error-chef.webp}"
              width="800"/>
-        <h1 class="error-status" id="error-status" th:text="${statusCode}">500</h1>
+        <h1 class="error-status" id="error-status" th:text="${status}">500</h1>
         <p class="error-message" th:text="${message}">An unexpected error occurred.</p>
     </section>
 </main>

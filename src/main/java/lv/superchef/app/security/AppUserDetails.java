@@ -1,5 +1,6 @@
 package lv.superchef.app.security;
 
+import lv.superchef.app.enums.Role;
 import lv.superchef.app.model.AppUser;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,5 +36,9 @@ public class AppUserDetails implements UserDetails {
 
     public Long getUserId() {
         return appUser.getId();
+    }
+
+    public Role getRole() {
+        return appUser.getRole();
     }
 }

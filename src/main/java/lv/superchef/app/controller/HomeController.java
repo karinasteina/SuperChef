@@ -21,8 +21,15 @@ public class HomeController {
     private IFavoriteRecipeService favoriteRecipeService;
 
     @GetMapping("/")
-    public String getControllerShowHomePage(Model model) {
+    public String showHomePage(Model model, @AuthenticationPrincipal AppUserDetails userDetails) {
         model.addAttribute("activePage", "home");
+        model.addAttribute("dinnerRecipes",
+                recipeService.searchRecipes("", "Dinner", "", null, null, null, 3));
+        model.addAttribute("tenMinuteRecipes",
+                recipeService.searchRecipes("", "", "", null, 10, null, 3));
+        model.addAttribute("hardRecipes",
+                recipeService.searchRecipes("", "", "Hard", null, null, null, 3));
+        addFavoriteState(userDetails, model);
         return "home-view";
     }
 
@@ -40,7 +47,7 @@ public class HomeController {
     @GetMapping("/profile")
     public String profile(@AuthenticationPrincipal AppUserDetails userDetails, Model model) {
         model.addAttribute("activePage", "profile");
-        model.addAttribute("loggedIn", userDetails != null);
+        model.addAttribute("user", userDetails);
         return "profile";
     }
 

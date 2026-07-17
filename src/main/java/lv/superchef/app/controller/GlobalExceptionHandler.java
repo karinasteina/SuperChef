@@ -32,10 +32,10 @@ public class GlobalExceptionHandler {
 
         response.setStatus(status.value());
         response.setContentType(MediaType.TEXT_HTML_VALUE);
-        model.addAttribute("statusCode", status.value());
+        model.addAttribute("status", status.value());
         model.addAttribute("message", message);
 
-        return "error-view";
+        return "error";
     }
 
     private HttpStatusCode resolveStatus(Exception exception) {

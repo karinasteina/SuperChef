@@ -24,10 +24,10 @@ class GlobalExceptionHandlerTest {
                 model
         );
 
-        assertThat(view).isEqualTo("error-view");
+        assertThat(view).isEqualTo("error");
         assertThat(response.getStatus()).isEqualTo(400);
         assertThat(response.getContentType()).isEqualTo("text/html");
-        assertThat(model.getAttribute("statusCode")).isEqualTo(400);
+        assertThat(model.getAttribute("status")).isEqualTo(400);
         assertThat(model.getAttribute("message")).isEqualTo("Invalid request");
     }
 
@@ -39,7 +39,7 @@ class GlobalExceptionHandlerTest {
         handler.handleException(new EntityNotFoundException("Recipe not found: 99"), response, model);
 
         assertThat(response.getStatus()).isEqualTo(404);
-        assertThat(model.getAttribute("statusCode")).isEqualTo(404);
+        assertThat(model.getAttribute("status")).isEqualTo(404);
         assertThat(model.getAttribute("message")).isEqualTo("Recipe not found: 99");
     }
 
@@ -51,7 +51,7 @@ class GlobalExceptionHandlerTest {
         handler.handleException(new IllegalStateException("Sensitive details"), response, model);
 
         assertThat(response.getStatus()).isEqualTo(500);
-        assertThat(model.getAttribute("statusCode")).isEqualTo(500);
+        assertThat(model.getAttribute("status")).isEqualTo(500);
         assertThat(model.getAttribute("message")).isEqualTo("An unexpected error occurred.");
     }
 }

@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/feed", true)
+                        .defaultSuccessUrl("/recipes/favorites", true)
                         .failureUrl("/login?error")
                         .usernameParameter("username")
                         .passwordParameter("password")
@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.ERROR)
                         .permitAll()
 
-                        .requestMatchers("/register", "/error", "/css/**", "/js/**", "/images/**")
+                        .requestMatchers("/", "/register", "/error", "/css/**", "/js/**", "/images/**")
                         .permitAll()
                         .requestMatchers("/.well-known/**").permitAll()
 

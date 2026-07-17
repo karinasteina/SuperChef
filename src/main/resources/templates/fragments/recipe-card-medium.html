@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 
-<!--/*@thymesVar id="recipe" type="lv.superchef.app.model.RecipeCreateDTO"*/-->
+<!--/*@thymesVar id="recipe" type="lv.superchef.app.model.Recipe"*/-->
 
 <body>
 
-<article class="recipe-card"
-         th:fragment="recipeCard(recipe, linkToDetails, imageLoading, showFavoriteButton, isFavorite)">
+<article class="recipe-card recipe-card--medium"
+         th:fragment="recipeCard-medium(recipe, linkToDetails, imageLoading, showFavoriteButton, isFavorite)"
+         th:with="result=${@textService.shorten(recipe.description, 150)}">
 
     <!-- Recipe image -->
     <a th:href="@{/recipes/{id}(id=${recipe.id})}"
@@ -39,8 +40,11 @@
     </h2>
 
     <!-- Recipe description -->
-    <p class="recipe-description"
-       th:text="${recipe.description}">
+    <p class="recipe-description recipe-description--preview"
+       th:classappend="${result.shortened}
+        ? ' is-shortened'
+        : ''"
+       th:text="${result.text}">
         Recipe description
     </p>
 
@@ -96,37 +100,6 @@
         </div>
     </div>
 
-    <!-- Recipe details -->
-    <div class="recipe-details">
-        <section>
-            <h3>Ingredients</h3>
-
-            <ul>
-                <li th:each="ingredient : ${recipe.ingredients}">
-                    <span th:text="${#numbers.formatDecimal(ingredient.quantity, 1, 0)}">
-                        Amount
-                    </span>
-                    <span th:text="${#strings.toLowerCase(ingredient.unit.name())}">
-                        Unit
-                    </span>
-                    <span th:text="${ingredient.ingredientName}">
-                        Ingredient
-                    </span>
-                </li>
-            </ul>
-        </section>
-
-        <section>
-            <h3>Steps</h3>
-
-            <ol>
-                <li th:each="step : ${recipe.steps}"
-                    th:text="${step.instruction}">
-                    Recipe step
-                </li>
-            </ol>
-        </section>
-    </div>
 
 </article>
 
