@@ -5,6 +5,7 @@ import lv.superchef.app.model.Profile;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.repository.IFavoriteRecipeRepo;
 import lv.superchef.app.repository.IProfileRepo;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Favorite Recipe Service Unit Tests")
 class FavoriteRecipeServiceTest {
 
     @Mock
@@ -31,6 +33,7 @@ class FavoriteRecipeServiceTest {
     private FavoriteRecipeService favoriteRecipeService;
 
     @Test
+    @DisplayName("Get Favorite IDs: Should successfully map and return core recipe IDs rather than intermediary table row IDs")
     void getFavoriteRecipeIdsReturnsRecipeIdsInsteadOfFavoriteRowIds() {
         Long userId = 11L;
         Long profileId = 22L;

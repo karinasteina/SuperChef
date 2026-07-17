@@ -3,6 +3,7 @@ package lv.superchef.app.service.impl;
 import lv.superchef.app.dto.RegisterRequest;
 import lv.superchef.app.repository.IAppUserRepo;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("App User Service Unit Tests")
 public class AppUserServiceImplTest {
     @Mock
     private IAppUserRepo userRepo;
@@ -23,6 +25,7 @@ public class AppUserServiceImplTest {
     private AppUserServiceImpl userService;
 
     @Test
+    @DisplayName("Register User: Should throw IllegalArgumentException when required input parameters are null")
     public void testRegisterUserWithNullParamShouldThrow() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest(null, "testuser1234567", "test@test.lv", "testuser1234567")));
 
@@ -31,6 +34,7 @@ public class AppUserServiceImplTest {
     }
 
     @Test
+    @DisplayName("Register User: Should throw IllegalArgumentException when password and confirm password fields do not match")
     public void passwordIsNotTheSameAsConfirmPassword() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", "testuser12345")));
         assertThat(ex.getMessage()).contains("Passwords do not match");
@@ -38,6 +42,7 @@ public class AppUserServiceImplTest {
     }
 
     @Test
+    @DisplayName("Register User: Should throw IllegalArgumentException and block registration when the username is already taken")
     public void registerFailsWithTakenUsername() {
         when(userRepo.existsByUsername("testuser")).thenReturn(true);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", "testuser1234567")));
@@ -46,6 +51,7 @@ public class AppUserServiceImplTest {
     }
 
     @Test
+    @DisplayName("Register User: Should throw IllegalArgumentException and block registration when the email is already registered")
     public void registerFailsWithTakenEmail() {
         when(userRepo.existsByEmail("test@test.lv")).thenReturn(true);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", "testuser1234567")));
