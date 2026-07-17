@@ -25,8 +25,8 @@ public class AppUserServiceImplTest {
     private AppUserServiceImpl userService;
 
     @Test
-    @DisplayName("Register User: Should throw IllegalArgumentException when required input parameters are null")
-    public void testRegisterUserWithNullParamShouldThrow() {
+    @DisplayName("Register User: Should throw IllegalArgumentException when required user input parameter is null")
+    public void testRegisterUserWithNullUsernameParamShouldThrow() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest(null, "testuser1234567", "test@test.lv", "testuser1234567")));
 
         assertThat(ex.getMessage()).contains("Incorrect input parameters");
@@ -57,6 +57,38 @@ public class AppUserServiceImplTest {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", "testuser1234567")));
         assertThat(ex.getMessage()).contains("Account with this email already exists");
         verify(userRepo, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Should throw when register request is null")
+    public void registerFailsWhenRequestIsNull(){
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(null));
+        assertThat(ex.getMessage()).contains("Register request is null");
+        verify(userRepo, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Register User: Should throw IllegalArgumentException when required password input parameter is null")
+    public void testRegisterUserWithNullPasswordParamShouldThrow() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest("testuser", null, "test@test.lv", "testuser1234567")));
+        assertThat(ex.getMessage()).contains("Incorrect input parameters");
+
+    }
+
+    @Test
+    @DisplayName("Register User: Should throw IllegalArgumentException when required confirm password input parameter is null")
+    public void testRegisterUserWithNullConfirmPasswordParamShouldThrow() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest("testuser", "testuser1234567", "test@test.lv", null)));
+        assertThat(ex.getMessage()).contains("Incorrect input parameters");
+
+    }
+
+    @Test
+    @DisplayName("Register User: Should throw IllegalArgumentException when required email input parameter is null")
+    public void testRegisterUserWithNullEmailParamShouldThrow() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> userService.register(new RegisterRequest("testuser", "testuser1234567", null, "testuser1234567")));
+        assertThat(ex.getMessage()).contains("Incorrect input parameters");
+
     }
 
 
