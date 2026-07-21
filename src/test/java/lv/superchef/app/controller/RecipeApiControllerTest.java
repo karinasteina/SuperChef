@@ -46,12 +46,14 @@ class RecipeApiControllerTest {
 
     @Nested
     @DisplayName("GET /api/recipes")
-    class GetAllPostsTests {
+    class GetAllPostsTests
+    {
 
 
         @Test
         @DisplayName("Should return 200 OK with list of recipes")
-        void getAllPosts_ShouldReturnRecipeList() throws Exception {
+        void getAllPosts_ShouldReturnRecipeList() throws Exception
+        {
             Recipe recipe = new Recipe();
             ReflectionTestUtils.setField(recipe, "id", 1L);
             recipe.setTitle("Korean Popcorn Chicken");
@@ -59,7 +61,7 @@ class RecipeApiControllerTest {
             when(recipeService.getAllRecipes()).thenReturn(List.of(recipe));
 
             mockMvc.perform(get("/api/recipes")
-                            .with(user("testuser").roles("USER"))) // Pass security context directly in the request
+                            .with(user("testuser").roles("USER")))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.length()").value(1))
@@ -71,7 +73,8 @@ class RecipeApiControllerTest {
 
         @Test
         @DisplayName("Should return 200 OK with empty array when no recipes exist")
-        void getAllPosts_EmptyList_ShouldReturnEmptyJsonArray() throws Exception {
+        void getAllPosts_EmptyList_ShouldReturnEmptyJsonArray() throws Exception
+        {
             when(recipeService.getAllRecipes()).thenReturn(Collections.emptyList());
 
             mockMvc.perform(get("/api/recipes")
@@ -88,7 +91,8 @@ class RecipeApiControllerTest {
 
         @Test
         @DisplayName("Should return 200 OK and created Recipe when DTO is valid")
-        void createPost_ValidDto_ShouldReturnCreatedRecipe() throws Exception {
+        void createPost_ValidDto_ShouldReturnCreatedRecipe() throws Exception
+        {
             RecipeCreateDTO dto = createValidRecipeDTO();
 
             Recipe savedRecipe = new Recipe();
@@ -112,8 +116,8 @@ class RecipeApiControllerTest {
 
         @Test
         @DisplayName("Should return 400 Bad Request when DTO validation fails (@Valid)")
-        void createPost_InvalidDto_ShouldReturn400() throws Exception {
-            // Unpopulated DTO triggers @NotBlank, @NotEmpty, and @NotNull validations
+        void createPost_InvalidDto_ShouldReturn400() throws Exception
+        {
             RecipeCreateDTO invalidDto = new RecipeCreateDTO();
 
             mockMvc.perform(post("/api/recipes")
@@ -127,7 +131,8 @@ class RecipeApiControllerTest {
         }
     }
 
-    private RecipeCreateDTO createValidRecipeDTO() {
+    private RecipeCreateDTO createValidRecipeDTO()
+    {
         IngredientInputDTO ingredient = new IngredientInputDTO(
                 "Chicken Thighs",
                 600.0,
