@@ -102,6 +102,13 @@ a:hover {
     font-size: .95rem;
 }
 
+.required-note {
+    margin: -14px 0 18px;
+    font-size: .82rem;
+    color: var(--color-text-muted);
+    text-align: right;
+}
+
 /* ── 7. Alert ─────────────────────────────────────────────── */
 .alert {
     padding: 14px 18px;
@@ -115,6 +122,16 @@ a:hover {
     background: var(--color-success-light);
     color: #15803D;
     border: 1px solid #BBF7D0;
+}
+
+.alert-error {
+    background: var(--color-danger-light);
+    color: #B91C1C;
+    border: 1px solid #FECACA;
+}
+
+.error-summary-list {
+    margin: 8px 0 0 18px;
 }
 
 /* ── 8. Form Sections ─────────────────────────────────────── */

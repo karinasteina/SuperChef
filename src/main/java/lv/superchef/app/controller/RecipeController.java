@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -114,7 +115,23 @@ public class RecipeController {
     }
 
     @PostMapping
-    public String handleCreateRecipe(@Valid @ModelAttribute RecipeCreateDTO createRecipeDto, @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) {
+    public String handleCreateRecipe(
+            @AuthenticationPrincipal AppUserDetails userDetails,
+            @Valid @ModelAttribute("createRecipeDto") RecipeCreateDTO createRecipeDto,
+            BindingResult bindingResult,
+            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage,
+            Model model) {
+
+        if (coverImage == null || coverImage.isEmpty()) {
+            bindingResult.reject("coverImage", "Cover image is required");
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("loggedIn", userDetails != null);
+            model.addAttribute("activePage", "createRecipe");
+            model.addAttribute("ingredientUnits", IngredientUnit.values());
+            return "recipe/create";
+        }
 
         String imageUrl = imageStorageService.storeCoverImage(coverImage);
 

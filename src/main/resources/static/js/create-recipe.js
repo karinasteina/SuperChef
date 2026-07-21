@@ -127,17 +127,21 @@ document.addEventListener('DOMContentLoaded', () => {
                        id="ingredients${index}Name"
                        placeholder="Ingredient name"
                        class="ingredient-name"
+                       required
                        autocomplete="off"/>
                 <input type="number"
                        name="ingredients[${index}].quantity"
                        id="ingredients${index}Amount"
                        placeholder="Quantity (e.g. 2)"
                        class="ingredient-quantity"
+                       required
+                       min="0.01"
                        step="0.01"
                        autocomplete="off"/>
                 <div class="select-wrapper">
                     <select name="ingredients[${index}].unit"
                             id="ingredients${index}Unit"
+                            required
                             class="ingredient-unit">
                         ${ingredientUnitOptionsHtml}
                     </select>
@@ -206,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       id="steps${index}"
                       placeholder="Describe this step in detail…"
                       rows="3"
+                      required
                       class="step-textarea"></textarea>
         `;
         attachClearErrorListeners(row.querySelectorAll('textarea'));
@@ -275,6 +280,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = document.getElementById('submitBtn');
     const btnText   = submitBtn.querySelector('.btn-text');
     const btnSpinner = submitBtn.querySelector('.btn-spinner');
+    const clientErrorSummary = document.getElementById('clientErrorSummary');
+    const clientErrorList = document.getElementById('clientErrorList');
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -282,19 +289,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let isValid = true;
         let firstErrorEl = null;
+        const errorMessages = [];
 
         /** Helper: mark a field as invalid */
         function markError(el, message) {
             el.classList.add('input-error');
             el.classList.add('input-shake');
             el.addEventListener('animationend', () => el.classList.remove('input-shake'), { once: true });
-
-            // Insert error message after field (or after parent wrapper)
-            const parent = el.closest('.input-with-unit') || el.closest('.select-wrapper') || el.parentElement;
-            const errSpan = document.createElement('span');
-            errSpan.className = 'error-message';
-            errSpan.textContent = message;
-            parent.insertAdjacentElement('afterend', errSpan);
+            errorMessages.push(message);
 
             if (!firstErrorEl) firstErrorEl = el;
             isValid = false;
@@ -352,12 +354,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ── Steps ────────────────────────────────────────────────
         const stepRows = stepList.querySelectorAll('.step-row');
-        stepRows.forEach((row, i) => {
-            const textarea = row.querySelector('.step-textarea');
-            if (!textarea.value.trim()) {
-                markError(textarea, `Step ${i + 1} description is required.`);
-            }
-        });
+        const stepTextareas = Array.from(stepRows).map((row) => row.querySelector('.step-textarea'));
+        const hasAnyInstruction = stepTextareas.some((textarea) => textarea && textarea.value.trim().length > 0);
+
+        if (!hasAnyInstruction && stepTextareas.length > 0) {
+            // Use one clear grouped message when instructions are completely missing.
+            markError(stepTextareas[0], 'Cooking instructions are required. Add at least 1 instruction step.');
+            stepTextareas.slice(1).forEach((textarea) => textarea.classList.add('input-error'));
+        } else {
+            stepTextareas.forEach((textarea, i) => {
+                if (textarea && !textarea.value.trim()) {
+                    markError(textarea, `Step ${i + 1}: instruction is required.`);
+                }
+            });
+        }
 
         // ── Calories ─────────────────────────────────────────────
         const caloriesEl = document.getElementById('calories');
@@ -397,6 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // ── Final Decision ────────────────────────────────────────
         if (!isValid) {
+            renderErrorSummary(errorMessages);
             if (firstErrorEl) {
                 firstErrorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 firstErrorEl.focus({ preventScroll: true });
@@ -426,16 +437,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function clearFieldError(el) {
         el.classList.remove('input-error');
-        const parent = el.closest('.input-with-unit') || el.closest('.select-wrapper') || el.parentElement;
-        const errSpan = parent.nextElementSibling;
-        if (errSpan && errSpan.classList.contains('error-message')) {
-            errSpan.remove();
-        }
     }
 
     function clearAllErrors() {
         document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
-        document.querySelectorAll('.error-message').forEach(el => el.remove());
+        if (clientErrorSummary) {
+            clientErrorSummary.classList.add('hidden');
+        }
+        if (clientErrorList) {
+            clientErrorList.innerHTML = '';
+        }
+    }
+
+    function renderErrorSummary(messages) {
+        if (!clientErrorSummary || !clientErrorList || messages.length === 0) {
+            return;
+        }
+
+        clientErrorList.innerHTML = '';
+        const uniqueMessages = [...new Set(messages)];
+        uniqueMessages.forEach((message) => {
+            const item = document.createElement('li');
+            item.textContent = message;
+            clientErrorList.appendChild(item);
+        });
+
+        clientErrorSummary.classList.remove('hidden');
+        clientErrorSummary.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // Attach to all static fields on page load
@@ -462,14 +490,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /** Show a global error banner at top of form */
     function showGlobalError(message) {
-        const existing = document.querySelector('.alert-error');
-        if (existing) existing.remove();
-        const alert = document.createElement('div');
-        alert.className = 'alert alert-error';
-        alert.style.cssText = 'background:#FEF2F2;color:#B91C1C;border:1px solid #FECACA;padding:14px 18px;border-radius:10px;font-size:.9rem;font-weight:500;margin-bottom:16px;';
-        alert.textContent = message;
-        form.insertAdjacentElement('beforebegin', alert);
-        setTimeout(() => alert.remove(), 5000);
+        clearAllErrors();
+        renderErrorSummary([message]);
     }
 
 });
