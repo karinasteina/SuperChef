@@ -48,6 +48,13 @@
     color: var(--color-text);
 }
 
+.recipe-author {
+    margin: -2px 0 12px;
+    color: var(--color-text-muted);
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
 .recipe-description {
     margin-bottom: 18px;
     color: var(--color-text-muted);
