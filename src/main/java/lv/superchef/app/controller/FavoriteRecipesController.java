@@ -109,7 +109,7 @@ public class FavoriteRecipesController {
         model.addAttribute("favoriteRecipeIds", favoriteRecipeIds);
         model.addAttribute("loggedIn", true);
 
-        return "favorite-recipe/favorite-list";
+        return "favorite-list";
     }
 
     private Profile getProfile(AppUserDetails userDetails) {
