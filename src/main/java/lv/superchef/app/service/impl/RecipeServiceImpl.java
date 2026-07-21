@@ -60,7 +60,7 @@ public class RecipeServiceImpl implements IRecipeService {
     public Recipe updateRecipe(Long id, @Valid RecipeCreateDTO dto) {
         Recipe recipe = getRecipeById(id);
         mapDtoToRecipe(dto, recipe);
-        recipe.setUpdatedAt(LocalDateTime.now());
+        //recipe.setUpdatedAt(LocalDateTime.now());
         return recipeRepo.save(recipe);
     }
 
