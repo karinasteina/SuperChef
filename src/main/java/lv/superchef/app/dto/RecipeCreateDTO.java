@@ -47,4 +47,6 @@ public class RecipeCreateDTO
 
     @NotEmpty(message = "A recipe must have at least one instruction step")
     private List<@NotBlank(message = "Step instruction cannot be empty") String> steps;
+
+    private Long authorId;
 }

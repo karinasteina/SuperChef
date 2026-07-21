@@ -39,11 +39,17 @@
         Recipe title
     </h2>
 
+    <!-- Recipe author -->
+    <p class="recipe-author">
+        <span>By </span>
+        <span th:text="${recipe.author != null ? recipe.author.username : 'SuperChef Team'}">SuperChef Team</span>
+    </p>
+
     <!-- Recipe description -->
     <p class="recipe-description recipe-description--preview"
        th:classappend="${result.shortened}
-        ? ' is-shortened'
-        : ''"
+         ? ' is-shortened'
+         : ''"
        th:text="${result.text}">
         Recipe description
     </p>
