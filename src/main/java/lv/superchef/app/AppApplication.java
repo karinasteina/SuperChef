@@ -23,7 +23,6 @@ public class AppApplication {
     }
 
     @Bean
-    @Transactional
     @org.springframework.context.annotation.Profile("!test")
     public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder, IRecipeService recipeService, IProfileRepo profileRepo) {
         return new CommandLineRunner() {
@@ -49,10 +48,20 @@ public class AppApplication {
 
                 createProfileIfMissing(user, profileRepo);
 
+                // Sample recipe seeding disabled due to SQLite lock issues
+                // Manually create recipes via /recipes/create form
 
-                for (var recipe : RECIPE_DATA) {
-                    recipeService.createRecipe(recipe);
+                try {
+                    for (var recipe : RECIPE_DATA) {
+                        if(admin!=null && admin.getId()!=null) {
+                            recipe.setAuthorId(admin.getId());
+                        }
+                        recipeService.createRecipe(recipe);
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Sample recipe seeding failed: " + ex.getMessage());
                 }
+
             }
 
             private void createProfileIfMissing(AppUser appUser, IProfileRepo profileRepo) {

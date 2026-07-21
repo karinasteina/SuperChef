@@ -110,6 +110,7 @@ public class RecipeController {
         model.addAttribute("activePage", "createRecipe");
         model.addAttribute("createRecipeDto", createRecipeDto);
         model.addAttribute("ingredientUnits", IngredientUnit.values());
+        model.addAttribute("authorName", userDetails != null ? userDetails.getUsername() : "Guest");
 
         return "recipe/create";
     }
@@ -130,12 +131,17 @@ public class RecipeController {
             model.addAttribute("loggedIn", userDetails != null);
             model.addAttribute("activePage", "createRecipe");
             model.addAttribute("ingredientUnits", IngredientUnit.values());
+            model.addAttribute("authorName", userDetails != null ? userDetails.getUsername() : "Guest");
             return "recipe/create";
         }
 
         String imageUrl = imageStorageService.storeCoverImage(coverImage);
 
         createRecipeDto.setImageUrl(imageUrl);
+
+        if (userDetails != null) {
+            createRecipeDto.setAuthorId(userDetails.getUserId());
+        }
 
         recipeService.createRecipe(createRecipeDto);
 
@@ -185,6 +191,7 @@ public class RecipeController {
         model.addAttribute("createRecipeDto", editDto);
         model.addAttribute("ingredientUnits", IngredientUnit.values());
         model.addAttribute("isEditMode", true);
+        model.addAttribute("authorName", recipe.getAuthor() != null ? recipe.getAuthor().getUsername() : "Unknown");
 
         return "recipe/edit";
     }
