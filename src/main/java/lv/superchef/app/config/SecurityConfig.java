@@ -59,7 +59,7 @@ public class SecurityConfig {
                         .authenticated()
 
 
-                        .requestMatchers(HttpMethod.GET, "/recipes/**")
+                        .requestMatchers(HttpMethod.GET, "/recipes", "/recipes/**")
                         .permitAll()
 
                         .anyRequest()
