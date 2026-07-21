@@ -12,7 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import static lv.superchef.app.config.TempData.RECIPE_DATA;
 
 @SpringBootApplication
@@ -26,6 +25,7 @@ public class AppApplication {
     @Bean
     @org.springframework.context.annotation.Profile("!test")
     @Transactional
+    @org.springframework.context.annotation.Profile("!test")
     public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder, IRecipeService recipeService, IProfileRepo profileRepo) {
         return new CommandLineRunner() {
             @Override

@@ -24,6 +24,8 @@
             <p class="page-subtitle">Share your culinary creation with the SuperChef community</p>
         </div>
 
+        <p class="required-note"><span class="required">*</span> Required fields</p>
+
         <!-- Success Banner -->
         <div class="alert alert-success" th:if="${param.success}">
             🎉 Your recipe has been published successfully!
@@ -37,6 +39,18 @@
               id="createRecipeForm"
               novalidate>
 
+            <div class="alert alert-error" role="alert" th:if="${#fields.hasAnyErrors()}">
+                <p>Please fix the following errors:</p>
+                <ul class="error-summary-list">
+                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Validation error</li>
+                </ul>
+            </div>
+
+            <div id="clientErrorSummary" class="alert alert-error hidden" role="alert" aria-live="assertive">
+                <p>Please fix the following errors:</p>
+                <ul class="error-summary-list" id="clientErrorList"></ul>
+            </div>
+
             <!-- ── SECTION 1: Basic Info ─────────────────────────────── -->
             <section class="form-section">
                 <h2 class="section-title">Basic Info</h2>
@@ -48,6 +62,7 @@
                            th:field="*{title}"
                            placeholder="e.g. Creamy Garlic Pasta"
                            maxlength="100"
+                           required
                            autocomplete="off"/>
                     <span class="char-counter" id="titleCounter">0 / 100</span>
                 </div>
@@ -58,6 +73,7 @@
                               th:field="*{description}"
                               placeholder="Tell us about your recipe — what makes it special?"
                               maxlength="1000"
+                              required
                               rows="4"></textarea>
                     <span class="char-counter" id="descCounter">0 / 1000</span>
                 </div>
@@ -65,7 +81,7 @@
 
             <!-- ── SECTION 2: Cover Image ─────────────────────────────── -->
             <section class="form-section">
-                <h2 class="section-title">Cover Image</h2>
+                <h2 class="section-title">Cover Image <span class="required">*</span></h2>
 
                 <div class="image-upload-zone" id="imageUploadZone">
                     <div class="upload-placeholder" id="uploadPlaceholder">
@@ -78,6 +94,7 @@
                            id="coverImage"
                            name="coverImage"
                            accept="image/*"
+                           required
                            class="file-input"/>
                 </div>
                 <button type="button" class="btn-change-image hidden" id="changeImageBtn">Change Image</button>
@@ -85,7 +102,7 @@
 
             <!-- ── SECTION 3: Ingredients ─────────────────────────────── -->
             <section class="form-section">
-                <h2 class="section-title">Ingredients</h2>
+                <h2 class="section-title">Ingredients <span class="required">*</span></h2>
                 <p class="section-hint">List every ingredient with its exact quantity.</p>
 
                 <div id="ingredientList">
@@ -94,14 +111,18 @@
                             <input type="text"
                                    th:field="*{ingredients[__${i.index}__].name}"
                                    placeholder="Ingredient name"
+                                   required
                                    class="ingredient-name"/>
                             <input type="number"
                                    th:field="*{ingredients[__${i.index}__].quantity}"
                                    placeholder="Quantity (e.g. 2)"
                                    class="ingredient-quantity"
+                                   required
+                                   min="0.01"
                                    step="0.01"/>
                             <div class="select-wrapper">
                                 <select th:field="*{ingredients[__${i.index}__].unit}"
+                                        required
                                         class="ingredient-unit">
                                     <option value="">Select unit…</option>
                                     <option th:each="unit : ${ingredientUnits}"
@@ -121,7 +142,7 @@
 
             <!-- ── SECTION 4: Cooking Instructions ───────────────────── -->
             <section class="form-section">
-                <h2 class="section-title">Cooking Instructions</h2>
+                <h2 class="section-title">Cooking Instructions <span class="required">*</span></h2>
                 <p class="section-hint">Describe each step clearly so anyone can follow along.</p>
 
                 <div id="stepList">
@@ -133,6 +154,7 @@
                         <textarea th:field="*{steps[__${i.index}__]}"
                                   placeholder="Describe this step in detail…"
                                   rows="3"
+                                  required
                                   class="step-textarea"></textarea>
                     </div>
                 </div>
@@ -155,6 +177,7 @@
                                    id="calories"
                                    th:field="*{calories}"
                                    placeholder="0"
+                                   required
                                    min="0"
                                    max="9999"/>
                             <span class="unit-label">kcal</span>
@@ -168,6 +191,7 @@
                                    id="preparationTime"
                                    th:field="*{preparationTime}"
                                    placeholder="0"
+                                   required
                                    min="0"/>
                             <span class="unit-label">mins</span>
                         </div>
@@ -180,6 +204,7 @@
                                    id="cookingTime"
                                    th:field="*{cookingTime}"
                                    placeholder="0"
+                                   required
                                    min="0"/>
                             <span class="unit-label">mins</span>
                         </div>
@@ -188,7 +213,7 @@
                     <div class="form-group">
                         <label for="difficulty">Difficulty <span class="required">*</span></label>
                         <div class="select-wrapper">
-                            <select id="difficulty" th:field="*{difficulty}">
+                            <select id="difficulty" th:field="*{difficulty}" required>
                                 <option value="">Select difficulty…</option>
                                 <option value="Easy">🟢 Easy</option>
                                 <option value="Medium">🟡 Medium</option>
@@ -200,7 +225,7 @@
                     <div class="form-group">
                         <label for="category">Category <span class="required">*</span></label>
                         <div class="select-wrapper">
-                            <select id="category" th:field="*{category}">
+                            <select id="category" th:field="*{category}" required>
                                 <option value="">Select category…</option>
                                 <option value="Breakfast">🌅 Breakfast</option>
                                 <option value="Lunch">☀️ Lunch</option>
