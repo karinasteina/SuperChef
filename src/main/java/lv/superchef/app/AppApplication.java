@@ -23,7 +23,6 @@ public class AppApplication {
     }
 
     @Bean
-    @org.springframework.context.annotation.Profile("!test")
     @Transactional
     @org.springframework.context.annotation.Profile("!test")
     public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder, IRecipeService recipeService, IProfileRepo profileRepo) {
