@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Home | SuperChef</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/recipe-list.css}"/>
+    <link rel="stylesheet" th:href="@{/css/favorite-button.css}"/>
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="home-page">
+    <section aria-labelledby="welcome-heading" class="home-hero">
+        <div class="home-welcome">
+            <p class="home-eyebrow">Cook something memorable</p>
+            <h1 class="home-title" id="welcome-heading">Welcome to SuperChef</h1>
+            <p class="home-intro">
+                Find approachable favorites, fast weekday ideas, and ambitious dishes for your next kitchen adventure.
+            </p>
+            <a class="home-cta" th:href="@{/recipes}">Explore all recipes</a>
+        </div>
+
+        <aside aria-labelledby="perks-heading" class="registration-perks"
+               sec:authorize="isAnonymous()">
+            <h2 id="perks-heading">Make SuperChef yours</h2>
+            <p>A free account gives you everything you need to build your own cooking collection.</p>
+            <ul class="perks-list">
+                <li>Save favorite recipes for later</li>
+                <li>Create and share your own recipes</li>
+                <li>Edit and manage everything you publish</li>
+            </ul>
+            <a class="registration-link"
+               sec:authorize="isAnonymous()"
+               th:href="@{/register}">Create your free account →</a>
+        </aside>
+        <aside aria-labelledby="perks-heading" class="registration-perks"
+               sec:authorize="isAuthenticated()">
+            <h2 id="perks-heading-registered">Thanks for registering!</h2>
+            <p>Soon you will see your stats here</p>
+            <ul class="perks-list">
+                <li><a th:href="@{/profile}">Manage your profile</a></li>
+                <li><a th:href="@{/recipes/create}">Create and share your own recipes</a></li>
+                <li><a th:href="@{/recipes/favorites}">See your saved recipes</a></li>
+            </ul>
+
+        </aside>
+    </section>
+
+    <section aria-labelledby="dinner-heading" class="home-recipe-section">
+        <header class="home-section-header">
+            <div>
+                <h2 class="home-section-title" id="dinner-heading">Dinner inspiration</h2>
+                <p class="home-section-description">Three satisfying ideas for the end of the day.</p>
+            </div>
+            <a class="section-link"
+               th:href="@{/recipes(query='', category='Dinner', difficulty='', maxCalories='', maxPrepTime='', maxCookTime='')}">
+                See all dinners →
+            </a>
+        </header>
+
+        <ol class="recipe-list recipe-list--small"
+            th:unless="${#lists.isEmpty(dinnerRecipes)}">
+            <li th:each="recipe, status : ${dinnerRecipes}">
+                <div th:replace="~{fragments/recipe-card-small
+                    :: recipeCard-small(
+                        ${recipe},
+                        true,
+                        ${status.first ? 'eager' : 'lazy'},
+                        true,
+                        ${favoriteRecipeIds.contains(recipe.id)}
+                    )}">
+                </div>
+            </li>
+        </ol>
+    </section>
+
+    <section aria-labelledby="quick-heading" class="home-recipe-section">
+        <header class="home-section-header">
+            <div>
+                <h2 class="home-section-title" id="quick-heading">10-minute prep meals</h2>
+                <p class="home-section-description">Spend ten minutes or less getting these recipes ready to cook.</p>
+            </div>
+            <a class="section-link"
+               th:href="@{/recipes(query='', category='', difficulty='', maxCalories='', maxPrepTime=10, maxCookTime='')}">
+                See more quick ideas →
+            </a>
+        </header>
+
+        <ol class="recipe-list recipe-list--small"
+            th:unless="${#lists.isEmpty(tenMinuteRecipes)}">
+            <li th:each="recipe, status : ${tenMinuteRecipes}">
+                <div th:replace="~{fragments/recipe-card-small
+                    :: recipeCard-small(
+                        ${recipe},
+                        true,
+                        'lazy',
+                        true,
+                        ${favoriteRecipeIds.contains(recipe.id)}
+                    )}">
+                </div>
+            </li>
+        </ol>
+    </section>
+
+    <section aria-labelledby="hard-heading" class="home-recipe-section">
+        <header class="home-section-header">
+            <div>
+                <h2 class="home-section-title" id="hard-heading">Ready for a challenge?</h2>
+                <p class="home-section-description">Three hard recipes for when you want to test your skills.</p>
+            </div>
+            <a class="section-link"
+               th:href="@{/recipes(query='', category='', difficulty='Hard', maxCalories='', maxPrepTime='', maxCookTime='')}">
+                See all hard recipes →
+            </a>
+        </header>
+
+        <ol class="recipe-list recipe-list--small"
+            th:unless="${#lists.isEmpty(hardRecipes)}">
+            <li th:each="recipe, status : ${hardRecipes}">
+                <div th:replace="~{fragments/recipe-card-small
+                    :: recipeCard-small(
+                        ${recipe},
+                        true,
+                        'lazy',
+                        true,
+                        ${favoriteRecipeIds.contains(recipe.id)}
+                    )}">
+                </div>
+            </li>
+        </ol>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script defer th:src="@{/js/favorites.js}"></script>
+</body>
+</html>

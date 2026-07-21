@@ -1,0 +1,49 @@
+.error-page {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    padding: 48px 24px;
+    text-align: center;
+}
+
+.error-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(100%, 560px);
+}
+
+.error-illustration {
+    display: block;
+    width: min(100%, 320px);
+    height: auto;
+    margin-bottom: 28px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+}
+
+.error-status {
+    color: var(--color-primary);
+    font-size: clamp(3.5rem, 10vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -.05em;
+}
+
+.error-message {
+    margin-top: 16px;
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+}
+
+@media (max-width: 480px) {
+    .error-page {
+        padding: 32px 16px;
+    }
+
+    .error-illustration {
+        width: min(100%, 260px);
+        margin-bottom: 24px;
+    }
+}

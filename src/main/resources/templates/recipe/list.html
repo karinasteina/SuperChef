@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <title>Recipes | SuperChef</title>
+
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="anonymous"
+          href="https://fonts.gstatic.com"
+          rel="preconnect"/>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"/>
+
+    <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/recipe-list.css}"/>
+    <link rel="stylesheet" th:href="@{/css/favorite-button.css}"/>
+</head>
+
+<body>
+
+<!-- ====== NAVBAR ====== -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ====== MAIN PAGE ====== -->
+<main class="recipe-list-page">
+
+    <header class="page-header">
+        <h1 class="page-title">Discover Recipes</h1>
+    </header>
+
+    <!-- Success/Status Message -->
+    <p role="status"
+       th:if="${message}"
+       class="alert"
+       th:classappend="|alert-${status}|"
+       th:text="${message}"
+       style="max-width: 1100px; margin: 0 auto 20px;">
+    </p>
+
+
+    <div th:replace="~{fragments/recipe-filter :: recipe-filter}"></div>
+
+    <!-- Result count -->
+    <p aria-live="polite"
+       class="page-subtitle recipe-results-count"
+       th:text="|${#lists.size(recipes)} recipes found|">
+        0 recipes found
+    </p>
+
+    <!-- No results -->
+    <div class="form-container"
+         th:if="${#lists.isEmpty(recipes)}">
+
+        <h2>No recipes found</h2>
+
+        <p class="page-subtitle">
+            Try another search or clear the selected filters.
+        </p>
+
+        <a class="btn btn-cancel"
+           th:href="@{/recipes}">
+            Clear filters
+        </a>
+    </div>
+
+    <!-- Recipe list -->
+    <ol class="recipe-list"
+        th:unless="${#lists.isEmpty(recipes)}">
+
+        <li th:each="recipe, status : ${recipes}">
+
+            <div th:replace="~{fragments/recipe-card-medium
+                :: recipeCard-medium(
+                    ${recipe},
+                    true,
+                    ${status.first ? 'eager' : 'lazy'},
+                    true,
+                    ${favoriteRecipeIds.contains(recipe.id)}
+                )}">
+            </div>
+
+        </li>
+    </ol>
+</main>
+
+<!-- ====== FOOTER ====== -->
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script defer th:src="@{/js/favorites.js}"></script>
+</body>
+</html>

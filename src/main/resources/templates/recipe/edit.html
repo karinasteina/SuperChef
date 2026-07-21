@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Edit Recipe | SuperChef</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+
+<!-- ====== NAVBAR ====== -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- ====== MAIN PAGE ====== -->
+<main class="create-recipe-page">
+    <div class="form-container">
+
+        <div class="page-header">
+            <h1 class="page-title">Edit Recipe</h1>
+            <p class="page-subtitle">Update your recipe details</p>
+        </div>
+
+        <p class="required-note"><span class="required">*</span> Required fields (cover image is optional while editing)</p>
+
+        <!-- ====== FORM ====== -->
+        <form th:action="@{/recipes/{id}/update(id=${recipeId})}"
+              th:object="${createRecipeDto}"
+              method="post"
+              enctype="multipart/form-data"
+              id="createRecipeForm"
+              novalidate>
+
+            <div class="alert alert-error" role="alert" th:if="${#fields.hasAnyErrors()}">
+                <p>Please fix the following errors:</p>
+                <ul class="error-summary-list">
+                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Validation error</li>
+                </ul>
+            </div>
+
+            <div id="clientErrorSummary" class="alert alert-error hidden" role="alert" aria-live="assertive">
+                <p>Please fix the following errors:</p>
+                <ul class="error-summary-list" id="clientErrorList"></ul>
+            </div>
+
+            <!-- ── SECTION 1: Basic Info ─────────────────────────────── -->
+            <section class="form-section">
+                <h2 class="section-title">Basic Info</h2>
+
+                <div class="form-group">
+                    <label for="title">Recipe Title <span class="required">*</span></label>
+                    <input type="text"
+                           id="title"
+                           th:field="*{title}"
+                           placeholder="e.g. Creamy Garlic Pasta"
+                           maxlength="100"
+                           required
+                           autocomplete="off"/>
+                    <span class="char-counter" id="titleCounter">0 / 100</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description <span class="required">*</span></label>
+                    <textarea id="description"
+                              th:field="*{description}"
+                              placeholder="Tell us about your recipe — what makes it special?"
+                              maxlength="1000"
+                              required
+                              rows="4"></textarea>
+                    <span class="char-counter" id="descCounter">0 / 1000</span>
+                </div>
+            </section>
+
+            <!-- ── SECTION 2: Cover Image ─────────────────────────────── -->
+            <section class="form-section">
+                <h2 class="section-title">Cover Image <span class="required">*</span></h2>
+
+                <!-- Show current image -->
+                <div th:if="*{imageUrl != null}" style="margin-bottom: 1rem;">
+                    <p style="font-size: 0.9rem; color: #6B7280; margin-bottom: 0.5rem;">Current image:</p>
+                    <img th:src="*{imageUrl}" alt="Current recipe image"
+                         style="max-width: 200px; border-radius: 8px; border: 2px solid #E5E7EB;"/>
+                </div>
+
+                <div class="image-upload-zone" id="imageUploadZone">
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <span class="upload-icon">📷</span>
+                        <p class="upload-text">Drag &amp; drop or <span class="upload-link">click to upload</span></p>
+                        <p class="upload-hint">JPG, PNG, WEBP — max 5 MB (leave empty to keep current image)</p>
+                    </div>
+                    <img id="imagePreview" src="#" alt="Recipe preview" class="image-preview hidden"/>
+                    <input type="file"
+                           id="coverImage"
+                           name="coverImage"
+                           accept="image/*"
+                           class="file-input"/>
+                </div>
+                <button type="button" class="btn-change-image hidden" id="changeImageBtn">Change Image</button>
+            </section>
+
+            <!-- ── SECTION 3: Ingredients ─────────────────────────────── -->
+            <section class="form-section">
+                <h2 class="section-title">Ingredients <span class="required">*</span></h2>
+                <p class="section-hint">List every ingredient with its exact quantity.</p>
+
+                <div id="ingredientList">
+                    <div class="ingredient-row" th:each="ingredient, i : *{ingredients}">
+                        <div class="ingredient-inputs">
+                            <input type="text"
+                                   th:field="*{ingredients[__${i.index}__].name}"
+                                   placeholder="Ingredient name"
+                                   required
+                                   class="ingredient-name"/>
+                            <input type="number"
+                                   th:field="*{ingredients[__${i.index}__].quantity}"
+                                   placeholder="Quantity (e.g. 2)"
+                                   class="ingredient-quantity"
+                                   required
+                                   min="0.01"
+                                   step="0.01"/>
+                            <div class="select-wrapper">
+                                <select th:field="*{ingredients[__${i.index}__].unit}"
+                                        required
+                                        class="ingredient-unit">
+                                    <option value="">Select unit…</option>
+                                    <option th:each="unit : ${ingredientUnits}"
+                                            th:value="${unit.name()}"
+                                            th:text="${unit}">G</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-remove" aria-label="Remove ingredient">✕</button>
+                    </div>
+                </div>
+
+                <button type="button" id="addIngredient" class="btn-add">
+                    <span>+</span> Add Ingredient
+                </button>
+            </section>
+
+            <!-- ── SECTION 4: Cooking Instructions ───────────────────── -->
+            <section class="form-section">
+                <h2 class="section-title">Cooking Instructions <span class="required">*</span></h2>
+                <p class="section-hint">Describe each step clearly so anyone can follow along.</p>
+
+                <div id="stepList">
+                    <div class="step-row" th:each="step, i : *{steps}">
+                        <div class="step-header">
+                            <span class="step-badge" th:text="'Step ' + (${i.index} + 1)">Step 1</span>
+                            <button type="button" class="btn-remove" aria-label="Remove step">✕</button>
+                        </div>
+                        <textarea th:field="*{steps[__${i.index}__]}"
+                                  placeholder="Describe this step in detail…"
+                                  rows="3"
+                                  required
+                                  class="step-textarea"></textarea>
+                    </div>
+                </div>
+
+                <button type="button" id="addStep" class="btn-add">
+                    <span>+</span> Add Step
+                </button>
+            </section>
+
+            <!-- ── SECTION 5: Recipe Details ──────────────────────────── -->
+            <section class="form-section">
+                <h2 class="section-title">Recipe Details</h2>
+
+                <div class="details-grid">
+
+                    <div class="form-group">
+                        <label for="calories">Calories <span class="required">*</span></label>
+                        <div class="input-with-unit">
+                            <input type="number"
+                                   id="calories"
+                                   th:field="*{calories}"
+                                   placeholder="0"
+                                   required
+                                   min="0"
+                                   max="9999"/>
+                            <span class="unit-label">kcal</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="preparationTime">Prep Time <span class="required">*</span></label>
+                        <div class="input-with-unit">
+                            <input type="number"
+                                   id="preparationTime"
+                                   th:field="*{preparationTime}"
+                                   placeholder="0"
+                                   required
+                                   min="0"/>
+                            <span class="unit-label">mins</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cookingTime">Cooking Time <span class="required">*</span></label>
+                        <div class="input-with-unit">
+                            <input type="number"
+                                   id="cookingTime"
+                                   th:field="*{cookingTime}"
+                                   placeholder="0"
+                                   required
+                                   min="0"/>
+                            <span class="unit-label">mins</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="difficulty">Difficulty <span class="required">*</span></label>
+                        <div class="select-wrapper">
+                            <select id="difficulty" th:field="*{difficulty}" required>
+                                <option value="">Select difficulty…</option>
+                                <option value="Easy">🟢 Easy</option>
+                                <option value="Medium">🟡 Medium</option>
+                                <option value="Hard">🔴 Hard</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category <span class="required">*</span></label>
+                        <div class="select-wrapper">
+                            <select id="category" th:field="*{category}" required>
+                                <option value="">Select category…</option>
+                                <option value="Breakfast">🌅 Breakfast</option>
+                                <option value="Lunch">☀️ Lunch</option>
+                                <option value="Dinner">🌙 Dinner</option>
+                                <option value="Dessert">🍰 Dessert</option>
+                                <option value="Snack">🥨 Snack</option>
+                                <option value="Drinks">🥤 Drinks</option>
+                                <option value="Other">🍽️ Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ── FORM ACTIONS ───────────────────────────────────────── -->
+            <div class="form-actions">
+                <a th:href="@{/recipes}" class="btn btn-cancel">Cancel</a>
+                <button type="submit" class="btn btn-submit" id="submitBtn">
+                    <span class="btn-text">Update Recipe</span>
+                    <span class="btn-spinner hidden" id="submitSpinner">⏳ Updating…</span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+<!-- ====== FOOTER ====== -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/create-recipe.js}"></script>
+</body>
+</html>
+

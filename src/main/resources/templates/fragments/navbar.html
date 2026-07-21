@@ -1,0 +1,27 @@
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!--/*@thymesVar id="activePage" type="java.lang.String"*/-->
+<nav class="navbar" th:fragment="navbar">
+    <a class="navbar-brand" th:href="@{/}">
+        <span class="brand-icon">🍳</span>
+        <span class="brand-name" th:classappend="${activePage == 'home' ? 'active' : ''}">SuperChef</span>
+    </a>
+    <ul class="navbar-links">
+        <li><a th:classappend="${activePage == 'recipes' ? 'active' : ''}" th:href="@{/recipes}">Recipes</a></li>
+        <li sec:authorize="isAuthenticated()"><a th:classappend="${activePage == 'createRecipe' ? 'active' : ''}"
+                                                 th:href="@{/recipes/create}">Create Recipe</a></li>
+        <li sec:authorize="isAnonymous()"><a th:classappend="${activePage == 'login' ? 'active' : ''}"
+                                             th:href="@{/login}">Login</a></li>
+        <li sec:authorize="isAuthenticated()"><a th:classappend="${activePage == 'profile' ? 'active' : ''}"
+                                                 th:href="@{/profile}">My Profile</a></li>
+        <li sec:authorize="isAuthenticated()"><a th:classappend="${activePage == 'recipes/favorites' ? 'active' : ''}"
+                                                 th:href="@{/recipes/favorites}">Favorites</a></li>
+        <li sec:authorize="isAuthenticated()">
+            <form class="navbar-logout-form" method="post" th:action="@{/logout}">
+                <input type="hidden"/>
+                <button class="navbar-logout-btn" type="submit">Logout</button>
+            </form>
+        </li>
+    </ul>
+</nav>

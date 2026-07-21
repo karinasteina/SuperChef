@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+
+<!--/*@thymesVar id="recipe" type="lv.superchef.app.model.RecipeCreateDTO"*/-->
+
+<body>
+
+<article class="recipe-card"
+         th:fragment="recipeCard(recipe, linkToDetails, imageLoading, showFavoriteButton, isFavorite)">
+
+    <!-- Recipe image -->
+    <a th:href="@{/recipes/{id}(id=${recipe.id})}"
+       th:if="${linkToDetails}">
+        <img class="recipe-image"
+             height="397"
+             th:alt="|Photo of ${recipe.title}|"
+             th:loading="${imageLoading}"
+             th:src="${recipe.imageUrl}"
+             width="397"/>
+    </a>
+
+    <img class="recipe-image"
+         height="397"
+         th:alt="|Photo of ${recipe.title}|"
+         th:loading="${imageLoading}"
+         th:src="${recipe.imageUrl}"
+         th:unless="${linkToDetails}"
+         width="397"/>
+
+    <!-- Recipe title -->
+    <a th:href="@{/recipes/{id}(id=${recipe.id})}"
+       th:if="${linkToDetails}">
+        <h2 th:text="${recipe.title}">Recipe title</h2>
+    </a>
+
+    <h2 th:text="${recipe.title}"
+        th:unless="${linkToDetails}">
+        Recipe title
+    </h2>
+
+    <!-- Recipe description -->
+    <p class="recipe-description"
+       th:text="${recipe.description}">
+        Recipe description
+    </p>
+
+    <!-- Recipe information -->
+    <div class="recipe-meta">
+        <a class="recipe-meta-link"
+           th:href="@{/recipes(query='', category='', difficulty='', maxCalories=${recipe.calories}, maxPrepTime='', maxCookTime='')}">
+            <span th:text="|${recipe.calories} kcal|">0 kcal</span>
+        </a>
+
+        <a class="recipe-meta-link"
+           th:href="@{/recipes(query='', category='', difficulty='', maxCalories='', maxPrepTime=${recipe.preparationTime}, maxCookTime='')}">
+            <span th:text="|Prep: ${recipe.preparationTime} min|">Prep: 0 min</span>
+        </a>
+
+        <a class="recipe-meta-link"
+           th:href="@{/recipes(query='', category='', difficulty='', maxCalories='', maxPrepTime='', maxCookTime=${recipe.cookingTime})}">
+            <span th:text="|Cook: ${recipe.cookingTime} min|">Cook: 0 min</span>
+        </a>
+
+        <a class="recipe-meta-link"
+           th:href="@{/recipes(query='', category='', difficulty=${recipe.difficulty}, maxCalories='', maxPrepTime='', maxCookTime='')}">
+            <span th:text="${recipe.difficulty}">Difficulty</span>
+        </a>
+
+        <a class="recipe-meta-link"
+           th:href="@{/recipes(query='', category=${recipe.category}, difficulty='', maxCalories='', maxPrepTime='', maxCookTime='')}">
+            <span th:text="${recipe.category}">Category</span>
+        </a>
+    </div>
+
+    <!-- Authenticated recipe controls -->
+    <div class="recipe-toolbar" sec:authorize="isAuthenticated()">
+        <th:block th:replace="~{fragments/favorite-button :: favoriteButton(${recipe.id}, ${isFavorite})}">
+        </th:block>
+
+        <div class="recipe-actions">
+            <a class="btn-action btn-edit"
+               th:href="@{/recipes/{id}/edit(id=${recipe.id})}"
+               title="Edit recipe">
+                ✏️ Edit
+            </a>
+            <form class="recipe-delete-form"
+                  method="post"
+                  onsubmit="return confirm('Are you sure you want to delete this recipe? This action cannot be undone.');"
+                  th:action="@{/recipes/{id}/delete(id=${recipe.id})}">
+                <button class="btn-action btn-delete"
+                        title="Delete recipe"
+                        type="submit">
+                    🗑️ Delete
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recipe details -->
+    <div class="recipe-details">
+        <section>
+            <h3>Ingredients</h3>
+
+            <ul>
+                <li th:each="ingredient : ${recipe.ingredients}">
+                    <span th:text="${#numbers.formatDecimal(ingredient.quantity, 1, 0)}">
+                        Amount
+                    </span>
+                    <span th:text="${#strings.toLowerCase(ingredient.unit.name())}">
+                        Unit
+                    </span>
+                    <span th:text="${ingredient.ingredientName}">
+                        Ingredient
+                    </span>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Steps</h3>
+
+            <ol>
+                <li th:each="step : ${recipe.steps}"
+                    th:text="${step.instruction}">
+                    Recipe step
+                </li>
+            </ol>
+        </section>
+    </div>
+
+</article>
+
+</body>
+</html>

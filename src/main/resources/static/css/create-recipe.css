@@ -1,0 +1,637 @@
+/* ============================================================
+   create-recipe.css
+   SuperChef – Create Recipe Page
+   Author: Sonakshi
+   ============================================================ */
+
+/* ── 1. CSS Custom Properties ─────────────────────────────── */
+:root {
+    --color-primary:        #F97316;
+    --color-primary-dark:   #EA6B0A;
+    --color-primary-light:  #FFF7ED;
+    --color-danger:         #EF4444;
+    --color-danger-light:   #FEF2F2;
+    --color-success:        #22C55E;
+    --color-success-light:  #F0FDF4;
+    --color-text:           #1E293B;
+    --color-text-muted:     #64748B;
+    --color-border:         #E2E8F0;
+    --color-border-focus:   #F97316;
+    --color-bg:             #F8FAFC;
+    --color-card:           #FFFFFF;
+    --color-nav-bg:         #FFFFFF;
+
+    --radius-sm:    6px;
+    --radius-md:    10px;
+    --radius-lg:    16px;
+    --radius-full:  9999px;
+
+    --shadow-card:  0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+    --shadow-input: 0 0 0 3px rgba(249,115,22,.18);
+
+    --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --transition:   all .2s ease;
+}
+
+/* ── 2. Reset & Base ──────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ── 4. Page Layout ───────────────────────────────────────── */
+.create-recipe-page {
+    flex: 1;
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 16px 60px;
+}
+
+/* ── 5. Form Container (Card) ─────────────────────────────── */
+.form-container {
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 40px 48px;
+}
+
+/* ── 6. Page Header ───────────────────────────────────────── */
+.page-header {
+    margin-bottom: 36px;
+    text-align: center;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -.5px;
+}
+
+.page-subtitle {
+    margin-top: 6px;
+    color: var(--color-text-muted);
+    font-size: .95rem;
+}
+
+.required-note {
+    margin: -14px 0 18px;
+    font-size: .82rem;
+    color: var(--color-text-muted);
+    text-align: right;
+}
+
+/* ── 7. Alert ─────────────────────────────────────────────── */
+.alert {
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    font-size: .9rem;
+    font-weight: 500;
+    margin-bottom: 28px;
+}
+
+.alert-success {
+    background: var(--color-success-light);
+    color: #15803D;
+    border: 1px solid #BBF7D0;
+}
+
+.alert-error {
+    background: var(--color-danger-light);
+    color: #B91C1C;
+    border: 1px solid #FECACA;
+}
+
+.error-summary-list {
+    margin: 8px 0 0 18px;
+}
+
+/* ── 8. Form Sections ─────────────────────────────────────── */
+.form-section {
+    margin-bottom: 40px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-primary);
+    display: inline-block;
+}
+
+.section-hint {
+    font-size: .85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 18px;
+    margin-top: 4px;
+}
+
+/* ── 9. Form Groups & Labels ──────────────────────────────── */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 20px;
+}
+
+.form-group:first-child {
+    margin-top: 16px;
+}
+
+label {
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.required {
+    color: var(--color-danger);
+    margin-left: 2px;
+}
+
+/* ── 10. Inputs & Textareas ───────────────────────────────── */
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    font-family: var(--font-sans);
+    font-size: .9rem;
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    transition: var(--transition);
+    outline: none;
+    resize: vertical;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--color-border-focus);
+    background: #FFFFFF;
+    box-shadow: var(--shadow-input);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #B0BEC5;
+}
+
+/* ── 11. Character Counter ────────────────────────────────── */
+.char-counter {
+    font-size: .78rem;
+    color: var(--color-text-muted);
+    text-align: right;
+    line-height: 1;
+}
+
+.char-counter.counter-warning {
+    color: var(--color-danger);
+    font-weight: 600;
+}
+
+/* ── 12. Input with Unit Label ────────────────────────────── */
+.input-with-unit {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.input-with-unit input {
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    flex: 1;
+}
+
+.unit-label {
+    background: var(--color-border);
+    border: 1.5px solid var(--color-border);
+    border-left: none;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 10px 12px;
+    font-size: .85rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+/* ── 13. Select Dropdown ──────────────────────────────────── */
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2364748B'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    pointer-events: none;
+}
+
+.select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    padding-right: 36px;
+}
+
+/* ── 14. Image Upload Zone ────────────────────────────────── */
+.image-upload-zone {
+    position: relative;
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--color-bg);
+    margin-top: 16px;
+    overflow: hidden;
+}
+
+.image-upload-zone:hover,
+.image-upload-zone.drag-active {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.upload-icon {
+    font-size: 2.5rem;
+}
+
+.upload-text {
+    font-size: .95rem;
+    color: var(--color-text-muted);
+}
+
+.upload-link {
+    color: var(--color-primary);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.upload-hint {
+    font-size: .78rem;
+    color: #9CA3AF;
+}
+
+.file-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.image-preview {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    display: block;
+}
+
+.btn-change-image {
+    margin-top: 10px;
+    background: none;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 7px 16px;
+    font-size: .83rem;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: var(--font-sans);
+}
+
+.btn-change-image:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ── 15. Ingredient Rows ──────────────────────────────────── */
+#ingredientList,
+#stepList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.ingredient-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ingredient-inputs {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+
+.ingredient-name {
+    flex: 1 1 260px;
+    min-width: 0;
+}
+
+.ingredient-quantity {
+     flex: 0 0 120px;
+}
+
+.ingredient-unit {
+     width: 100%;
+}
+
+.ingredient-inputs .select-wrapper {
+     flex: 0 0 130px;
+}
+
+/* ── 16. Step Rows ────────────────────────────────────────── */
+.step-row {
+    background: var(--color-bg);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.step-badge {
+    background: var(--color-primary);
+    color: #fff;
+    font-size: .78rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    letter-spacing: .3px;
+}
+
+.step-textarea {
+    background: #fff;
+}
+
+/* ── 17. Remove Button ────────────────────────────────────── */
+.btn-remove {
+    background: none;
+    border: 1.5px solid #FCA5A5;
+    border-radius: var(--radius-sm);
+    color: var(--color-danger);
+    font-size: .75rem;
+    padding: 5px 9px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: var(--font-sans);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.btn-remove:hover {
+    background: var(--color-danger);
+    color: #fff;
+    border-color: var(--color-danger);
+}
+
+/* ── 18. Add Button ───────────────────────────────────────── */
+.btn-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1.5px dashed var(--color-primary);
+    border-radius: var(--radius-md);
+    color: var(--color-primary);
+    font-size: .875rem;
+    font-weight: 600;
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: var(--font-sans);
+}
+
+.btn-add span {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.btn-add:hover {
+    background: var(--color-primary-light);
+    border-style: solid;
+}
+
+/* ── 19. Details Grid ─────────────────────────────────────── */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 24px;
+}
+
+/* ── 20. Validation Errors ────────────────────────────────── */
+input.input-error,
+textarea.input-error,
+select.input-error {
+    border-color: var(--color-danger) !important;
+    background: var(--color-danger-light);
+}
+
+input.input-error:focus,
+textarea.input-error:focus,
+select.input-error:focus {
+    box-shadow: 0 0 0 3px rgba(239,68,68,.18);
+}
+
+.error-message {
+    font-size: .78rem;
+    color: var(--color-danger);
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+@keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60%  { transform: translateX(-6px); }
+    40%,80%  { transform: translateX(6px); }
+}
+
+.input-shake {
+    animation: shake .35s ease;
+}
+
+/* ── 21. Form Actions ─────────────────────────────────────── */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-sans);
+    font-size: .9rem;
+    font-weight: 600;
+    padding: 11px 28px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1.5px solid transparent;
+    text-decoration: none;
+}
+
+.btn-cancel {
+    background: none;
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+}
+
+.btn-cancel:hover {
+    border-color: var(--color-text-muted);
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.btn-submit {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+    min-width: 160px;
+}
+
+.btn-submit:hover {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
+
+.btn-submit:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ── 22. Utility ──────────────────────────────────────────── */
+.hidden {
+    display: none !important;
+}
+
+/* ── 23. Footer ───────────────────────────────────────────── */
+.footer {
+    text-align: center;
+    padding: 24px 16px;
+    font-size: .82rem;
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-card);
+    margin-top: auto;
+}
+
+/* ── 24. Responsive ───────────────────────────────────────── */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 28px 20px;
+    }
+
+    .page-title {
+        font-size: 1.6rem;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ingredient-inputs {
+        flex-wrap: wrap;
+    }
+
+    .ingredient-name {
+        flex-basis: 100%;
+    }
+}
+
+@media (max-width: 540px) {
+     .ingredient-inputs {
+         flex-direction: column;
+     }
+
+     .ingredient-quantity,
+     .ingredient-unit {
+         width: 100%;
+     }
+
+     .form-actions {
+         flex-direction: column-reverse;
+         align-items: stretch;
+     }
+
+     .btn {
+         width: 100%;
+         justify-content: center;
+     }
+}

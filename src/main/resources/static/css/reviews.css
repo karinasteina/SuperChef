@@ -1,0 +1,155 @@
+.reviews-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 3rem auto 0;
+}
+
+.reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.average-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.average-rating-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.display-stars {
+    display: inline-flex;
+    gap: 0.1rem;
+}
+
+.display-stars span {
+    color: #c7c7c7;
+    font-size: 1.25rem;
+}
+
+.display-stars .filled {
+    color: #f5b301;
+}
+
+.review-form {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border: 1px solid #dddddd;
+    border-radius: 0.75rem;
+}
+
+.rating-fieldset {
+    padding: 0;
+    margin: 0 0 1rem;
+    border: 0;
+}
+
+.rating-fieldset legend {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.star-rating input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.star-rating label {
+    color: #c7c7c7;
+    cursor: pointer;
+    font-size: 2.25rem;
+    line-height: 1;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f5b301;
+}
+
+.star-rating input:focus-visible + label {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+}
+
+.review-comment-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.review-comment-field label {
+    font-weight: 600;
+}
+
+.review-comment-field textarea {
+    width: 100%;
+    padding: 0.75rem;
+    resize: vertical;
+    box-sizing: border-box;
+    border: 1px solid #cccccc;
+    border-radius: 0.5rem;
+    font: inherit;
+}
+
+.review-submit-button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.25rem;
+    border: 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+}
+
+.review-list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.review-card {
+    padding: 1.25rem;
+    border: 1px solid #dddddd;
+    border-radius: 0.75rem;
+}
+
+.review-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.review-comment {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.review-date {
+    font-size: 0.875rem;
+    opacity: 0.7;
+}
+
+.field-error,
+.review-error {
+    color: #b00020;
+}
+
+.review-success {
+    color: #176b2c;
+}
