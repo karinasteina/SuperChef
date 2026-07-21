@@ -10,7 +10,7 @@ import lv.superchef.app.enums.IngredientUnit;
 @Entity
 @Table(name = "recipe_ingredient")
 @NoArgsConstructor
-// @AllArgsConstructor
+//@AllArgsConstructor
 @Setter
 @Getter
 public class RecipeIngredient {
@@ -33,4 +33,5 @@ public class RecipeIngredient {
     @Column(name = "unit")
     @Enumerated(EnumType.STRING)
     private IngredientUnit unit;
+
 }

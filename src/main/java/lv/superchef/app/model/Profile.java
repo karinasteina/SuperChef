@@ -37,7 +37,6 @@ public class Profile {
     private String bio;
 
     @NotBlank
-    @Pattern(regexp = "^(?:(?:https?|ftp|file)://\\S+|/\\S+)$", message = "Must be a valid URL format")
     @Column(name = "ProfileImageUrl")
     private String profileImageUrl;
 
