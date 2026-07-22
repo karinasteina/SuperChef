@@ -6,12 +6,11 @@ import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.model.*;
-import lv.superchef.app.repository.IAppUserRepo;
-import lv.superchef.app.repository.IProfileRepo;
-import lv.superchef.app.repository.IRecipeRepo;
-import lv.superchef.app.repository.RecipeSpecifications;
+import lv.superchef.app.repository.*;
+
 import lv.superchef.app.service.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,6 +28,9 @@ public class RecipeServiceImpl implements IRecipeService {
 
     @Autowired
     private IProfileRepo profileRepo;
+
+    @Autowired
+    private IFollowRepo followRepo;
 
     @Override
     public Recipe createRecipe(@Valid RecipeCreateDTO dto) {
@@ -118,13 +120,20 @@ public class RecipeServiceImpl implements IRecipeService {
 
     // add tests for this
     @Override
-    public List<Recipe> getRecipesByFollowedProfiles(List<Long> profileIds) {
-        if(profileIds == null || profileIds.isEmpty()){
+    public List<Recipe> getRecipesByFollowedProfiles(Long profileId) {
+        if(profileId == null){
             return List.of();
         }
 
-        return recipeRepo.findByAuthor_IdIn(profileIds);
+        List<Long> followedIds = followRepo.findByFollower_Id(profileId)
+                .stream()
+                .map(follow -> follow.getFollowing().getId()).toList();
 
+        if(followedIds.isEmpty()){
+            return List.of();
+        }
+
+        return recipeRepo.findByAuthor_IdIn(followedIds);
     }
 
 }

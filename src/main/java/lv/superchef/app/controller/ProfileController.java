@@ -18,7 +18,7 @@ import java.util.List;
 public class ProfileController {
     @Autowired
     private IProfileService profileService;
-
+    // tests later
     @GetMapping
     public String getControllerGetAllProfiles(Model model){
         List<ProfileDTO> profiles = profileService.getAllProfiles()
@@ -29,13 +29,12 @@ public class ProfileController {
         return "profile-view";  // or another view where u need this
 
     }
-
+    // tests later
     @GetMapping("/{id}")
     public String getControllerGetProfileById(@PathVariable Long id, Model model){
         ProfileDTO profile = ProfileDTO.mapToDto(profileService.getProfileById(id));
         model.addAttribute("profile", profile);
         return "profile-detail-view"; // or whatever the single-profile template is called
     }
-
 
 }

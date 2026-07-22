@@ -8,7 +8,6 @@ import lv.superchef.app.model.Profile;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class ProfileDTO {
     private Long id;
