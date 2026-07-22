@@ -49,11 +49,13 @@ public class SecurityConfig {
                         .requestMatchers("/.well-known/**")
                         .permitAll()
 
-                        .requestMatchers("/", "/feed", "/login", "/register", "/error")
+                        .requestMatchers("/login")
                         .permitAll()
 
                         .requestMatchers("/h2-console/**")
                         .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/feed").authenticated()
 
                         .requestMatchers(HttpMethod.GET, "/recipes/*/edit").authenticated()
                         .requestMatchers(HttpMethod.GET, "/recipes/create", "/recipes/favorites", "/recipes/favorites/**")

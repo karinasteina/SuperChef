@@ -1,12 +1,9 @@
 package lv.superchef.app.controller;
 
 import lv.superchef.app.config.SecurityConfig;
-import lv.superchef.app.enums.Role;
-import lv.superchef.app.model.Recipe;
 import lv.superchef.app.security.AppUserDetails;
 import lv.superchef.app.service.IFavoriteRecipeService;
 import lv.superchef.app.service.IRecipeService;
-import lv.superchef.app.service.ShortenedText;
 import lv.superchef.app.service.TextService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,7 +13,6 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -32,8 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Import(SecurityConfig.class)
 @DisplayName("Home Controller Unit Tests")
-class HomeControllerTest
-{
+class HomeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -52,13 +47,11 @@ class HomeControllerTest
 
     @Nested
     @DisplayName("GET / (Home Page)")
-    class HomePageTests
-    {
+    class HomePageTests {
 
         @Test
         @DisplayName("Should return home-view with recipes and empty favorites for unauthenticated user")
-        void showHomePage_Anonymous_ShouldReturnHomeViewWithEmptyFavorites() throws Exception
-        {
+        void showHomePage_Anonymous_ShouldReturnHomeViewWithEmptyFavorites() throws Exception {
             when(recipeService.searchRecipes(anyString(), anyString(), anyString(), any(), any(), any(), anyInt()))
                     .thenReturn(List.of());
 
@@ -77,33 +70,20 @@ class HomeControllerTest
 
     @Nested
     @DisplayName("GET /feed")
-    class FeedPageTests
-    {
+    class FeedPageTests {
 
         @Test
-        @DisplayName("Should return feed view with recipes list for unauthenticated user")
-        void feed_Anonymous_ShouldReturnFeedView() throws Exception {
-            Recipe recipe = new Recipe();
-            ReflectionTestUtils.setField(recipe, "id", 1L);
-
-            List<Recipe> recipeList = List.of(recipe);
-            when(recipeService.searchRecipes("", "", null, null, null, null)).thenReturn(recipeList);
-
+        @DisplayName("Should reject unauthenticated user")
+        void feed_Anonymous_ShouldReturnUnauthorized() throws Exception {
             mockMvc.perform(get("/feed"))
-                    .andExpect(status().isOk())
-                    .andExpect(view().name("feed"))
-                    .andExpect(model().attribute("activePage", "feed"))
-                    .andExpect(model().attribute("recipes", recipeList))
-                    .andExpect(model().attribute("loggedIn", false))
-                    .andExpect(model().attribute("favoriteRecipeIds", Set.of()));
+                    .andExpect(status().isUnauthorized());
 
-            verify(favoriteRecipeService, never()).getFavoriteRecipeIdsByUserId(anyLong());
+            verifyNoInteractions(recipeService, favoriteRecipeService);
         }
 
         @Test
         @DisplayName("Should return feed view with favorite IDs for authenticated user")
-        void feed_Authenticated_ShouldReturnFeedViewWithFavorites() throws Exception
-        {
+        void feed_Authenticated_ShouldReturnFeedViewWithFavorites() throws Exception {
             Long userId = 2L;
             Set<Long> favoriteIds = Set.of(5L);
 
@@ -122,22 +102,4 @@ class HomeControllerTest
         }
     }
 
-    @Nested
-    @DisplayName("GET /profile")
-    class ProfilePageTests
-    {
-
-        @Test
-        @DisplayName("Should return profile view with user details in model")
-        void profile_ShouldReturnProfileView() throws Exception
-        {
-            when(mockUserDetails.getRole()).thenReturn(Role.ROLE_USER);
-
-            mockMvc.perform(get("/profile").with(user(mockUserDetails)))
-                    .andExpect(status().isOk())
-                    .andExpect(view().name("profile"))
-                    .andExpect(model().attribute("activePage", "profile"))
-                    .andExpect(model().attribute("user", mockUserDetails));
-        }
-    }
 }

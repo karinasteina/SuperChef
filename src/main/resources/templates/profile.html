@@ -25,9 +25,10 @@
     <div th:if="${user != null}">
         <p>Name: <span th:text="${user.username}"></span></p>
 
-        <p>Role: <span
-                th:text="${#strings.capitalize(#strings.toLowerCase(#strings.substringAfter(user.role.name(), 'ROLE_')))}"></span>
+        <p>Role:
+            <span th:text="${#strings.capitalize(#strings.toLowerCase(#strings.substringAfter(user.role.name(), 'ROLE_')))}"></span>
         </p>
+        <p><span th:text="${profile.getDisplayName()}"></span></p>
     </div>
 
 </main>

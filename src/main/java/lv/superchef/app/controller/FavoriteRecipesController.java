@@ -105,6 +105,7 @@ public class FavoriteRecipesController {
                 .map(Recipe::getId)
                 .collect(Collectors.toSet());
 
+        model.addAttribute("activePage", "recipes/favorites");
         model.addAttribute("recipes", recipes);
         model.addAttribute("favoriteRecipeIds", favoriteRecipeIds);
         model.addAttribute("loggedIn", true);

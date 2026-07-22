@@ -50,6 +50,7 @@ public class RecipeController {
     public String listOfRecipes(@AuthenticationPrincipal AppUserDetails userDetails, @RequestParam(required = false) String query, @RequestParam(required = false) String category, @RequestParam(required = false) String difficulty, @RequestParam(required = false) Integer maxCalories, @RequestParam(required = false) Integer maxPrepTime, @RequestParam(required = false) Integer maxCookTime, Model model) {
         List<Recipe> recipes = recipeService.searchRecipes(query, category, difficulty, maxCalories, maxPrepTime, maxCookTime);
 
+        model.addAttribute("activePage", "recipes");
         model.addAttribute("recipes", recipes);
         addFavoriteState(userDetails, model);
 
