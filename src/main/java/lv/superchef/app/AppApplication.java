@@ -1,5 +1,6 @@
 package lv.superchef.app;
 
+import lv.superchef.app.config.TempData;
 import lv.superchef.app.enums.Role;
 import lv.superchef.app.model.AppUser;
 import lv.superchef.app.model.Profile;
@@ -11,8 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import static lv.superchef.app.config.TempData.RECIPE_DATA;
 
 @SpringBootApplication
 public class AppApplication {
@@ -48,19 +47,7 @@ public class AppApplication {
 
                 createProfileIfMissing(user, profileRepo);
 
-                // Sample recipe seeding disabled due to SQLite lock issues
-                // Manually create recipes via /recipes/create form
-
-                try {
-                    for (var recipe : RECIPE_DATA) {
-                        if(admin!=null && admin.getId()!=null) {
-                            recipe.setAuthorUserId(admin.getId());
-                        }
-                        recipeService.createRecipe(recipe);
-                    }
-                } catch (Exception ex) {
-                    System.err.println("Sample recipe seeding failed: " + ex.getMessage());
-                }
+                TempData.addDemoData(userRepo, profileRepo, passwordEncoder, recipeService);
 
             }
 
@@ -70,10 +57,7 @@ public class AppApplication {
                         .isEmpty()) {
                     Profile profile = new Profile();
                     profile.setDisplayName(appUser.getUsername());
-                    profile.setBio("New SuperChef member");
-                    profile.setProfileImageUrl("/images/chef.jpg");
                     profile.setAppUser(appUser);
-                    profile.setDisplayName(appUser.getUsername());
                     profile.setBio("Hey there! I'm using SuperChef.");
                     profile.setProfileImageUrl("/images/profiles/default-avatar.jpeg");
                     profileRepo.save(profile);

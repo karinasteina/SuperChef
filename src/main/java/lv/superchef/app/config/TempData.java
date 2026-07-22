@@ -3,6 +3,13 @@ package lv.superchef.app.config;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.enums.IngredientUnit;
+import lv.superchef.app.enums.Role;
+import lv.superchef.app.model.AppUser;
+import lv.superchef.app.model.Profile;
+import lv.superchef.app.repository.IAppUserRepo;
+import lv.superchef.app.repository.IProfileRepo;
+import lv.superchef.app.service.IRecipeService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -353,6 +360,90 @@ public final class TempData {
                     ))
                     .build()
     );
+
+    public static void addDemoData(
+            IAppUserRepo userRepo,
+            IProfileRepo profileRepo,
+            PasswordEncoder passwordEncoder,
+            IRecipeService recipeService) {
+        List<AppUser> recipeAuthors = List.of(
+                createAuthorIfMissing(
+                        "chef_alex",
+                        "alex@superchef.lv",
+                        "Alex shares quick, comforting recipes for busy home cooks.",
+                        userRepo,
+                        profileRepo,
+                        passwordEncoder),
+                createAuthorIfMissing(
+                        "chef_bella",
+                        "bella@superchef.lv",
+                        "Bella loves fresh ingredients and colorful seasonal dishes.",
+                        userRepo,
+                        profileRepo,
+                        passwordEncoder),
+                createAuthorIfMissing(
+                        "chef_carlos",
+                        "carlos@superchef.lv",
+                        "Carlos specializes in ambitious recipes for special occasions.",
+                        userRepo,
+                        profileRepo,
+                        passwordEncoder)
+        );
+
+        try {
+            for (int index = 0; index < RECIPE_DATA.size(); index++) {
+                RecipeCreateDTO recipe = RECIPE_DATA.get(index);
+                recipe.setAuthorUserId(authorUserIdForRecipe(index, recipeAuthors));
+                recipeService.createRecipe(recipe);
+            }
+        } catch (Exception ex) {
+            System.err.println("Sample recipe seeding failed: " + ex.getMessage());
+        }
+    }
+
+    private static AppUser createAuthorIfMissing(
+            String username,
+            String email,
+            String bio,
+            IAppUserRepo userRepo,
+            IProfileRepo profileRepo,
+            PasswordEncoder passwordEncoder) {
+        AppUser author = userRepo.findByUsername(username);
+        if (author == null) {
+            author = userRepo.save(new AppUser(
+                    username,
+                    passwordEncoder.encode("superchef12345"),
+                    email,
+                    Role.ROLE_USER));
+        }
+
+        createProfileIfMissing(author, bio, profileRepo);
+        return author;
+    }
+
+    private static void createProfileIfMissing(AppUser appUser, String bio, IProfileRepo profileRepo) {
+        if (profileRepo.findByAppUser_Id(appUser.getId()).isEmpty()) {
+            Profile profile = new Profile();
+            profile.setDisplayName(appUser.getUsername());
+            profile.setBio(bio);
+            profile.setProfileImageUrl("/images/profiles/default-avatar.jpeg");
+            profile.setAppUser(appUser);
+            profileRepo.save(profile);
+        }
+    }
+
+    private static Long authorUserIdForRecipe(int recipeIndex, List<AppUser> authors) {
+        if (recipeIndex < 2) {
+            return authors.get(0).getId();
+        }
+        if (recipeIndex == 2) {
+            return authors.get(1).getId();
+        }
+        if (recipeIndex < RECIPE_DATA.size() - 1) {
+            return authors.get(2).getId();
+        }
+        return null;
+    }
 
     private TempData() {
     }
