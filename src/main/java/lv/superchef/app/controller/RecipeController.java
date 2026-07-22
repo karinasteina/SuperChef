@@ -228,6 +228,14 @@ public class RecipeController {
         return "redirect:/recipes";
     }
 
+    @GetMapping("/by-profiles")
+    public String getControllerGetRecipesByFollowedProfiles(@RequestParam List<Long> profileIds, Model model){
+        List<Recipe> recipes = recipeService.getRecipesByFollowedProfiles(profileIds);
+        model.addAttribute("recipes", recipes);
+        return "recipe-feed-view"; // change to the view that will use this data
+    }
+
+
     private void addFavoriteState(AppUserDetails userDetails, Model model) {
         boolean loggedIn = userDetails != null;
 
@@ -242,6 +250,7 @@ public class RecipeController {
         model.addAttribute("loggedIn", loggedIn);
         model.addAttribute("favoriteRecipeIds", favoriteRecipeIds);
     }
+
 
 
 }
