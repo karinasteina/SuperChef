@@ -44,12 +44,6 @@ public class HomeController {
         return "feed";
     }
 
-    @GetMapping("/profile")
-    public String profile(@AuthenticationPrincipal AppUserDetails userDetails, Model model) {
-        model.addAttribute("activePage", "profile");
-        model.addAttribute("user", userDetails);
-        return "profile";
-    }
 
     private void addFavoriteState(AppUserDetails userDetails, Model model) {
         boolean loggedIn = userDetails != null;
