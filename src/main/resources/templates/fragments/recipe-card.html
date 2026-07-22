@@ -84,9 +84,10 @@
         </th:block>
 
         <div class="recipe-actions"
-             th:if="${recipe.author != null
+             th:if="${#authorization.expression('hasRole(''ADMIN'')')
+                 or (recipe.author != null
                  and recipe.author.appUser != null
-                 and recipe.author.appUser.id == #authentication.principal.userId}">
+                 and recipe.author.appUser.id == #authentication.principal.userId)}">
             <a class="btn btn--pill recipe-action recipe-action--edit"
                th:href="@{/recipes/{id}/edit(id=${recipe.id})}"
                title="Edit recipe">

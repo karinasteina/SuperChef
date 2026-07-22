@@ -8,6 +8,7 @@ import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.dto.RecipeDTO;
 import lv.superchef.app.dto.ReviewFormDTO;
 import lv.superchef.app.enums.IngredientUnit;
+import lv.superchef.app.enums.Role;
 import lv.superchef.app.model.Profile;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.model.Review;
@@ -274,8 +275,15 @@ public class RecipeController {
     }
 
     private void requireRecipeOwner(Recipe recipe, AppUserDetails userDetails) {
-        if (userDetails == null
-                || recipe == null
+        if (userDetails == null) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not own this recipe");
+        }
+
+        if (Role.ROLE_ADMIN.equals(userDetails.getRole())) {
+            return;
+        }
+
+        if (recipe == null
                 || recipe.getAuthor() == null
                 || recipe.getAuthor().getAppUser() == null
                 || !Objects.equals(recipe.getAuthor().getAppUser().getId(), userDetails.getUserId())) {

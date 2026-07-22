@@ -40,9 +40,10 @@
 
         <div class="recipe-card-small__actions"
              sec:authorize="isAuthenticated()"
-             th:if="${recipe.author != null
+             th:if="${#authorization.expression('hasRole(''ADMIN'')')
+                 or (recipe.author != null
                  and recipe.author.appUser != null
-                 and recipe.author.appUser.id == #authentication.principal.userId}">
+                 and recipe.author.appUser.id == #authentication.principal.userId)}">
             <a aria-label="Edit recipe"
                class="icon-button icon-button--edit recipe-card-small__action"
                th:href="@{/recipes/{id}/edit(id=${recipe.id})}"
