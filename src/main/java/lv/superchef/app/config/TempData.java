@@ -9,12 +9,13 @@ import lv.superchef.app.model.Profile;
 import lv.superchef.app.repository.IAppUserRepo;
 import lv.superchef.app.repository.IProfileRepo;
 import lv.superchef.app.service.IRecipeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 public final class TempData {
-
     public static final List<RecipeCreateDTO> RECIPE_DATA = List.of(
             RecipeCreateDTO.builder()
                     .title("Creamy Garlic Pasta")
@@ -360,6 +361,10 @@ public final class TempData {
                     ))
                     .build()
     );
+    private static final Logger logger = LoggerFactory.getLogger(TempData.class);
+
+    private TempData() {
+    }
 
     public static void addDemoData(
             IAppUserRepo userRepo,
@@ -397,7 +402,7 @@ public final class TempData {
                 recipeService.createRecipe(recipe);
             }
         } catch (Exception ex) {
-            System.err.println("Sample recipe seeding failed: " + ex.getMessage());
+            logger.error("Sample recipe seeding failed: {}", ex.getMessage());
         }
     }
 
@@ -443,8 +448,5 @@ public final class TempData {
             return authors.get(2).getId();
         }
         return null;
-    }
-
-    private TempData() {
     }
 }
