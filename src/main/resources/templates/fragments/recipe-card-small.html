@@ -40,7 +40,7 @@
 
         <div class="recipe-card-small__actions" sec:authorize="isAuthenticated()">
             <a aria-label="Edit recipe"
-               class="recipe-card-small__action recipe-card-small__action--edit"
+               class="icon-button icon-button--edit recipe-card-small__action"
                th:href="@{/recipes/{id}/edit(id=${recipe.id})}"
                title="Edit recipe">
                 <span aria-hidden="true">✎</span>
@@ -50,7 +50,7 @@
                   onsubmit="return confirm('Are you sure you want to delete this recipe? This action cannot be undone.');"
                   th:action="@{/recipes/{id}/delete(id=${recipe.id})}">
                 <button aria-label="Delete recipe"
-                        class="recipe-card-small__action recipe-card-small__action--delete"
+                        class="icon-button icon-button--danger recipe-card-small__action"
                         title="Delete recipe"
                         type="submit">
                     <span aria-hidden="true">🗑</span>

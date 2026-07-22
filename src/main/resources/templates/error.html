@@ -14,10 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"/>
 
-    <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{/css/recipe-list.css}"/>
-    <link rel="stylesheet" th:href="@{/css/favorite-button.css}"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
     <link rel="stylesheet" th:href="@{/css/error.css}"/>
 
     <title th:text="|${status} Error - SuperChef|">Error - SuperChef</title>
@@ -33,7 +30,7 @@
              th:src="@{/images/error-chef.webp}"
              width="800"/>
         <h1 class="error-status" id="error-status" th:text="${status}">500</h1>
-        <p class="error-message" th:text="${message}">An unexpected error occurred.</p>
+        <p class="error-page__message" th:text="${message}">An unexpected error occurred.</p>
     </section>
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>

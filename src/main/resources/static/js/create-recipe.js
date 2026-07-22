@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </select>
                 </div>
             </div>
-            <button type="button" class="btn-remove" aria-label="Remove ingredient">✕</button>
+            <button type="button" class="icon-button icon-button--danger btn-remove" aria-label="Remove ingredient">✕</button>
         `;
         attachClearErrorListeners(row.querySelectorAll('input, select'));
         return row;
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         row.innerHTML = `
             <div class="step-header">
                 <span class="step-badge">Step ${index + 1}</span>
-                <button type="button" class="btn-remove" aria-label="Remove step">✕</button>
+                <button type="button" class="icon-button icon-button--danger btn-remove" aria-label="Remove step">✕</button>
             </div>
             <textarea name="steps[${index}]"
                       id="steps${index}"
@@ -481,8 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const existing = triggerEl.parentElement.querySelector('.inline-warning');
         if (existing) return;
         const warn = document.createElement('span');
-        warn.className = 'error-message inline-warning';
-        warn.style.marginLeft = '8px';
+        warn.className = 'field-error inline-warning';
         warn.textContent = message;
         triggerEl.insertAdjacentElement('afterend', warn);
         setTimeout(() => warn.remove(), 3000);
@@ -495,4 +494,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
-
