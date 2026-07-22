@@ -2,10 +2,7 @@ package lv.superchef.app.repo;
 
 import lv.superchef.app.enums.IngredientUnit;
 import lv.superchef.app.enums.Role;
-import lv.superchef.app.model.AppUser;
-import lv.superchef.app.model.Recipe;
-import lv.superchef.app.model.RecipeIngredient;
-import lv.superchef.app.model.RecipeStep;
+import lv.superchef.app.model.*;
 import lv.superchef.app.repository.IRecipeRepo;
 import lv.superchef.app.repository.RecipeSpecifications;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +45,14 @@ class RecipeSpecificationsTest
         );
         entityManager.persist(testUser);
 
+        Profile testProfile = new Profile(
+                testUser.getUsername(),
+                "Test racoon",
+                "/images/racoon.jpg",
+                testUser
+        );
+        entityManager.persist(testProfile);
+
         RecipeIngredient pastaIngredient = new RecipeIngredient();
         pastaIngredient.setIngredientName("Garlic");
         pastaIngredient.setQuantity(2.0);
@@ -66,7 +71,7 @@ class RecipeSpecificationsTest
         quickPasta.setCalories(450);
         quickPasta.setPreparationTime(5);
         quickPasta.setCookingTime(10);
-        quickPasta.setAuthor(testUser);
+        quickPasta.setAuthor(testProfile);
         quickPasta.getIngredients().add(pastaIngredient);
         quickPasta.getSteps().add(pastaStep);
 
@@ -88,7 +93,7 @@ class RecipeSpecificationsTest
         slowSteak.setCalories(850);
         slowSteak.setPreparationTime(15);
         slowSteak.setCookingTime(30);
-        slowSteak.setAuthor(testUser);
+        slowSteak.setAuthor(testProfile);
         slowSteak.getIngredients().add(steakIngredient);
         slowSteak.getSteps().add(steakStep);
 
