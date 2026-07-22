@@ -1,9 +1,11 @@
 package lv.superchef.app.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
+import lv.superchef.app.dto.RecipeDTO;
 import lv.superchef.app.dto.ReviewFormDTO;
 import lv.superchef.app.enums.IngredientUnit;
 import lv.superchef.app.model.Profile;
@@ -12,6 +14,7 @@ import lv.superchef.app.model.Review;
 import lv.superchef.app.security.AppUserDetails;
 import lv.superchef.app.service.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Arrays.stream;
 
 @Controller
 @RequestMapping("/recipes")
@@ -192,7 +197,7 @@ public class RecipeController {
         model.addAttribute("createRecipeDto", editDto);
         model.addAttribute("ingredientUnits", IngredientUnit.values());
         model.addAttribute("isEditMode", true);
-        model.addAttribute("authorName", recipe.getAuthor() != null ? recipe.getAuthor().getUsername() : "Unknown");
+        model.addAttribute("authorName", recipe.getAuthor() != null ? recipe.getAuthor().getDisplayName() : "Unknown");
 
         return "recipe/edit";
     }
@@ -229,6 +234,26 @@ public class RecipeController {
         return "redirect:/recipes";
     }
 
+    // needs tests
+    @GetMapping("/by-profiles")
+    public String getControllerGetRecipesByFollowedProfiles(Authentication authentication, Model model){
+        if(authentication == null || !authentication.isAuthenticated()){
+            return "redirect:/login";
+        }
+        AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
+
+        Profile currentProfile = profileService.getProfileByUserId(userDetails.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
+
+        List<RecipeDTO> recipes = recipeService.getRecipesByFollowedProfiles(currentProfile.getId())
+                .stream()
+                .map(RecipeDTO::mapToDto)
+                .toList();
+        model.addAttribute("recipes", recipes);
+        return "recipe-feed-view"; // change to the view that will use this data
+    }
+
+
     private void addFavoriteState(AppUserDetails userDetails, Model model) {
         boolean loggedIn = userDetails != null;
 
@@ -243,4 +268,7 @@ public class RecipeController {
         model.addAttribute("loggedIn", loggedIn);
         model.addAttribute("favoriteRecipeIds", favoriteRecipeIds);
     }
+
+
+
 }

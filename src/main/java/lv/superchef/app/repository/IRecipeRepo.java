@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface IRecipeRepo extends JpaRepository<Recipe, Long>, JpaSpecificationExecutor<Recipe> {
     List<Recipe> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String title, String description);
+
+    List<Recipe> findByAuthor_IdIn(List<Long> profileIds);
 }

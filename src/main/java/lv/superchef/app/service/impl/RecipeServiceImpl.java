@@ -5,15 +5,12 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
-import lv.superchef.app.model.AppUser;
-import lv.superchef.app.model.Recipe;
-import lv.superchef.app.model.RecipeIngredient;
-import lv.superchef.app.model.RecipeStep;
-import lv.superchef.app.repository.IAppUserRepo;
-import lv.superchef.app.repository.IRecipeRepo;
-import lv.superchef.app.repository.RecipeSpecifications;
+import lv.superchef.app.model.*;
+import lv.superchef.app.repository.*;
+
 import lv.superchef.app.service.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,6 +26,12 @@ public class RecipeServiceImpl implements IRecipeService {
     @Autowired
     private IAppUserRepo appUserRepo;
 
+    @Autowired
+    private IProfileRepo profileRepo;
+
+    @Autowired
+    private IFollowRepo followRepo;
+
     @Override
     public Recipe createRecipe(@Valid RecipeCreateDTO dto) {
         Recipe recipe = new Recipe();
@@ -36,7 +39,7 @@ public class RecipeServiceImpl implements IRecipeService {
 
         // Set author if authorId provided in DTO
         if (dto.getAuthorId() != null) {
-            AppUser author = appUserRepo.findById(dto.getAuthorId()).orElse(null);
+            Profile author = profileRepo.findById(dto.getAuthorId()).orElse(null);
             recipe.setAuthor(author);
         }
 
@@ -113,6 +116,24 @@ public class RecipeServiceImpl implements IRecipeService {
                 recipe.getSteps().add(step);
             }
         }
+    }
+
+    // add tests for this
+    @Override
+    public List<Recipe> getRecipesByFollowedProfiles(Long profileId) {
+        if(profileId == null){
+            return List.of();
+        }
+
+        List<Long> followedIds = followRepo.findByFollower_Id(profileId)
+                .stream()
+                .map(follow -> follow.getFollowing().getId()).toList();
+
+        if(followedIds.isEmpty()){
+            return List.of();
+        }
+
+        return recipeRepo.findByAuthor_IdIn(followedIds);
     }
 
 }
