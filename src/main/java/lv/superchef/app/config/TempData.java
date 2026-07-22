@@ -8,6 +8,7 @@ import lv.superchef.app.model.AppUser;
 import lv.superchef.app.model.Profile;
 import lv.superchef.app.repository.IAppUserRepo;
 import lv.superchef.app.repository.IProfileRepo;
+import lv.superchef.app.repository.IRecipeRepo;
 import lv.superchef.app.service.IRecipeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -369,6 +370,7 @@ public final class TempData {
     public static void addDemoData(
             IAppUserRepo userRepo,
             IProfileRepo profileRepo,
+            IRecipeRepo recipeRepo,
             PasswordEncoder passwordEncoder,
             IRecipeService recipeService) {
         List<AppUser> recipeAuthors = List.of(
@@ -401,6 +403,9 @@ public final class TempData {
         try {
             for (int index = 0; index < RECIPE_DATA.size(); index++) {
                 RecipeCreateDTO recipe = RECIPE_DATA.get(index);
+                if (recipeRepo.existsByTitle(recipe.getTitle())) {
+                    continue;
+                }
                 recipe.setAuthorUserId(authorUserIdForRecipe(index, recipeAuthors));
                 recipeService.createRecipe(recipe);
             }

@@ -6,6 +6,7 @@ import lv.superchef.app.model.AppUser;
 import lv.superchef.app.model.Profile;
 import lv.superchef.app.repository.IAppUserRepo;
 import lv.superchef.app.repository.IProfileRepo;
+import lv.superchef.app.repository.IRecipeRepo;
 import lv.superchef.app.service.IRecipeService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,7 +24,12 @@ public class AppApplication {
 
     @Bean
     @org.springframework.context.annotation.Profile("!test")
-    public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder, IRecipeService recipeService, IProfileRepo profileRepo) {
+    public CommandLineRunner testDB(
+            IAppUserRepo userRepo,
+            PasswordEncoder passwordEncoder,
+            IRecipeService recipeService,
+            IProfileRepo profileRepo,
+            IRecipeRepo recipeRepo) {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -47,7 +53,7 @@ public class AppApplication {
 
                 createProfileIfMissing(user, profileRepo);
 
-                TempData.addDemoData(userRepo, profileRepo, passwordEncoder, recipeService);
+                TempData.addDemoData(userRepo, profileRepo, recipeRepo, passwordEncoder, recipeService);
 
             }
 
