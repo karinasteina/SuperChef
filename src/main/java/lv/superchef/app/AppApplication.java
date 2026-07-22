@@ -1,6 +1,5 @@
 package lv.superchef.app;
 
-import jakarta.transaction.Transactional;
 import lv.superchef.app.enums.Role;
 import lv.superchef.app.model.AppUser;
 import lv.superchef.app.model.Profile;
@@ -12,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import static lv.superchef.app.config.TempData.RECIPE_DATA;
 
 @SpringBootApplication
@@ -54,7 +54,7 @@ public class AppApplication {
                 try {
                     for (var recipe : RECIPE_DATA) {
                         if(admin!=null && admin.getId()!=null) {
-                            recipe.setAuthorId(admin.getId());
+                            recipe.setAuthorUserId(admin.getId());
                         }
                         recipeService.createRecipe(recipe);
                     }

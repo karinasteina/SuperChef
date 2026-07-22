@@ -25,12 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import static java.util.Arrays.stream;
+import java.util.*;
 
 @Controller
 @RequestMapping("/recipes")
@@ -146,7 +141,7 @@ public class RecipeController {
         createRecipeDto.setImageUrl(imageUrl);
 
         if (userDetails != null) {
-            createRecipeDto.setAuthorId(userDetails.getUserId());
+            createRecipeDto.setAuthorUserId(userDetails.getUserId());
         }
 
         recipeService.createRecipe(createRecipeDto);
@@ -161,6 +156,8 @@ public class RecipeController {
         if (recipe == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found");
         }
+
+        requireRecipeOwner(recipe, userDetails);
 
         // Convert Recipe to RecipeCreateDTO for form binding
         RecipeCreateDTO editDto = new RecipeCreateDTO();
@@ -205,8 +202,12 @@ public class RecipeController {
     @PostMapping("/{id}/update")
     public String handleUpdateRecipe(
             @PathVariable Long id,
+            @AuthenticationPrincipal AppUserDetails userDetails,
             @Valid @ModelAttribute RecipeCreateDTO createRecipeDto,
             @RequestParam(value = "coverImage", required = false) MultipartFile coverImage, RedirectAttributes redirectAttributes) {
+
+        Recipe existingRecipe = recipeService.getRecipeById(id);
+        requireRecipeOwner(existingRecipe, userDetails);
 
         // Only store new image if one was uploaded
         if (coverImage != null && !coverImage.isEmpty()) {
@@ -214,7 +215,6 @@ public class RecipeController {
             createRecipeDto.setImageUrl(imageUrl);
         } else {
             // Keep existing image
-            Recipe existingRecipe = recipeService.getRecipeById(id);
             createRecipeDto.setImageUrl(existingRecipe.getImageUrl());
         }
 
@@ -226,7 +226,11 @@ public class RecipeController {
     }
 
     @PostMapping("/{id}/delete")
-    public String handleDeleteRecipe(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String handleDeleteRecipe(@PathVariable Long id,
+                                     @AuthenticationPrincipal AppUserDetails userDetails,
+                                     RedirectAttributes redirectAttributes) {
+        Recipe recipe = recipeService.getRecipeById(id);
+        requireRecipeOwner(recipe, userDetails);
         recipeService.deleteRecipe(id);
         redirectAttributes.addFlashAttribute(
                 "message", "Recipe deleted successfully.");
@@ -267,6 +271,16 @@ public class RecipeController {
 
         model.addAttribute("loggedIn", loggedIn);
         model.addAttribute("favoriteRecipeIds", favoriteRecipeIds);
+    }
+
+    private void requireRecipeOwner(Recipe recipe, AppUserDetails userDetails) {
+        if (userDetails == null
+                || recipe == null
+                || recipe.getAuthor() == null
+                || recipe.getAuthor().getAppUser() == null
+                || !Objects.equals(recipe.getAuthor().getAppUser().getId(), userDetails.getUserId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not own this recipe");
+        }
     }
 
 

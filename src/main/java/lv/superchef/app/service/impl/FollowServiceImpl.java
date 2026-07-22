@@ -34,13 +34,13 @@ public class FollowServiceImpl implements IFollowService {
             throw new IllegalStateException("Already following this profile");
         }
 
-        Optional<Profile> follower = profileRepo.findByAppUser_Id(followerId);
+        Optional<Profile> follower = profileRepo.findById(followerId);
 
         if (follower.isEmpty()) {
             throw new IllegalArgumentException("Profile with id " + followerId + " does not exist");
         }
 
-        Optional<Profile> followedProfile = profileRepo.findByAppUser_Id(followingId);
+        Optional<Profile> followedProfile = profileRepo.findById(followingId);
 
         if(followedProfile.isEmpty()){
             throw new IllegalArgumentException("Profile with id " + followingId + " does not exist");

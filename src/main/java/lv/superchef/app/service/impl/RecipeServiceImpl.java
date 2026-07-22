@@ -5,16 +5,16 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
-import lv.superchef.app.model.*;
+import lv.superchef.app.model.Profile;
+import lv.superchef.app.model.Recipe;
+import lv.superchef.app.model.RecipeIngredient;
+import lv.superchef.app.model.RecipeStep;
 import lv.superchef.app.repository.*;
-
 import lv.superchef.app.service.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,9 +37,10 @@ public class RecipeServiceImpl implements IRecipeService {
         Recipe recipe = new Recipe();
         mapDtoToRecipe(dto, recipe);
 
-        // Set author if authorId provided in DTO
-        if (dto.getAuthorId() != null) {
-            Profile author = profileRepo.findById(dto.getAuthorId()).orElse(null);
+        if (dto.getAuthorUserId() != null) {
+            Profile author = profileRepo.findByAppUser_Id(dto.getAuthorUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Profile not found for user: " + dto.getAuthorUserId()));
             recipe.setAuthor(author);
         }
 
