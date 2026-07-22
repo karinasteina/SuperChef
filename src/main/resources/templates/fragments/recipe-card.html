@@ -41,7 +41,10 @@
     <!-- Recipe author -->
     <p class="recipe-author">
         <span>By </span>
-        <span th:text="${recipe.author != null ? recipe.author.displayName : 'SuperChef Team'}">SuperChef Team</span>
+        <a th:href="@{/profile/{id}(id=${recipe.author.id})}"
+           th:if="${recipe.author != null}"
+           th:text="${recipe.author.displayName}">Chef name</a>
+        <span th:unless="${recipe.author != null}">SuperChef Team</span>
     </p>
 
     <!-- Recipe description -->

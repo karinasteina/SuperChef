@@ -11,6 +11,8 @@
         <li><a th:classappend="${activePage == 'recipes' ? 'active' : ''}" th:href="@{/recipes}">Recipes</a></li>
         <li sec:authorize="isAuthenticated()"><a th:classappend="${activePage == 'feed' ? 'active' : ''}"
                                                  th:href="@{/feed}">Feed</a></li>
+        <li sec:authorize="isAuthenticated()"><a th:classappend="${activePage == 'profiles' ? 'active' : ''}"
+                                                 th:href="@{/profiles}">Chefs</a></li>
         <li sec:authorize="isAuthenticated()"><a th:classappend="${activePage == 'createRecipe' ? 'active' : ''}"
                                                  th:href="@{/recipes/create}">Create Recipe</a></li>
         <li sec:authorize="isAnonymous()"><a th:classappend="${activePage == 'login' ? 'active' : ''}"

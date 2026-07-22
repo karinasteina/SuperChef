@@ -4,30 +4,34 @@
 <head>
     <meta charset="UTF-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title th:text="${profile.displayName + ' | SuperChef'}">My Profile | SuperChef</title>
+    <title th:text="${profile.displayName + ' | SuperChef'}">Chef Profile | SuperChef</title>
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/base.css}"/>
-
 </head>
-<body>
 
-<!-- ====== NAVBAR ====== -->
+<body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- ====== MAIN PAGE ====== -->
-<main class="page-shell">
+<main class="page-shell page-shell--narrow">
     <header class="page-header">
-        <h1 class="page-title">My Profile</h1>
-        <p class="page-subtitle">This is how other cooks see you on SuperChef.</p>
+        <h1 class="page-title" th:text="${profile.displayName}">Chef Profile</h1>
     </header>
 
-    <div th:replace="~{fragments/profile-card :: profileCard(${profile}, false, false, false, 'profile')}"></div>
+    <div th:replace="~{fragments/profile-card :: profileCard(
+        ${profile},
+        false,
+        ${profile.id != currentProfileId},
+        ${followedProfileIds.contains(profile.id)},
+        'profile'
+    )}"></div>
 
+    <div class="form-actions">
+        <a class="btn btn--secondary" th:href="@{/profiles}">Browse all chefs</a>
+    </div>
 </main>
 
-<!-- ====== FOOTER ====== -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

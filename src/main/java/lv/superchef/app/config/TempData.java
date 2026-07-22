@@ -373,23 +373,26 @@ public final class TempData {
             IRecipeService recipeService) {
         List<AppUser> recipeAuthors = List.of(
                 createAuthorIfMissing(
-                        "chef_alex",
-                        "alex@superchef.lv",
-                        "Alex shares quick, comforting recipes for busy home cooks.",
+                        "Chef_Human",
+                        "tar@superchef.lv",
+                        "Human is definitely a human chef",
+                        "/images/profiles/rat.webp",
                         userRepo,
                         profileRepo,
                         passwordEncoder),
                 createAuthorIfMissing(
-                        "chef_bella",
-                        "bella@superchef.lv",
-                        "Bella loves fresh ingredients and colorful seasonal dishes.",
+                        "Julia",
+                        "julia@superchef.lv",
+                        "French cuisine for all",
+                        "/images/profiles/julia.jpg",
                         userRepo,
                         profileRepo,
                         passwordEncoder),
                 createAuthorIfMissing(
-                        "chef_carlos",
-                        "carlos@superchef.lv",
-                        "Carlos specializes in ambitious recipes for special occasions.",
+                        "Gordon",
+                        "gordon@superchef.lv",
+                        "Gordon yells a lot",
+                        "/images/profiles/ramsay.jpg",
                         userRepo,
                         profileRepo,
                         passwordEncoder)
@@ -410,6 +413,7 @@ public final class TempData {
             String username,
             String email,
             String bio,
+            String profileImageUrl,
             IAppUserRepo userRepo,
             IProfileRepo profileRepo,
             PasswordEncoder passwordEncoder) {
@@ -422,16 +426,16 @@ public final class TempData {
                     Role.ROLE_USER));
         }
 
-        createProfileIfMissing(author, bio, profileRepo);
+        createProfileIfMissing(author, bio, profileImageUrl, profileRepo);
         return author;
     }
 
-    private static void createProfileIfMissing(AppUser appUser, String bio, IProfileRepo profileRepo) {
+    private static void createProfileIfMissing(AppUser appUser, String bio, String profileImageUrl, IProfileRepo profileRepo) {
         if (profileRepo.findByAppUser_Id(appUser.getId()).isEmpty()) {
             Profile profile = new Profile();
             profile.setDisplayName(appUser.getUsername());
             profile.setBio(bio);
-            profile.setProfileImageUrl("/images/profiles/default-avatar.jpeg");
+            profile.setProfileImageUrl(profileImageUrl);
             profile.setAppUser(appUser);
             profileRepo.save(profile);
         }

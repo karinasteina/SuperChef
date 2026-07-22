@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Chefs | SuperChef</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/recipes.css}"/>
+</head>
+
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="page-shell">
+    <header class="page-header">
+        <h1 class="page-title">Meet Our Chefs</h1>
+        <p class="page-subtitle">Discover the cooks sharing ideas, techniques, and recipes.</p>
+    </header>
+
+    <section>
+        <div class="form-container" th:if="${#lists.isEmpty(profiles)}">
+            <h2>No chefs yet</h2>
+            <p class="page-subtitle">New creator profiles will appear here.</p>
+        </div>
+
+        <ol class="recipe-list" th:unless="${#lists.isEmpty(profiles)}">
+            <li th:each="profile : ${profiles}">
+                <div th:replace="~{fragments/profile-card :: profileCard(
+                    ${profile},
+                    true,
+                    ${profile.id != currentProfileId},
+                    ${followedProfileIds.contains(profile.id)},
+                    'profiles'
+                )}"></div>
+            </li>
+        </ol>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

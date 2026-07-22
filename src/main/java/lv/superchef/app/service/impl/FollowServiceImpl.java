@@ -31,7 +31,7 @@ public class FollowServiceImpl implements IFollowService {
         }
 
         if(followRepo.existsByFollowerIdAndFollowingId(followerId, followingId)){
-            throw new IllegalStateException("Already following this profile");
+            return;
         }
 
         Optional<Profile> follower = profileRepo.findById(followerId);
@@ -63,7 +63,7 @@ public class FollowServiceImpl implements IFollowService {
         }
 
         if(!followRepo.existsByFollowerIdAndFollowingId(followerId, followingId)){
-            throw new IllegalStateException("Cannot unfollow a profile that was not followed");
+            return;
         }
 
         followRepo.deleteByFollowerIdAndFollowingId(followerId, followingId);
