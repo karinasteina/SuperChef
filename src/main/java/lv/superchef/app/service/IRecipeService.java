@@ -23,4 +23,6 @@ public interface IRecipeService {
 
     void deleteRecipe(Long id);
 
+    List<Recipe> getRecipesByFollowedProfiles(List<Long> profileIds);
+
 }

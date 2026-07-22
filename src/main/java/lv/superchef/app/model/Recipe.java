@@ -74,6 +74,6 @@ public class Recipe {
     // lazy loading where we can
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "author_id")
-    private AppUser author;
+    @JoinColumn(name = "profile_id")
+    private Profile author;
 }

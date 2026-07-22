@@ -191,7 +191,7 @@ public class RecipeController {
         model.addAttribute("createRecipeDto", editDto);
         model.addAttribute("ingredientUnits", IngredientUnit.values());
         model.addAttribute("isEditMode", true);
-        model.addAttribute("authorName", recipe.getAuthor() != null ? recipe.getAuthor().getUsername() : "Unknown");
+        model.addAttribute("authorName", recipe.getAuthor() != null ? recipe.getAuthor().getDisplayName() : "Unknown");
 
         return "recipe/edit";
     }
@@ -242,4 +242,6 @@ public class RecipeController {
         model.addAttribute("loggedIn", loggedIn);
         model.addAttribute("favoriteRecipeIds", favoriteRecipeIds);
     }
+
+
 }

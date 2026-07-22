@@ -5,11 +5,9 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
-import lv.superchef.app.model.AppUser;
-import lv.superchef.app.model.Recipe;
-import lv.superchef.app.model.RecipeIngredient;
-import lv.superchef.app.model.RecipeStep;
+import lv.superchef.app.model.*;
 import lv.superchef.app.repository.IAppUserRepo;
+import lv.superchef.app.repository.IProfileRepo;
 import lv.superchef.app.repository.IRecipeRepo;
 import lv.superchef.app.repository.RecipeSpecifications;
 import lv.superchef.app.service.IRecipeService;
@@ -29,6 +27,9 @@ public class RecipeServiceImpl implements IRecipeService {
     @Autowired
     private IAppUserRepo appUserRepo;
 
+    @Autowired
+    private IProfileRepo profileRepo;
+
     @Override
     public Recipe createRecipe(@Valid RecipeCreateDTO dto) {
         Recipe recipe = new Recipe();
@@ -36,7 +37,7 @@ public class RecipeServiceImpl implements IRecipeService {
 
         // Set author if authorId provided in DTO
         if (dto.getAuthorId() != null) {
-            AppUser author = appUserRepo.findById(dto.getAuthorId()).orElse(null);
+            Profile author = profileRepo.findById(dto.getAuthorId()).orElse(null);
             recipe.setAuthor(author);
         }
 
@@ -113,6 +114,17 @@ public class RecipeServiceImpl implements IRecipeService {
                 recipe.getSteps().add(step);
             }
         }
+    }
+
+    // add tests for this
+    @Override
+    public List<Recipe> getRecipesByFollowedProfiles(List<Long> profileIds) {
+        if(profileIds == null || profileIds.isEmpty()){
+            return List.of();
+        }
+
+        return recipeRepo.findByAuthor_IdIn(profileIds);
+
     }
 
 }
