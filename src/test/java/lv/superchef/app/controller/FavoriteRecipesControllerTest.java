@@ -69,7 +69,7 @@ public class FavoriteRecipesControllerTest {
         mockMvc.perform(get("/recipes/favorites")
                         .with(user(userDetails)))
                 .andExpect(status().isOk())
-                .andExpect(view().name("favorites-list"))
+                .andExpect(view().name("favorite-list"))
                 .andExpect(model().attribute("recipes", List.of(recipe)))
                 .andExpect(model().attribute("favoriteRecipeIds", Set.of(67L)))
                 .andExpect(model().attribute("loggedIn", true));
