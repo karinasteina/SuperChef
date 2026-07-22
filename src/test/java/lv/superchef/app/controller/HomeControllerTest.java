@@ -3,6 +3,7 @@ package lv.superchef.app.controller;
 import lv.superchef.app.config.SecurityConfig;
 import lv.superchef.app.security.AppUserDetails;
 import lv.superchef.app.service.IFavoriteRecipeService;
+import lv.superchef.app.service.IProfileService;
 import lv.superchef.app.service.IRecipeService;
 import lv.superchef.app.service.TextService;
 import org.junit.jupiter.api.DisplayName;
@@ -40,6 +41,9 @@ class HomeControllerTest {
     private IFavoriteRecipeService favoriteRecipeService;
 
     @MockitoBean
+    private IProfileService profileService;
+
+    @MockitoBean
     private AppUserDetails mockUserDetails;
 
     @MockitoBean
@@ -54,6 +58,7 @@ class HomeControllerTest {
         void showHomePage_Anonymous_ShouldReturnHomeViewWithEmptyFavorites() throws Exception {
             when(recipeService.searchRecipes(anyString(), anyString(), anyString(), any(), any(), any(), anyInt()))
                     .thenReturn(List.of());
+            when(profileService.getAllProfiles()).thenReturn(List.of());
 
             mockMvc.perform(get("/"))
                     .andExpect(status().isOk())
@@ -61,9 +66,10 @@ class HomeControllerTest {
                     .andExpect(model().attribute("activePage", "home"))
                     .andExpect(model().attribute("loggedIn", false))
                     .andExpect(model().attribute("favoriteRecipeIds", Set.of()))
-                    .andExpect(model().attributeExists("dinnerRecipes", "tenMinuteRecipes", "hardRecipes"));
+                    .andExpect(model().attributeExists("dinnerRecipes", "tenMinuteRecipes", "hardRecipes", "chefs"));
 
             verify(favoriteRecipeService, never()).getFavoriteRecipeIdsByUserId(anyLong());
+            verify(profileService).getAllProfiles();
         }
 
     }
