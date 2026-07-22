@@ -27,21 +27,8 @@
             rel="stylesheet"
     />
 
-    <link
-            rel="stylesheet"
-            th:href="@{/css/create-recipe.css}"
-    />
-
-    <link
-            rel="stylesheet"
-            th:href="@{/css/main.css}"
-    />
-
-    <link
-            rel="stylesheet"
-            th:href="@{/css/recipe-list.css}"
-    />
-    <link rel="stylesheet" th:href="@{/css/favorite-button.css}"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/recipes.css}"/>
 </head>
 
 <body>
@@ -50,7 +37,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- ====== MAIN PAGE ====== -->
-<main class="recipe-list-page">
+<main class="page-shell">
 
     <header class="page-header">
         <h1 class="page-title">Feed</h1>
@@ -61,11 +48,15 @@
             class="form-container"
             th:if="${#lists.isEmpty(recipes)}"
     >
-        <h2>No recipes available</h2>
+        <h2>Your feed is empty</h2>
 
         <p class="page-subtitle">
-            There are currently no recipes in the feed.
+            Follow chefs to see their recipes here.
         </p>
+
+        <div class="form-actions">
+            <a class="btn btn--primary" th:href="@{/profiles}">Browse chefs</a>
+        </div>
     </div>
 
     <!-- Recipe list -->

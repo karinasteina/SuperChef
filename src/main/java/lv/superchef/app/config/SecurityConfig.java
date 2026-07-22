@@ -45,10 +45,17 @@ public class SecurityConfig {
 
                         .requestMatchers("/", "/register", "/error", "/css/**", "/js/**", "/images/**")
                         .permitAll()
-                        .requestMatchers("/.well-known/**").permitAll()
+
+                        .requestMatchers("/.well-known/**")
+                        .permitAll()
+
+                        .requestMatchers("/login")
+                        .permitAll()
 
                         .requestMatchers("/h2-console/**")
                         .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/feed").authenticated()
 
                         .requestMatchers(HttpMethod.GET, "/recipes/*/edit").authenticated()
                         .requestMatchers(HttpMethod.GET, "/recipes/create", "/recipes/favorites", "/recipes/favorites/**")
@@ -59,7 +66,10 @@ public class SecurityConfig {
                         .authenticated()
 
 
-                        .requestMatchers(HttpMethod.GET, "/recipes/**")
+                        .requestMatchers(HttpMethod.GET, "/recipes", "/recipes/**")
+                        .permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/profiles", "/profile/*")
                         .permitAll()
 
                         .anyRequest()

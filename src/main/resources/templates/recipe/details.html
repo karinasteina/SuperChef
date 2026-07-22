@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 
-<!--/*@thymesVar id="recipe" type="lv.superchef.app.model.Recipe"*/-->
-<!--/*@thymesVar id="loggedIn" type="java.lang.Boolean"*/-->
-<!--/*@thymesVar id="favoriteRecipeIds" type="java.util.Set<java.lang.Long>"*/-->
-
 <head>
     <meta charset="UTF-8"/>
 
@@ -44,22 +40,8 @@
             rel="stylesheet"
     />
 
-    <link
-            rel="stylesheet"
-            th:href="@{/css/create-recipe.css}"
-    />
-
-    <link
-            rel="stylesheet"
-            th:href="@{/css/main.css}"
-    />
-
-    <link
-            rel="stylesheet"
-            th:href="@{/css/recipe-list.css}"
-    />
-    <link rel="stylesheet" th:href="@{/css/favorite-button.css}"/>
-    <link rel="stylesheet" th:href="@{/css/reviews.css}"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/recipes.css}"/>
 </head>
 
 <body>
@@ -68,7 +50,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- ====== MAIN PAGE ====== -->
-<main class="recipe-list-page">
+<main class="page-shell">
 
     <header class="page-header">
         <h1
@@ -221,7 +203,7 @@
             </div>
 
             <button
-                    class="review-submit-button"
+                    class="btn btn--primary review-submit-button"
                     th:text="${editingReview ? 'Update review' : 'Submit review'}"
                     type="submit"
             >

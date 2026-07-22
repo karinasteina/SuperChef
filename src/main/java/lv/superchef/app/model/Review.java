@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reviews", uniqueConstraints = {@UniqueConstraint(name = "uk_review_profile_recipe", columnNames = {"profile_id", "recipe_id"})})
+@Table(name = "review", uniqueConstraints = {@UniqueConstraint(name = "uk_review_profile_recipe", columnNames = {"profile_id", "recipe_id"})})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,30 +24,30 @@ public class Review {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "profile_id", nullable = false)
+    @JoinColumn(name = "profile_id")
     private Profile profile;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "recipe_id", nullable = false)
+    @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
     @NotBlank(message = "The comment cannot be blank")
     @Size(max = 2000, message = "Review length cannot exceed 2000 symbols")
-    @Column(nullable = false, length = 2000)
+    @Column(length = 2000)
     private String comment;
 
     @NotNull
     @Min(value = 1, message = "Review rating must be at least 1")
     @Max(value = 5, message = "Review rating cannot be greater than 5")
-    @Column(nullable = false)
-    private Integer rating;
+    @Column(name = "rating")
+    private int rating;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt; // ?
 
     public Review(Profile profile, Recipe recipe, String comment, Integer rating) {
         this.profile = profile;

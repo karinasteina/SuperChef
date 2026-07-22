@@ -7,8 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/recipes.css}"/>
 </head>
 <body>
 
@@ -16,7 +16,7 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- ====== MAIN PAGE ====== -->
-<main class="create-recipe-page">
+<main class="page-shell page-shell--narrow">
     <div class="form-container">
 
         <div class="page-header">
@@ -72,17 +72,23 @@
                               rows="4"></textarea>
                     <span class="char-counter" id="descCounter">0 / 1000</span>
                 </div>
+
+                <div class="form-group">
+                    <label for="authorName">Chef</label>
+                    <input id="authorName" type="text" readonly th:value="${authorName}"/>
+                </div>
             </section>
 
             <!-- ── SECTION 2: Cover Image ─────────────────────────────── -->
             <section class="form-section">
-                <h2 class="section-title">Cover Image <span class="required">*</span></h2>
+                <h2 class="section-title">Cover Image</h2>
 
                 <!-- Show current image -->
-                <div th:if="*{imageUrl != null}" style="margin-bottom: 1rem;">
-                    <p style="font-size: 0.9rem; color: #6B7280; margin-bottom: 0.5rem;">Current image:</p>
-                    <img th:src="*{imageUrl}" alt="Current recipe image"
-                         style="max-width: 200px; border-radius: 8px; border: 2px solid #E5E7EB;"/>
+                <div class="current-image" th:if="*{imageUrl != null}">
+                    <p class="current-image-label">Current image:</p>
+                    <img alt="Current recipe image"
+                         class="current-image-preview"
+                         th:src="*{imageUrl}"/>
                 </div>
 
                 <div class="image-upload-zone" id="imageUploadZone">
@@ -98,7 +104,9 @@
                            accept="image/*"
                            class="file-input"/>
                 </div>
-                <button type="button" class="btn-change-image hidden" id="changeImageBtn">Change Image</button>
+                <button class="btn btn--secondary btn--small btn-change-image hidden" id="changeImageBtn" type="button">
+                    Change Image
+                </button>
             </section>
 
             <!-- ── SECTION 3: Ingredients ─────────────────────────────── -->
@@ -132,11 +140,13 @@
                                 </select>
                             </div>
                         </div>
-                        <button type="button" class="btn-remove" aria-label="Remove ingredient">✕</button>
+                        <button aria-label="Remove ingredient" class="icon-button icon-button--danger btn-remove"
+                                type="button">✕
+                        </button>
                     </div>
                 </div>
 
-                <button type="button" id="addIngredient" class="btn-add">
+                <button class="btn btn--outline-primary btn-add" id="addIngredient" type="button">
                     <span>+</span> Add Ingredient
                 </button>
             </section>
@@ -150,7 +160,9 @@
                     <div class="step-row" th:each="step, i : *{steps}">
                         <div class="step-header">
                             <span class="step-badge" th:text="'Step ' + (${i.index} + 1)">Step 1</span>
-                            <button type="button" class="btn-remove" aria-label="Remove step">✕</button>
+                            <button aria-label="Remove step" class="icon-button icon-button--danger btn-remove"
+                                    type="button">✕
+                            </button>
                         </div>
                         <textarea th:field="*{steps[__${i.index}__]}"
                                   placeholder="Describe this step in detail…"
@@ -160,19 +172,19 @@
                     </div>
                 </div>
 
-                <button type="button" id="addStep" class="btn-add">
+                <button class="btn btn--outline-primary btn-add" id="addStep" type="button">
                     <span>+</span> Add Step
                 </button>
             </section>
 
             <!-- ── SECTION 5: Recipe Details ──────────────────────────── -->
             <section class="form-section">
-                <h2 class="section-title">Recipe Details</h2>
+                <h2 class="section-title">Recipe Details <span class="required">*</span></h2>
 
                 <div class="details-grid">
 
                     <div class="form-group">
-                        <label for="calories">Calories <span class="required">*</span></label>
+                        <label for="calories">Calories </label>
                         <div class="input-with-unit">
                             <input type="number"
                                    id="calories"
@@ -186,7 +198,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="preparationTime">Prep Time <span class="required">*</span></label>
+                        <label for="preparationTime">Prep Time </label>
                         <div class="input-with-unit">
                             <input type="number"
                                    id="preparationTime"
@@ -199,7 +211,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="cookingTime">Cooking Time <span class="required">*</span></label>
+                        <label for="cookingTime">Cooking Time </label>
                         <div class="input-with-unit">
                             <input type="number"
                                    id="cookingTime"
@@ -212,7 +224,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="difficulty">Difficulty <span class="required">*</span></label>
+                        <label for="difficulty">Difficulty </label>
                         <div class="select-wrapper">
                             <select id="difficulty" th:field="*{difficulty}" required>
                                 <option value="">Select difficulty…</option>
@@ -224,7 +236,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="category">Category <span class="required">*</span></label>
+                        <label for="category">Category </label>
                         <div class="select-wrapper">
                             <select id="category" th:field="*{category}" required>
                                 <option value="">Select category…</option>
@@ -244,8 +256,8 @@
 
             <!-- ── FORM ACTIONS ───────────────────────────────────────── -->
             <div class="form-actions">
-                <a th:href="@{/recipes}" class="btn btn-cancel">Cancel</a>
-                <button type="submit" class="btn btn-submit" id="submitBtn">
+                <a class="btn btn--secondary" th:href="@{/recipes}">Cancel</a>
+                <button class="btn btn--primary btn--wide" id="submitBtn" type="submit">
                     <span class="btn-text">Update Recipe</span>
                     <span class="btn-spinner hidden" id="submitSpinner">⏳ Updating…</span>
                 </button>
@@ -261,4 +273,3 @@
 <script th:src="@{/js/create-recipe.js}"></script>
 </body>
 </html>
-

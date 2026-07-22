@@ -5,17 +5,16 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
+import lv.superchef.app.model.Profile;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.model.RecipeIngredient;
 import lv.superchef.app.model.RecipeStep;
-import lv.superchef.app.repository.IRecipeRepo;
-import lv.superchef.app.repository.RecipeSpecifications;
+import lv.superchef.app.repository.*;
 import lv.superchef.app.service.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,11 +23,27 @@ public class RecipeServiceImpl implements IRecipeService {
     @Autowired
     private IRecipeRepo recipeRepo;
 
+    @Autowired
+    private IAppUserRepo appUserRepo;
+
+    @Autowired
+    private IProfileRepo profileRepo;
+
+    @Autowired
+    private IFollowRepo followRepo;
+
     @Override
-    @Transactional
     public Recipe createRecipe(@Valid RecipeCreateDTO dto) {
         Recipe recipe = new Recipe();
         mapDtoToRecipe(dto, recipe);
+
+        if (dto.getAuthorUserId() != null) {
+            Profile author = profileRepo.findByAppUser_Id(dto.getAuthorUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Profile not found for user: " + dto.getAuthorUserId()));
+            recipe.setAuthor(author);
+        }
+
         return recipeRepo.save(recipe);
     }
 
@@ -60,7 +75,7 @@ public class RecipeServiceImpl implements IRecipeService {
     public Recipe updateRecipe(Long id, @Valid RecipeCreateDTO dto) {
         Recipe recipe = getRecipeById(id);
         mapDtoToRecipe(dto, recipe);
-        recipe.setUpdatedAt(LocalDateTime.now());
+        //recipe.setUpdatedAt(LocalDateTime.now());
         return recipeRepo.save(recipe);
     }
 
@@ -102,6 +117,29 @@ public class RecipeServiceImpl implements IRecipeService {
                 recipe.getSteps().add(step);
             }
         }
+    }
+
+    @Override
+    public List<Recipe> getRecipesByFollowedProfilesForUser(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+
+        Long profileId = profileRepo.findByAppUser_Id(userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Profile not found for user: " + userId))
+                .getId();
+
+        List<Long> followedIds = followRepo.findByFollower_Id(profileId)
+                .stream()
+                .map(follow -> follow.getFollowing().getId())
+                .toList();
+
+        if (followedIds.isEmpty()) {
+            return List.of();
+        }
+
+        return recipeRepo.findByAuthor_IdIn(followedIds);
     }
 
 }

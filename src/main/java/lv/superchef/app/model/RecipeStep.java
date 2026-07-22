@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
-@Table(name = "recipe_steps")
+@Table(name = "recipe_step")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +15,7 @@ public class RecipeStep {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)
+    @Column(name = "recipeStepId")
     private Long id;
 
     @Min(value = 1, message = "Step number must be at least 1")

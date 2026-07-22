@@ -88,11 +88,11 @@
     </div>
 
     <div class="form-actions recipe-filter-actions">
-        <a class="btn btn-cancel"
+        <a class="btn btn--secondary"
            th:href="@{/recipes}"
            th:if="${param.query != null or param.category != null or param.difficulty != null
                        or param.maxCalories != null or param.maxPrepTime != null or param.maxCookTime != null}">Clear
             filters</a>
-        <button class="btn btn-submit" type="submit">Search</button>
+        <button class="btn btn--primary btn--wide" type="submit">Search</button>
     </div>
 </form>

@@ -37,7 +37,6 @@ public class Profile {
     private String bio;
 
     @NotBlank
-    @Pattern(regexp = "^(?:(?:https?|ftp|file)://\\S+|/\\S+)$", message = "Must be a valid URL format")
     @Column(name = "ProfileImageUrl")
     private String profileImageUrl;
 
@@ -46,8 +45,7 @@ public class Profile {
     @JoinColumn(name = "UserId", nullable = false, unique = true)
     private AppUser appUser;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ProfileId")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Recipe> recipes = new ArrayList<>();
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
