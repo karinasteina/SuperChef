@@ -28,6 +28,11 @@ public class ProfileController {
         model.addAttribute("activePage", "profile");
         model.addAttribute("user", userDetails);
         model.addAttribute("profile", profile);
+        model.addAttribute("recipes", profileService.getRecipesByProfileId(profile.getId()));
+        model.addAttribute("followedProfiles", profileService.getFollowedProfiles(profile.getId())
+                .stream()
+                .map(ProfileDTO::mapToDto)
+                .toList());
 
         return "profile";
     }
@@ -44,6 +49,7 @@ public class ProfileController {
 
         model.addAttribute("activePage", "profiles");
         model.addAttribute("profile", profile);
+        model.addAttribute("recipes", profileService.getRecipesByProfileId(id));
         model.addAttribute("currentProfileId", currentProfile == null ? null : currentProfile.getId());
         model.addAttribute("followedProfileIds", followedProfileIds);
         return "profile-detail-view";

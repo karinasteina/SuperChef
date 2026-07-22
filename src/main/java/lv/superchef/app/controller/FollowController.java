@@ -68,9 +68,11 @@ public class FollowController {
             return ResponseEntity.noContent().build();
         }
 
-        String location = "profiles".equals(returnTo)
-                ? "/profiles"
-                : "/profile/" + profileId;
+        String location = switch (returnTo) {
+            case "profiles" -> "/profiles";
+            case "profile" -> "/profile";
+            case null, default -> "/profile/" + profileId;
+        };
 
         return ResponseEntity.status(HttpStatus.SEE_OTHER)
                 .location(URI.create(location))

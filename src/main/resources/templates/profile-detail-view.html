@@ -9,12 +9,14 @@
     <link crossorigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/recipes.css}"/>
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
 </head>
 
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<main class="page-shell page-shell--narrow">
+<main class="page-shell">
     <header class="page-header">
         <h1 class="page-title" th:text="${profile.displayName}">Chef Profile</h1>
     </header>
@@ -26,6 +28,29 @@
         ${followedProfileIds.contains(profile.id)},
         'profile'
     )}"></div>
+
+    <section aria-labelledby="chef-recipes-heading" class="home-recipe-section profile-recipes">
+        <header class="home-section-header">
+            <div>
+                <h2 class="home-section-title" id="chef-recipes-heading"
+                    th:text="|Recipes by ${profile.displayName}|">Chef recipes</h2>
+            </div>
+        </header>
+
+        <div class="form-container" th:if="${#lists.isEmpty(recipes)}">
+            <p th:text="|${profile.displayName} has not shared any recipes yet.|">
+                This chef has not shared any recipes yet.
+            </p>
+        </div>
+
+        <ol class="recipe-list recipe-list--small" th:unless="${#lists.isEmpty(recipes)}">
+            <li th:each="recipe, status : ${recipes}">
+                <div th:replace="~{fragments/recipe-card-small :: recipeCard-small(
+                    ${recipe}, true, ${status.first ? 'eager' : 'lazy'}, false, false
+                )}"></div>
+            </li>
+        </ol>
+    </section>
 
     <div class="form-actions">
         <a class="btn btn--secondary" th:href="@{/profiles}">Browse all chefs</a>
