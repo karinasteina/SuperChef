@@ -7,8 +7,7 @@
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" th:href="@{/css/create-recipe.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
     <link rel="stylesheet" th:href="@{/css/auth.css}">
 </head>
 
@@ -42,7 +41,7 @@
         </nav>
 
         <!-- Registration form -->
-        <div class="form-message error-message" th:if="${error}" th:text="${error}"></div>
+        <div class="form-message form-message--error" th:if="${error}" th:text="${error}"></div>
         <form
                 class="auth-form"
                 method="post"
@@ -154,7 +153,7 @@
                 ></p>
             </div>
 
-            <button class="primary-button" type="submit">
+            <button class="btn btn--primary btn--block auth-submit" type="submit">
                 Sign Up
             </button>
         </form>

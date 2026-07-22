@@ -42,7 +42,7 @@
     <!-- Recipe author -->
     <p class="recipe-author">
         <span>By </span>
-        <span th:text="${recipe.author != null ? recipe.author.username : 'SuperChef Team'}">SuperChef Team</span>
+        <span th:text="${recipe.author != null ? recipe.author.displayName : 'SuperChef Team'}">SuperChef Team</span>
     </p>
 
     <!-- Recipe description -->
@@ -88,7 +88,7 @@
         </th:block>
 
         <div class="recipe-actions">
-            <a class="btn-action btn-edit"
+            <a class="btn btn--pill recipe-action recipe-action--edit"
                th:href="@{/recipes/{id}/edit(id=${recipe.id})}"
                title="Edit recipe">
                 ✏️ Edit
@@ -97,7 +97,7 @@
                   method="post"
                   onsubmit="return confirm('Are you sure you want to delete this recipe? This action cannot be undone.');"
                   th:action="@{/recipes/{id}/delete(id=${recipe.id})}">
-                <button class="btn-action btn-delete"
+                <button class="btn btn--pill recipe-action recipe-action--delete"
                         title="Delete recipe"
                         type="submit">
                     🗑️ Delete
