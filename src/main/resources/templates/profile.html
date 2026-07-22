@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title th:text="${user.username} + ' Profile'"></title>
+    <title th:text="${profile.displayName + ' | SuperChef'}">My Profile | SuperChef</title>
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/recipes.css}"/>
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
 
 </head>
 <body>
@@ -19,16 +21,57 @@
 <!-- ====== MAIN PAGE ====== -->
 <main class="page-shell">
     <header class="page-header">
-        <h1 class="page-title" th:text="${user.username} + ' Profile'"></h1>
+        <h1 class="page-title">My Profile</h1>
+        <p class="page-subtitle">This is how other cooks see you on SuperChef.</p>
     </header>
-    <div th:if="${user != null}">
-        <p>Name: <span th:text="${user.username}"></span></p>
 
-        <p>Role:
-            <span th:text="${#strings.capitalize(#strings.toLowerCase(#strings.substringAfter(user.role.name(), 'ROLE_')))}"></span>
-        </p>
-        <p><span th:text="${profile.getDisplayName()}"></span></p>
-    </div>
+    <div th:replace="~{fragments/profile-card :: profileCard(${profile}, false, false, false, 'profile')}"></div>
+
+    <section aria-labelledby="followed-chefs-heading" class="home-recipe-section profile-recipes">
+        <header class="home-section-header">
+            <div>
+                <h2 class="home-section-title" id="followed-chefs-heading">Chefs I follow</h2>
+                <p class="home-section-description">Chefs whose latest recipes appear in your feed.</p>
+            </div>
+            <a class="section-link" th:href="@{/profiles}">Browse chefs →</a>
+        </header>
+
+        <div class="form-container" th:if="${#lists.isEmpty(followedProfiles)}">
+            <p>You are not following any chefs yet.</p>
+        </div>
+
+        <ol class="recipe-list" th:unless="${#lists.isEmpty(followedProfiles)}">
+            <li th:each="followedProfile : ${followedProfiles}">
+                <div th:replace="~{fragments/profile-card :: profileCard(
+                    ${followedProfile}, true, true, true, 'profile'
+                )}"></div>
+            </li>
+        </ol>
+    </section>
+
+    <section aria-labelledby="my-recipes-heading" class="home-recipe-section profile-recipes">
+        <header class="home-section-header">
+            <div>
+                <h2 class="home-section-title" id="my-recipes-heading">My recipes</h2>
+                <p class="home-section-description">Recipes you have shared with SuperChef.</p>
+            </div>
+        </header>
+
+        <div class="form-container" th:if="${#lists.isEmpty(recipes)}">
+            <p>You have not added any recipes yet.</p>
+            <div class="form-actions">
+                <a class="btn btn--primary" th:href="@{/recipes/create}">Add a recipe</a>
+            </div>
+        </div>
+
+        <ol class="recipe-list recipe-list--small" th:unless="${#lists.isEmpty(recipes)}">
+            <li th:each="recipe, status : ${recipes}">
+                <div th:replace="~{fragments/recipe-card-small :: recipeCard-small(
+                    ${recipe}, true, ${status.first ? 'eager' : 'lazy'}, false, false
+                )}"></div>
+            </li>
+        </ol>
+    </section>
 
 </main>
 

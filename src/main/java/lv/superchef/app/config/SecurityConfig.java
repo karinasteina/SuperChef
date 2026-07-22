@@ -20,7 +20,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**", "/profiles/follow/**", "/profiles/unfollow/**"))
+                        .ignoringRequestMatchers("/api/**"))
 
                 .httpBasic(Customizer.withDefaults())
 
@@ -67,6 +67,9 @@ public class SecurityConfig {
 
 
                         .requestMatchers(HttpMethod.GET, "/recipes", "/recipes/**")
+                        .permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/profiles", "/profile/*")
                         .permitAll()
 
                         .anyRequest()

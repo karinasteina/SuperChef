@@ -31,16 +31,16 @@ public class FollowServiceImpl implements IFollowService {
         }
 
         if(followRepo.existsByFollowerIdAndFollowingId(followerId, followingId)){
-            throw new IllegalStateException("Already following this profile");
+            return;
         }
 
-        Optional<Profile> follower = profileRepo.findByAppUser_Id(followerId);
+        Optional<Profile> follower = profileRepo.findById(followerId);
 
         if (follower.isEmpty()) {
             throw new IllegalArgumentException("Profile with id " + followerId + " does not exist");
         }
 
-        Optional<Profile> followedProfile = profileRepo.findByAppUser_Id(followingId);
+        Optional<Profile> followedProfile = profileRepo.findById(followingId);
 
         if(followedProfile.isEmpty()){
             throw new IllegalArgumentException("Profile with id " + followingId + " does not exist");
@@ -63,7 +63,7 @@ public class FollowServiceImpl implements IFollowService {
         }
 
         if(!followRepo.existsByFollowerIdAndFollowingId(followerId, followingId)){
-            throw new IllegalStateException("Cannot unfollow a profile that was not followed");
+            return;
         }
 
         followRepo.deleteByFollowerIdAndFollowingId(followerId, followingId);

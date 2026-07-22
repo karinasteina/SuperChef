@@ -1,20 +1,18 @@
 package lv.superchef.app.controller;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
-import lv.superchef.app.dto.RecipeDTO;
 import lv.superchef.app.dto.ReviewFormDTO;
 import lv.superchef.app.enums.IngredientUnit;
+import lv.superchef.app.enums.Role;
 import lv.superchef.app.model.Profile;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.model.Review;
 import lv.superchef.app.security.AppUserDetails;
 import lv.superchef.app.service.*;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,12 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import static java.util.Arrays.stream;
+import java.util.*;
 
 @Controller
 @RequestMapping("/recipes")
@@ -76,6 +69,7 @@ public class RecipeController {
         model.addAttribute("currentUrl", currentUrl);
         model.addAttribute("absoluteImageUrl", URI.create(currentUrl).resolve(recipe.getImageUrl()).toString());
         model.addAttribute("reviews", reviewService.getReviewsByRecipeId(id));
+        model.addAttribute("activePage", "recipes");
         model.addAttribute("averageRating", reviewService.getAverageRating(id));
         model.addAttribute("reviewCount", reviewService.getReviewCount(id));
 
@@ -146,7 +140,7 @@ public class RecipeController {
         createRecipeDto.setImageUrl(imageUrl);
 
         if (userDetails != null) {
-            createRecipeDto.setAuthorId(userDetails.getUserId());
+            createRecipeDto.setAuthorUserId(userDetails.getUserId());
         }
 
         recipeService.createRecipe(createRecipeDto);
@@ -161,6 +155,8 @@ public class RecipeController {
         if (recipe == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found");
         }
+
+        requireRecipeOwner(recipe, userDetails);
 
         // Convert Recipe to RecipeCreateDTO for form binding
         RecipeCreateDTO editDto = new RecipeCreateDTO();
@@ -205,8 +201,12 @@ public class RecipeController {
     @PostMapping("/{id}/update")
     public String handleUpdateRecipe(
             @PathVariable Long id,
+            @AuthenticationPrincipal AppUserDetails userDetails,
             @Valid @ModelAttribute RecipeCreateDTO createRecipeDto,
             @RequestParam(value = "coverImage", required = false) MultipartFile coverImage, RedirectAttributes redirectAttributes) {
+
+        Recipe existingRecipe = recipeService.getRecipeById(id);
+        requireRecipeOwner(existingRecipe, userDetails);
 
         // Only store new image if one was uploaded
         if (coverImage != null && !coverImage.isEmpty()) {
@@ -214,7 +214,6 @@ public class RecipeController {
             createRecipeDto.setImageUrl(imageUrl);
         } else {
             // Keep existing image
-            Recipe existingRecipe = recipeService.getRecipeById(id);
             createRecipeDto.setImageUrl(existingRecipe.getImageUrl());
         }
 
@@ -226,33 +225,17 @@ public class RecipeController {
     }
 
     @PostMapping("/{id}/delete")
-    public String handleDeleteRecipe(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String handleDeleteRecipe(@PathVariable Long id,
+                                     @AuthenticationPrincipal AppUserDetails userDetails,
+                                     RedirectAttributes redirectAttributes) {
+        Recipe recipe = recipeService.getRecipeById(id);
+        requireRecipeOwner(recipe, userDetails);
         recipeService.deleteRecipe(id);
         redirectAttributes.addFlashAttribute(
                 "message", "Recipe deleted successfully.");
         redirectAttributes.addFlashAttribute("status", "success");
         return "redirect:/recipes";
     }
-
-    // needs tests
-    @GetMapping("/by-profiles")
-    public String getControllerGetRecipesByFollowedProfiles(Authentication authentication, Model model){
-        if(authentication == null || !authentication.isAuthenticated()){
-            return "redirect:/login";
-        }
-        AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
-
-        Profile currentProfile = profileService.getProfileByUserId(userDetails.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("Profile not found"));
-
-        List<RecipeDTO> recipes = recipeService.getRecipesByFollowedProfiles(currentProfile.getId())
-                .stream()
-                .map(RecipeDTO::mapToDto)
-                .toList();
-        model.addAttribute("recipes", recipes);
-        return "recipe-feed-view"; // change to the view that will use this data
-    }
-
 
     private void addFavoriteState(AppUserDetails userDetails, Model model) {
         boolean loggedIn = userDetails != null;
@@ -267,6 +250,23 @@ public class RecipeController {
 
         model.addAttribute("loggedIn", loggedIn);
         model.addAttribute("favoriteRecipeIds", favoriteRecipeIds);
+    }
+
+    private void requireRecipeOwner(Recipe recipe, AppUserDetails userDetails) {
+        if (userDetails == null) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not own this recipe");
+        }
+
+        if (Role.ROLE_ADMIN.equals(userDetails.getRole())) {
+            return;
+        }
+
+        if (recipe == null
+                || recipe.getAuthor() == null
+                || recipe.getAuthor().getAppUser() == null
+                || !Objects.equals(recipe.getAuthor().getAppUser().getId(), userDetails.getUserId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not own this recipe");
+        }
     }
 
 

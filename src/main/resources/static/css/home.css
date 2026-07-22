@@ -91,6 +91,83 @@
     margin-top: 48px;
 }
 
+.home-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 32px;
+    align-items: start;
+}
+
+.home-recipe-sections {
+    min-width: 0;
+}
+
+.home-chefs {
+    position: sticky;
+    top: 24px;
+    padding: 22px;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+}
+
+.home-chefs__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.home-chefs__list {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.home-chef {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background-color 160ms ease;
+}
+
+.home-chef:hover,
+.home-chef:focus-visible {
+    background: var(--color-primary-light);
+    text-decoration: none;
+}
+
+.home-chef__avatar {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.home-chef__name {
+    overflow-wrap: anywhere;
+    font-size: .9rem;
+    font-weight: 700;
+}
+
+.home-chefs__empty {
+    color: var(--color-text-muted);
+    font-size: .9rem;
+}
+
+.profile-recipes {
+    margin-top: 48px;
+}
+
 .home-section-header {
     display: flex;
     align-items: flex-end;
@@ -264,13 +341,28 @@
     font-size: .72rem;
 }
 
+@media (max-width: 1000px) {
+    .home-content {
+        grid-template-columns: minmax(0, 1fr) 220px;
+        gap: 24px;
+    }
+
+    .recipe-list--small {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 850px) {
     .home-hero {
         grid-template-columns: 1fr;
     }
 
-    .recipe-list--small {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .home-content {
+        grid-template-columns: 1fr;
+    }
+
+    .home-chefs {
+        position: static;
     }
 }
 

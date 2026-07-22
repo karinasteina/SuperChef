@@ -54,6 +54,8 @@
         </aside>
     </section>
 
+    <div class="home-content">
+        <div class="home-recipe-sections">
     <section aria-labelledby="dinner-heading" class="home-recipe-section">
         <header class="home-section-header">
             <div>
@@ -137,6 +139,31 @@
             </li>
         </ol>
     </section>
+        </div>
+
+        <aside aria-labelledby="chefs-heading" class="home-chefs">
+            <header class="home-chefs__header">
+                <h2 class="home-section-title" id="chefs-heading">Our Chefs</h2>
+                <a class="section-link" th:href="@{/profiles}">See all →</a>
+            </header>
+
+            <p class="home-chefs__empty" th:if="${#lists.isEmpty(chefs)}">No chefs have joined yet.</p>
+
+            <ol class="home-chefs__list" th:unless="${#lists.isEmpty(chefs)}">
+                <li th:each="chef : ${chefs}">
+                    <a class="home-chef" th:href="@{/profile/{id}(id=${chef.id})}">
+                        <img class="home-chef__avatar"
+                             height="52"
+                             loading="lazy"
+                             th:alt="|${chef.displayName}'s profile picture|"
+                             th:src="${chef.profileImageUrl}"
+                             width="52"/>
+                        <span class="home-chef__name" th:text="${chef.displayName}">Chef name</span>
+                    </a>
+                </li>
+            </ol>
+        </aside>
+    </div>
 </main>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

@@ -1,18 +1,18 @@
 package lv.superchef.app;
 
-import jakarta.transaction.Transactional;
+import lv.superchef.app.config.TempData;
 import lv.superchef.app.enums.Role;
 import lv.superchef.app.model.AppUser;
 import lv.superchef.app.model.Profile;
 import lv.superchef.app.repository.IAppUserRepo;
 import lv.superchef.app.repository.IProfileRepo;
+import lv.superchef.app.repository.IRecipeRepo;
 import lv.superchef.app.service.IRecipeService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static lv.superchef.app.config.TempData.RECIPE_DATA;
 
 @SpringBootApplication
 public class AppApplication {
@@ -24,7 +24,12 @@ public class AppApplication {
 
     @Bean
     @org.springframework.context.annotation.Profile("!test")
-    public CommandLineRunner testDB(IAppUserRepo userRepo, PasswordEncoder passwordEncoder, IRecipeService recipeService, IProfileRepo profileRepo) {
+    public CommandLineRunner testDB(
+            IAppUserRepo userRepo,
+            PasswordEncoder passwordEncoder,
+            IRecipeService recipeService,
+            IProfileRepo profileRepo,
+            IRecipeRepo recipeRepo) {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -48,19 +53,7 @@ public class AppApplication {
 
                 createProfileIfMissing(user, profileRepo);
 
-                // Sample recipe seeding disabled due to SQLite lock issues
-                // Manually create recipes via /recipes/create form
-
-                try {
-                    for (var recipe : RECIPE_DATA) {
-                        if(admin!=null && admin.getId()!=null) {
-                            recipe.setAuthorId(admin.getId());
-                        }
-                        recipeService.createRecipe(recipe);
-                    }
-                } catch (Exception ex) {
-                    System.err.println("Sample recipe seeding failed: " + ex.getMessage());
-                }
+                TempData.addDemoData(userRepo, profileRepo, recipeRepo, passwordEncoder, recipeService);
 
             }
 
@@ -70,10 +63,7 @@ public class AppApplication {
                         .isEmpty()) {
                     Profile profile = new Profile();
                     profile.setDisplayName(appUser.getUsername());
-                    profile.setBio("New SuperChef member");
-                    profile.setProfileImageUrl("/images/chef.jpg");
                     profile.setAppUser(appUser);
-                    profile.setDisplayName(appUser.getUsername());
                     profile.setBio("Hey there! I'm using SuperChef.");
                     profile.setProfileImageUrl("/images/profiles/default-avatar.jpeg");
                     profileRepo.save(profile);

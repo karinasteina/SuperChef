@@ -48,11 +48,15 @@
             class="form-container"
             th:if="${#lists.isEmpty(recipes)}"
     >
-        <h2>No recipes available</h2>
+        <h2>Your feed is empty</h2>
 
         <p class="page-subtitle">
-            There are currently no recipes in the feed.
+            Follow chefs to see their recipes here.
         </p>
+
+        <div class="form-actions">
+            <a class="btn btn--primary" th:href="@{/profiles}">Browse chefs</a>
+        </div>
     </div>
 
     <!-- Recipe list -->

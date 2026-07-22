@@ -3,11 +3,20 @@ package lv.superchef.app.config;
 import lv.superchef.app.dto.IngredientInputDTO;
 import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.enums.IngredientUnit;
+import lv.superchef.app.enums.Role;
+import lv.superchef.app.model.AppUser;
+import lv.superchef.app.model.Profile;
+import lv.superchef.app.repository.IAppUserRepo;
+import lv.superchef.app.repository.IProfileRepo;
+import lv.superchef.app.repository.IRecipeRepo;
+import lv.superchef.app.service.IRecipeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 public final class TempData {
-
     public static final List<RecipeCreateDTO> RECIPE_DATA = List.of(
             RecipeCreateDTO.builder()
                     .title("Creamy Garlic Pasta")
@@ -353,7 +362,100 @@ public final class TempData {
                     ))
                     .build()
     );
+    private static final Logger logger = LoggerFactory.getLogger(TempData.class);
 
     private TempData() {
+    }
+
+    public static void addDemoData(
+            IAppUserRepo userRepo,
+            IProfileRepo profileRepo,
+            IRecipeRepo recipeRepo,
+            PasswordEncoder passwordEncoder,
+            IRecipeService recipeService) {
+        List<AppUser> recipeAuthors = List.of(
+                createAuthorIfMissing(
+                        "Chef_Human",
+                        "tar@superchef.lv",
+                        "Human is definitely a human chef",
+                        "/images/profiles/rat.webp",
+                        userRepo,
+                        profileRepo,
+                        passwordEncoder),
+                createAuthorIfMissing(
+                        "Julia",
+                        "julia@superchef.lv",
+                        "French cuisine for all",
+                        "/images/profiles/julia.jpg",
+                        userRepo,
+                        profileRepo,
+                        passwordEncoder),
+                createAuthorIfMissing(
+                        "Gordon",
+                        "gordon@superchef.lv",
+                        "Gordon yells a lot",
+                        "/images/profiles/ramsay.jpg",
+                        userRepo,
+                        profileRepo,
+                        passwordEncoder)
+        );
+
+        try {
+            for (int index = 0; index < RECIPE_DATA.size(); index++) {
+                RecipeCreateDTO recipe = RECIPE_DATA.get(index);
+                if (recipeRepo.existsByTitle(recipe.getTitle())) {
+                    continue;
+                }
+                recipe.setAuthorUserId(authorUserIdForRecipe(index, recipeAuthors));
+                recipeService.createRecipe(recipe);
+            }
+        } catch (Exception ex) {
+            logger.error("Sample recipe seeding failed: {}", ex.getMessage());
+        }
+    }
+
+    private static AppUser createAuthorIfMissing(
+            String username,
+            String email,
+            String bio,
+            String profileImageUrl,
+            IAppUserRepo userRepo,
+            IProfileRepo profileRepo,
+            PasswordEncoder passwordEncoder) {
+        AppUser author = userRepo.findByUsername(username);
+        if (author == null) {
+            author = userRepo.save(new AppUser(
+                    username,
+                    passwordEncoder.encode("superchef12345"),
+                    email,
+                    Role.ROLE_USER));
+        }
+
+        createProfileIfMissing(author, bio, profileImageUrl, profileRepo);
+        return author;
+    }
+
+    private static void createProfileIfMissing(AppUser appUser, String bio, String profileImageUrl, IProfileRepo profileRepo) {
+        if (profileRepo.findByAppUser_Id(appUser.getId()).isEmpty()) {
+            Profile profile = new Profile();
+            profile.setDisplayName(appUser.getUsername());
+            profile.setBio(bio);
+            profile.setProfileImageUrl(profileImageUrl);
+            profile.setAppUser(appUser);
+            profileRepo.save(profile);
+        }
+    }
+
+    private static Long authorUserIdForRecipe(int recipeIndex, List<AppUser> authors) {
+        if (recipeIndex < 2) {
+            return authors.get(0).getId();
+        }
+        if (recipeIndex == 2) {
+            return authors.get(1).getId();
+        }
+        if (recipeIndex < RECIPE_DATA.size() - 1) {
+            return authors.get(2).getId();
+        }
+        return null;
     }
 }

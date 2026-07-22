@@ -3,29 +3,31 @@ package lv.superchef.app.controller;
 import lv.superchef.app.config.SecurityConfig;
 import lv.superchef.app.dto.RecipeCreateDTO;
 import lv.superchef.app.enums.IngredientUnit;
+import lv.superchef.app.model.AppUser;
+import lv.superchef.app.model.Profile;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.security.AppUserDetails;
 import lv.superchef.app.service.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -35,6 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Recipe Controller Integration-Style Web Tests")
 class RecipeControllerTest
 {
+    private static final Long USER_ID = 42L;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -62,6 +66,23 @@ class RecipeControllerTest
 
     @MockitoBean
     private AppUserDetails mockUserDetails;
+
+    @BeforeEach
+    void setUpAuthenticatedUser() {
+        when(mockUserDetails.getUserId()).thenReturn(USER_ID);
+    }
+
+    private Recipe ownedRecipe() {
+        AppUser owner = new AppUser();
+        ReflectionTestUtils.setField(owner, "id", USER_ID);
+
+        Profile author = new Profile();
+        author.setAppUser(owner);
+
+        Recipe recipe = new Recipe();
+        recipe.setAuthor(author);
+        return recipe;
+    }
 
 
 
@@ -146,7 +167,7 @@ class RecipeControllerTest
     void showEditRecipePage_ShouldPopulateForm() throws Exception
     {
         Long recipeId = 1L;
-        Recipe recipe = new Recipe();
+        Recipe recipe = ownedRecipe();
         recipe.setTitle("Low Poly Baked Salmon");
         recipe.setIngredients(Collections.emptyList());
         recipe.setSteps(Collections.emptyList());
@@ -166,7 +187,7 @@ class RecipeControllerTest
     void handleUpdateRecipe_WithoutNewImage_ShouldKeepExistingImage() throws Exception
     {
         Long recipeId = 1L;
-        Recipe existingRecipe = new Recipe();
+        Recipe existingRecipe = ownedRecipe();
         ReflectionTestUtils.setField(existingRecipe, "id", recipeId);
         existingRecipe.setImageUrl("/uploads/old-image.jpg");
 
@@ -199,6 +220,7 @@ class RecipeControllerTest
     void handleDeleteRecipe_ShouldExecuteAndRedirect() throws Exception
     {
         Long recipeId = 5L;
+        when(recipeService.getRecipeById(recipeId)).thenReturn(ownedRecipe());
 
         mockMvc.perform(post("/recipes/" + recipeId + "/delete")
                         .with(user(mockUserDetails))

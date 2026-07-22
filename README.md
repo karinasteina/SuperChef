@@ -6,7 +6,8 @@ See it live [https://team5.acnbootcamp.lv/](https://team5.acnbootcamp.lv/)
 
 ## prerequisites
 
-Project uses Java 21 and a maven wrapper so the only thing you need is a Java sdk
+Project uses Java 21 and a maven wrapper so the only thing you need is a Java sdk Database is SQLite, templating with
+Thymeleaf
 
 If you use mise to manage your dev dependencies jou can install Java with
 
@@ -34,6 +35,8 @@ You can access SuperChef at http://localhost:3500/
 ![Home page](docs/main.png)
 
 ## run tests
+
+Tests use H2 in memory database
 
 ```bash
 ./mvnw test

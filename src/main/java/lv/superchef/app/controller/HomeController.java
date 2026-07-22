@@ -1,8 +1,10 @@
 package lv.superchef.app.controller;
 
+import lv.superchef.app.dto.ProfileDTO;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.security.AppUserDetails;
 import lv.superchef.app.service.IFavoriteRecipeService;
+import lv.superchef.app.service.IProfileService;
 import lv.superchef.app.service.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +21,8 @@ public class HomeController {
     private IRecipeService recipeService;
     @Autowired
     private IFavoriteRecipeService favoriteRecipeService;
+    @Autowired
+    private IProfileService profileService;
 
     @GetMapping("/")
     public String showHomePage(Model model, @AuthenticationPrincipal AppUserDetails userDetails) {
@@ -29,6 +33,9 @@ public class HomeController {
                 recipeService.searchRecipes("", "", "", null, 10, null, 3));
         model.addAttribute("hardRecipes",
                 recipeService.searchRecipes("", "", "Hard", null, null, null, 3));
+        model.addAttribute("chefs", profileService.getAllProfiles().stream()
+                .map(ProfileDTO::mapToDto)
+                .toList());
         addFavoriteState(userDetails, model);
         return "home-view";
     }
@@ -36,7 +43,7 @@ public class HomeController {
     @GetMapping("/feed")
     public String feed(@AuthenticationPrincipal AppUserDetails userDetails, Model model) {
         model.addAttribute("activePage", "feed");
-        List<Recipe> recipes = recipeService.searchRecipes("", "", null, null, null, null);
+        List<Recipe> recipes = recipeService.getRecipesByFollowedProfilesForUser(userDetails.getUserId());
 
         model.addAttribute("recipes", recipes);
         addFavoriteState(userDetails, model);
