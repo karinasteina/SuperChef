@@ -54,7 +54,7 @@ public class Recipe {
     private String difficulty;
 
     @NotBlank(message = "Category is required")
-    @Column(nullable = false, comment = "Category is required", name = "")
+    @Column(name = "category", nullable = false)
     private String category;
 
     @NotEmpty(message = "Ingredients list cannot be empty")
