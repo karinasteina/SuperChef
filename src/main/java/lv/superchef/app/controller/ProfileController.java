@@ -37,12 +37,14 @@ public class ProfileController {
                                               @AuthenticationPrincipal AppUserDetails userDetails,
                                               Model model) {
         ProfileDTO profile = ProfileDTO.mapToDto(profileService.getProfileById(id));
-        Profile currentProfile = getCurrentProfile(userDetails);
-        Set<Long> followedProfileIds = profileService.getFollowedProfileIds(currentProfile.getId());
+        Profile currentProfile = userDetails == null ? null : getCurrentProfile(userDetails);
+        Set<Long> followedProfileIds = currentProfile == null
+                ? Set.of()
+                : profileService.getFollowedProfileIds(currentProfile.getId());
 
         model.addAttribute("activePage", "profiles");
         model.addAttribute("profile", profile);
-        model.addAttribute("currentProfileId", currentProfile.getId());
+        model.addAttribute("currentProfileId", currentProfile == null ? null : currentProfile.getId());
         model.addAttribute("followedProfileIds", followedProfileIds);
         return "profile-detail-view";
     }
@@ -53,12 +55,14 @@ public class ProfileController {
         List<ProfileDTO> profiles = profileService.getAllProfiles()
                 .stream().map(ProfileDTO::mapToDto)
                 .toList();
-        Profile currentProfile = getCurrentProfile(userDetails);
+        Profile currentProfile = userDetails == null ? null : getCurrentProfile(userDetails);
 
         model.addAttribute("activePage", "profiles");
         model.addAttribute("profiles", profiles);
-        model.addAttribute("currentProfileId", currentProfile.getId());
-        model.addAttribute("followedProfileIds", profileService.getFollowedProfileIds(currentProfile.getId()));
+        model.addAttribute("currentProfileId", currentProfile == null ? null : currentProfile.getId());
+        model.addAttribute("followedProfileIds", currentProfile == null
+                ? Set.of()
+                : profileService.getFollowedProfileIds(currentProfile.getId()));
         return "all-profiles";
     }
 

@@ -22,7 +22,7 @@
     <div th:replace="~{fragments/profile-card :: profileCard(
         ${profile},
         false,
-        ${profile.id != currentProfileId},
+        ${currentProfileId != null and profile.id != currentProfileId},
         ${followedProfileIds.contains(profile.id)},
         'profile'
     )}"></div>

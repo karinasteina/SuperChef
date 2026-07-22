@@ -69,6 +69,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/recipes", "/recipes/**")
                         .permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/profiles", "/profile/*")
+                        .permitAll()
+
                         .anyRequest()
                         .authenticated())
 
