@@ -36,7 +36,7 @@ public class HomeController {
     @GetMapping("/feed")
     public String feed(@AuthenticationPrincipal AppUserDetails userDetails, Model model) {
         model.addAttribute("activePage", "feed");
-        List<Recipe> recipes = recipeService.searchRecipes("", "", null, null, null, null);
+        List<Recipe> recipes = recipeService.getRecipesByFollowedProfilesForUser(userDetails.getUserId());
 
         model.addAttribute("recipes", recipes);
         addFavoriteState(userDetails, model);

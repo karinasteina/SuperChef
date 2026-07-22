@@ -119,18 +119,23 @@ public class RecipeServiceImpl implements IRecipeService {
         }
     }
 
-    // add tests for this
     @Override
-    public List<Recipe> getRecipesByFollowedProfiles(Long profileId) {
-        if(profileId == null){
-            return List.of();
+    public List<Recipe> getRecipesByFollowedProfilesForUser(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID is required");
         }
+
+        Long profileId = profileRepo.findByAppUser_Id(userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Profile not found for user: " + userId))
+                .getId();
 
         List<Long> followedIds = followRepo.findByFollower_Id(profileId)
                 .stream()
-                .map(follow -> follow.getFollowing().getId()).toList();
+                .map(follow -> follow.getFollowing().getId())
+                .toList();
 
-        if(followedIds.isEmpty()){
+        if (followedIds.isEmpty()) {
             return List.of();
         }
 
