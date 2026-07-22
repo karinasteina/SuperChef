@@ -69,6 +69,7 @@ public class RecipeController {
         model.addAttribute("currentUrl", currentUrl);
         model.addAttribute("absoluteImageUrl", URI.create(currentUrl).resolve(recipe.getImageUrl()).toString());
         model.addAttribute("reviews", reviewService.getReviewsByRecipeId(id));
+        model.addAttribute("activePage", "recipes");
         model.addAttribute("averageRating", reviewService.getAverageRating(id));
         model.addAttribute("reviewCount", reviewService.getReviewCount(id));
 
