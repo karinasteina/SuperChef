@@ -19,9 +19,9 @@ CREATE TABLE favorite_recipe (
                                      UNIQUE (profile_id, recipe_id)
 );
 
-DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS review;
 
-CREATE TABLE reviews (
+CREATE TABLE review (
                          review_id INTEGER PRIMARY KEY AUTOINCREMENT,
                          profile_id INTEGER NOT NULL,
                          recipe_id INTEGER NOT NULL,
