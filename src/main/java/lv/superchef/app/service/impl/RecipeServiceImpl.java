@@ -9,9 +9,11 @@ import lv.superchef.app.model.Profile;
 import lv.superchef.app.model.Recipe;
 import lv.superchef.app.model.RecipeIngredient;
 import lv.superchef.app.model.RecipeStep;
-import lv.superchef.app.repository.*;
+import lv.superchef.app.repository.IFollowRepo;
+import lv.superchef.app.repository.IProfileRepo;
+import lv.superchef.app.repository.IRecipeRepo;
+import lv.superchef.app.repository.RecipeSpecifications;
 import lv.superchef.app.service.IRecipeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -20,17 +22,16 @@ import java.util.List;
 @Service
 @Validated
 public class RecipeServiceImpl implements IRecipeService {
-    @Autowired
-    private IRecipeRepo recipeRepo;
+    private final IRecipeRepo recipeRepo;
+    private final IProfileRepo profileRepo;
+    private final IFollowRepo followRepo;
 
-    @Autowired
-    private IAppUserRepo appUserRepo;
 
-    @Autowired
-    private IProfileRepo profileRepo;
-
-    @Autowired
-    private IFollowRepo followRepo;
+    public RecipeServiceImpl(IRecipeRepo recipeRepo, IProfileRepo profileRepo, IFollowRepo followRepo) {
+        this.recipeRepo = recipeRepo;
+        this.profileRepo = profileRepo;
+        this.followRepo = followRepo;
+    }
 
     @Override
     public Recipe createRecipe(@Valid RecipeCreateDTO dto) {
@@ -38,9 +39,9 @@ public class RecipeServiceImpl implements IRecipeService {
         mapDtoToRecipe(dto, recipe);
 
         if (dto.getAuthorUserId() != null) {
-            Profile author = profileRepo.findByAppUser_Id(dto.getAuthorUserId())
-                    .orElseThrow(() -> new EntityNotFoundException(
-                            "Profile not found for user: " + dto.getAuthorUserId()));
+            Profile author = profileRepo
+                    .findByAppUser_Id(dto.getAuthorUserId())
+                    .orElseThrow(() -> new EntityNotFoundException("Profile not found for user: " + dto.getAuthorUserId()));
             recipe.setAuthor(author);
         }
 
@@ -49,14 +50,14 @@ public class RecipeServiceImpl implements IRecipeService {
 
     @Override
     public List<Recipe> searchRecipes(String keyword, String category, String difficulty, Integer maxCalories, Integer maxPrepTime, Integer maxCookTime, Integer limit) {
-        return recipeRepo.findBy(RecipeSpecifications.recipeByFilter(keyword, category,
-                difficulty, maxCalories, maxPrepTime, maxCookTime), query -> limit != null && limit > 0 ? query.limit(limit).all() : query.all());
+        return recipeRepo.findBy(RecipeSpecifications.recipeByFilter(keyword, category, difficulty, maxCalories, maxPrepTime, maxCookTime), query -> limit != null && limit > 0 ? query
+                                                                                                                                                                                  .limit(limit)
+                                                                                                                                                                                  .all() : query.all());
     }
 
     @Override
     public List<Recipe> searchRecipes(String keyword, String category, String difficulty, Integer maxCalories, Integer maxPrepTime, Integer maxCookTime) {
-        return recipeRepo.findAll(RecipeSpecifications.recipeByFilter(keyword, category,
-                difficulty, maxCalories, maxPrepTime, maxCookTime));
+        return recipeRepo.findAll(RecipeSpecifications.recipeByFilter(keyword, category, difficulty, maxCalories, maxPrepTime, maxCookTime));
     }
 
     @Override
@@ -66,8 +67,9 @@ public class RecipeServiceImpl implements IRecipeService {
 
     @Override
     public Recipe getRecipeById(Long id) {
-        return recipeRepo.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Recipe not found: " + id));
+        return recipeRepo
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Recipe not found: " + id));
     }
 
     @Override
@@ -75,7 +77,7 @@ public class RecipeServiceImpl implements IRecipeService {
     public Recipe updateRecipe(Long id, @Valid RecipeCreateDTO dto) {
         Recipe recipe = getRecipeById(id);
         mapDtoToRecipe(dto, recipe);
-        //recipe.setUpdatedAt(LocalDateTime.now());
+
         return recipeRepo.save(recipe);
     }
 
@@ -96,25 +98,33 @@ public class RecipeServiceImpl implements IRecipeService {
         recipe.setDifficulty(dto.getDifficulty());
         recipe.setCategory(dto.getCategory());
 
-        recipe.getIngredients().clear();
+        recipe
+                .getIngredients()
+                .clear();
         if (dto.getIngredients() != null) {
             for (IngredientInputDTO ingDto : dto.getIngredients()) {
                 RecipeIngredient ingredient = new RecipeIngredient();
                 ingredient.setIngredientName(ingDto.getName());
                 ingredient.setQuantity(ingDto.getQuantity());
                 ingredient.setUnit(ingDto.getUnit());
-                recipe.getIngredients().add(ingredient);
+                recipe
+                        .getIngredients()
+                        .add(ingredient);
             }
         }
 
-        recipe.getSteps().clear();
+        recipe
+                .getSteps()
+                .clear();
         if (dto.getSteps() != null) {
             int currentStepNum = 1;
             for (String stepInstruction : dto.getSteps()) {
                 RecipeStep step = new RecipeStep();
                 step.setStepNumber(currentStepNum++);
                 step.setInstruction(stepInstruction);
-                recipe.getSteps().add(step);
+                recipe
+                        .getSteps()
+                        .add(step);
             }
         }
     }
@@ -125,14 +135,17 @@ public class RecipeServiceImpl implements IRecipeService {
             throw new IllegalArgumentException("User ID is required");
         }
 
-        Long profileId = profileRepo.findByAppUser_Id(userId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Profile not found for user: " + userId))
+        Long profileId = profileRepo
+                .findByAppUser_Id(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found for user: " + userId))
                 .getId();
 
-        List<Long> followedIds = followRepo.findByFollower_Id(profileId)
+        List<Long> followedIds = followRepo
+                .findByFollower_Id(profileId)
                 .stream()
-                .map(follow -> follow.getFollowing().getId())
+                .map(follow -> follow
+                        .getFollowing()
+                        .getId())
                 .toList();
 
         if (followedIds.isEmpty()) {

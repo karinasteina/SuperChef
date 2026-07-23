@@ -19,15 +19,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**"))
+
 
                 .httpBasic(Customizer.withDefaults())
 
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/recipes/favorites", true)
+                        .defaultSuccessUrl("/recipes/favorites", false)
                         .failureUrl("/login?error")
                         .usernameParameter("username")
                         .passwordParameter("password")
@@ -55,9 +54,11 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**")
                         .hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/feed").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/feed")
+                        .authenticated()
 
-                        .requestMatchers(HttpMethod.GET, "/recipes/*/edit").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/recipes/*/edit")
+                        .authenticated()
                         .requestMatchers(HttpMethod.GET, "/recipes/create", "/recipes/favorites", "/recipes/favorites/**")
                         .authenticated()
 

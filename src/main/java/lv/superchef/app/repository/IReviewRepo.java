@@ -23,7 +23,7 @@ public interface IReviewRepo extends JpaRepository<Review, Long> {
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(value = """
-            INSERT INTO reviews (
+            INSERT INTO review (
                 profile_id,
                 recipe_id,
                 comment,
