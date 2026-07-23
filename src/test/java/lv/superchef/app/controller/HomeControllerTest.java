@@ -49,6 +49,7 @@ class HomeControllerTest {
     @MockitoBean
     private TextService textService;
 
+
     @Nested
     @DisplayName("GET / (Home Page)")
     class HomePageTests {

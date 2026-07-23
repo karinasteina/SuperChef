@@ -35,8 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Import({SecurityConfig.class})
 @DisplayName("Recipe Controller Integration-Style Web Tests")
-class RecipeControllerTest
-{
+class RecipeControllerTest {
+
     private static final Long USER_ID = 42L;
 
     @Autowired
@@ -44,7 +44,6 @@ class RecipeControllerTest
 
     @MockitoBean
     private IRecipeService recipeService;
-
 
     @MockitoBean
     private IFavoriteRecipeService favoriteRecipeService;

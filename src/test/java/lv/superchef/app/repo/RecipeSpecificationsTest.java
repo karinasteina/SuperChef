@@ -22,8 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @DisplayName("Recipe Specifications Repository Unit Tests")
 @ActiveProfiles("test")
-class RecipeSpecificationsTest
-{
+class RecipeSpecificationsTest {
 
     @Autowired
     private TestEntityManager entityManager;

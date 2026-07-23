@@ -10,7 +10,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "favorite_recipe", uniqueConstraints = {@UniqueConstraint(name = "uk_favorite_profile_recipe", columnNames = {"profile_id", "recipe_id"})})
 public class FavoriteRecipe {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)

@@ -23,8 +23,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Recipe Service Implementation Unit Tests")
-public class RecipeServiceImplTest
-{
+public class RecipeServiceImplTest {
+
     @Mock
     private IRecipeRepo recipeRepo;
 

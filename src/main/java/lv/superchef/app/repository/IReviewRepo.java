@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IReviewRepo extends JpaRepository<Review, Long> {
-
     @EntityGraph(attributePaths = "profile")
     List<Review> findByRecipe_IdOrderByCreatedAtDesc(Long recipeId);
 

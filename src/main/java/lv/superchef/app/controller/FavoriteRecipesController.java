@@ -25,9 +25,7 @@ import java.util.stream.Collectors;
 public class FavoriteRecipesController {
 
     private final IFavoriteRecipeService favoriteRecipeService;
-
     private final IRecipeService recipeService;
-
     private final IProfileService profileService;
 
     public FavoriteRecipesController(IFavoriteRecipeService favoriteRecipeService, IRecipeService recipeService, IProfileService profileService) {

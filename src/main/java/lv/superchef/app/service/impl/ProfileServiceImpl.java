@@ -18,14 +18,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProfileServiceImpl implements IProfileService {
-    @Autowired
-    private IProfileRepo profileRepo;
 
-    @Autowired
-    private IFollowRepo followRepo;
+    private final IProfileRepo profileRepo;
+    private final IFollowRepo followRepo;
+    private final IRecipeRepo recipeRepo;
 
-    @Autowired
-    private IRecipeRepo recipeRepo;
+    public ProfileServiceImpl(IProfileRepo profileRepo, IFollowRepo followRepo, IRecipeRepo recipeRepo) {
+        this.profileRepo = profileRepo;
+        this.followRepo = followRepo;
+        this.recipeRepo = recipeRepo;
+    }
 
     public Optional<Profile> getProfileByUserId(Long userId) {
         return profileRepo.findByAppUser_Id(userId);

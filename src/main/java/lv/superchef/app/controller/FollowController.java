@@ -20,11 +20,14 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/profiles")
 public class FollowController {
-    @Autowired
-    private IFollowService followService;
 
-    @Autowired
-    private IProfileService profileService;
+    private final IFollowService followService;
+    private final IProfileService profileService;
+
+    public FollowController(IFollowService followService, IProfileService profileService) {
+        this.followService = followService;
+        this.profileService = profileService;
+    }
 
     // userDetails -- user that follows and the id for the profile he wants to follow
     @PostMapping("/follow/{followingProfileId}")

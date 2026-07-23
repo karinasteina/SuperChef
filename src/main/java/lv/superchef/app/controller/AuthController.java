@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AuthController {
 
-    @Autowired
-    private IAppUserService userService;
+    private final IAppUserService userService;
+
+    public AuthController(IAppUserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/login")
     public String getControllerShowLogInPage() {

@@ -15,11 +15,13 @@ import java.util.Optional;
 @Service
 public class FollowServiceImpl implements IFollowService {
 
-    @Autowired
-    private IFollowRepo followRepo;
+    private final IFollowRepo followRepo;
+    private final IProfileRepo profileRepo;
 
-    @Autowired
-    private IProfileRepo profileRepo;
+    public FollowServiceImpl(IFollowRepo followRepo, IProfileRepo profileRepo) {
+        this.followRepo = followRepo;
+        this.profileRepo = profileRepo;
+    }
 
     @Override
     public void follow(Long followerId, Long followingId) {

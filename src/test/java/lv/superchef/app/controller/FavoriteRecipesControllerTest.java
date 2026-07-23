@@ -32,17 +32,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfig.class)
 @DisplayName("Favorite Recipes Controller Tests")
 public class FavoriteRecipesControllerTest {
+
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockitoBean
-    IFavoriteRecipeService favoriteRecipeService;
+    private IFavoriteRecipeService favoriteRecipeService;
 
     @MockitoBean
-    IRecipeService recipeService;
+    private IRecipeService recipeService;
 
     @MockitoBean
-    IProfileService profileService;
+    private IProfileService profileService;
 
     private AppUserDetails authenticatedUser(Long userId) {
         AppUser appUser = mock(AppUser.class);
