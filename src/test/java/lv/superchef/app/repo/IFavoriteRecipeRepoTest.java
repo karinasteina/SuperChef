@@ -19,11 +19,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 
 public class IFavoriteRecipeRepoTest {
-    @Autowired
-    IFavoriteRecipeRepo favoriteRecipeRepo;
 
     @Autowired
-    TestEntityManager entityManager;
+    private IFavoriteRecipeRepo favoriteRecipeRepo;
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Test
     void deleteByProfileIdAndRecipeIdWithExistingIdsDeletesCorrectRow(){

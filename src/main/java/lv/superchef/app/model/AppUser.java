@@ -14,7 +14,6 @@ import lv.superchef.app.enums.Role;
 @Table(name="AppUser")
 @NoArgsConstructor
 public class AppUser {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)

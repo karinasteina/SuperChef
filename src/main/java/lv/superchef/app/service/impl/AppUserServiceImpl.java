@@ -8,20 +8,21 @@ import lv.superchef.app.model.Profile;
 import lv.superchef.app.repository.IAppUserRepo;
 import lv.superchef.app.repository.IProfileRepo;
 import lv.superchef.app.service.IAppUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AppUserServiceImpl implements IAppUserService {
 
-    @Autowired
-    private IAppUserRepo userRepo;
-    @Autowired
-    private IProfileRepo profileRepo;
+    private final IAppUserRepo userRepo;
+    private final IProfileRepo profileRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public AppUserServiceImpl(IAppUserRepo userRepo, IProfileRepo profileRepo, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.profileRepo = profileRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
 
    
     @Override

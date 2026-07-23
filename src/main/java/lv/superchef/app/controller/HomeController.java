@@ -17,12 +17,16 @@ import java.util.Set;
 
 @Controller
 public class HomeController {
-    @Autowired
-    private IRecipeService recipeService;
-    @Autowired
-    private IFavoriteRecipeService favoriteRecipeService;
-    @Autowired
-    private IProfileService profileService;
+
+    private final IRecipeService recipeService;
+    private final IFavoriteRecipeService favoriteRecipeService;
+    private final IProfileService profileService;
+
+    public HomeController(IRecipeService recipeService, IFavoriteRecipeService favoriteRecipeService, IProfileService profileService) {
+        this.recipeService = recipeService;
+        this.favoriteRecipeService = favoriteRecipeService;
+        this.profileService = profileService;
+    }
 
     @GetMapping("/")
     public String showHomePage(Model model, @AuthenticationPrincipal AppUserDetails userDetails) {

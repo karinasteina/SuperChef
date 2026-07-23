@@ -4,21 +4,22 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lv.superchef.app.enums.IngredientUnit;
 
 @Entity
 @Table(name = "recipe_ingredient")
 @NoArgsConstructor
-//@AllArgsConstructor
 @Setter
 @Getter
 public class RecipeIngredient {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)
-    @Column(name="recipeIngredientId")
+    @Column(name = "recipeIngredientId")
     private Long id;
 
     @NotBlank

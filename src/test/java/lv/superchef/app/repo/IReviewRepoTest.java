@@ -17,11 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataJpaTest
 @ActiveProfiles("test")
 public class IReviewRepoTest {
-    @Autowired
-    IReviewRepo reviewRepo;
 
     @Autowired
-    TestEntityManager entityManager;
+    private IReviewRepo reviewRepo;
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Test
     void findAverageRatingByRecipeIdReturnsCorrectAverage(){

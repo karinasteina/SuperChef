@@ -12,7 +12,6 @@ import java.util.List;
 
 @Repository
 public interface IFavoriteRecipeRepo extends JpaRepository<FavoriteRecipe, Long> {
-
     @Modifying
     @Query(value = """
             INSERT INTO favorite_recipe (

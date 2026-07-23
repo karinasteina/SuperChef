@@ -18,6 +18,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("App User Service Unit Tests")
 public class AppUserServiceImplTest {
+
     @Mock
     private IAppUserRepo userRepo;
 
