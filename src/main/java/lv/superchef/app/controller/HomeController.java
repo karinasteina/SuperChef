@@ -6,7 +6,6 @@ import lv.superchef.app.security.AppUserDetails;
 import lv.superchef.app.service.IFavoriteRecipeService;
 import lv.superchef.app.service.IProfileService;
 import lv.superchef.app.service.IRecipeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +16,16 @@ import java.util.Set;
 
 @Controller
 public class HomeController {
-    @Autowired
-    private IRecipeService recipeService;
-    @Autowired
-    private IFavoriteRecipeService favoriteRecipeService;
-    @Autowired
-    private IProfileService profileService;
+
+    private final IRecipeService recipeService;
+    private final IFavoriteRecipeService favoriteRecipeService;
+    private final IProfileService profileService;
+
+    public HomeController(IRecipeService recipeService, IFavoriteRecipeService favoriteRecipeService, IProfileService profileService) {
+        this.recipeService = recipeService;
+        this.favoriteRecipeService = favoriteRecipeService;
+        this.profileService = profileService;
+    }
 
     @GetMapping("/")
     public String showHomePage(Model model, @AuthenticationPrincipal AppUserDetails userDetails) {

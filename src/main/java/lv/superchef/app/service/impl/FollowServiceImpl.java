@@ -5,8 +5,6 @@ import lv.superchef.app.model.Profile;
 import lv.superchef.app.repository.IFollowRepo;
 import lv.superchef.app.repository.IProfileRepo;
 import lv.superchef.app.service.IFollowService;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,22 +13,24 @@ import java.util.Optional;
 @Service
 public class FollowServiceImpl implements IFollowService {
 
-    @Autowired
-    private IFollowRepo followRepo;
+    private final IFollowRepo followRepo;
+    private final IProfileRepo profileRepo;
 
-    @Autowired
-    private IProfileRepo profileRepo;
+    public FollowServiceImpl(IFollowRepo followRepo, IProfileRepo profileRepo) {
+        this.followRepo = followRepo;
+        this.profileRepo = profileRepo;
+    }
 
     @Override
     public void follow(Long followerId, Long followingId) {
-        if(followerId == null || followingId == null){
+        if (followerId == null || followingId == null) {
             throw new IllegalArgumentException("Parameters are null");
         }
-        if(followerId.equals(followingId)){
+        if (followerId.equals(followingId)) {
             throw new IllegalArgumentException("Cannot follow yourself");
         }
 
-        if(followRepo.existsByFollowerIdAndFollowingId(followerId, followingId)){
+        if (followRepo.existsByFollowerIdAndFollowingId(followerId, followingId)) {
             return;
         }
 
@@ -42,7 +42,7 @@ public class FollowServiceImpl implements IFollowService {
 
         Optional<Profile> followedProfile = profileRepo.findById(followingId);
 
-        if(followedProfile.isEmpty()){
+        if (followedProfile.isEmpty()) {
             throw new IllegalArgumentException("Profile with id " + followingId + " does not exist");
         }
 
@@ -54,15 +54,15 @@ public class FollowServiceImpl implements IFollowService {
     @Override
     @Transactional
     public void unfollow(Long followerId, Long followingId) {
-        if(followerId == null || followingId == null){
+        if (followerId == null || followingId == null) {
             throw new IllegalArgumentException("Parameters are null");
         }
 
-        if(followerId.equals(followingId)){
+        if (followerId.equals(followingId)) {
             throw new IllegalArgumentException("Cannot unfollow yourself");
         }
 
-        if(!followRepo.existsByFollowerIdAndFollowingId(followerId, followingId)){
+        if (!followRepo.existsByFollowerIdAndFollowingId(followerId, followingId)) {
             return;
         }
 

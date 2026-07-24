@@ -27,8 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Import(SecurityConfig.class)
 @DisplayName("Auth Controller Unit Tests")
-class AuthControllerTest
-{
+class AuthControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 

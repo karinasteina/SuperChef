@@ -16,7 +16,6 @@ import lv.superchef.app.enums.IngredientUnit;
 @Setter
 @Getter
 public class RecipeIngredient {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)

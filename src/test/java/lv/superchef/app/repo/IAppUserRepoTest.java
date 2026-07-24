@@ -14,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @ActiveProfiles("test")
 public class IAppUserRepoTest {
-    @Autowired
-    IAppUserRepo userRepo;
 
     @Autowired
-    TestEntityManager entityManager;
+    private IAppUserRepo userRepo;
 
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Test
     void givenExistingUsernameDBReturnsTrue(){

@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface IReviewService {
 
-
     @Transactional(readOnly = true)
     double getAverageRating(Long recipeId);
 

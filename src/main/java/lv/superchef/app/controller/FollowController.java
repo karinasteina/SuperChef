@@ -4,7 +4,6 @@ import lv.superchef.app.model.Profile;
 import lv.superchef.app.security.AppUserDetails;
 import lv.superchef.app.service.IFollowService;
 import lv.superchef.app.service.IProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,24 +19,27 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/profiles")
 public class FollowController {
-    @Autowired
-    private IFollowService followService;
 
-    @Autowired
-    private IProfileService profileService;
+    private final IFollowService followService;
+    private final IProfileService profileService;
+
+    public FollowController(IFollowService followService, IProfileService profileService) {
+        this.followService = followService;
+        this.profileService = profileService;
+    }
 
     // userDetails -- user that follows and the id for the profile he wants to follow
     @PostMapping("/follow/{followingProfileId}")
     public ResponseEntity<Void> follow(@AuthenticationPrincipal AppUserDetails userDetails,
                                        @PathVariable Long followingProfileId,
                                        @RequestParam(required = false) String returnTo) {
-        if(userDetails == null){
+        if (userDetails == null) {
             return ResponseEntity.status(401).build();
         }
 
         Optional<Profile> follower = profileService.getProfileByUserId(userDetails.getUserId());
 
-        if(follower.isEmpty()){
+        if (follower.isEmpty()) {
             return ResponseEntity.status(401).build();
         }
 
@@ -49,13 +51,13 @@ public class FollowController {
     public ResponseEntity<Void> unfollow(@AuthenticationPrincipal AppUserDetails userDetails,
                                          @PathVariable Long unfollowProfileId,
                                          @RequestParam(required = false) String returnTo) {
-        if(userDetails == null){
+        if (userDetails == null) {
             return ResponseEntity.status(401).build();
         }
 
         Optional<Profile> unfollower = profileService.getProfileByUserId(userDetails.getUserId());
 
-        if(unfollower.isEmpty()){
+        if (unfollower.isEmpty()) {
             return ResponseEntity.status(401).build();
         }
 

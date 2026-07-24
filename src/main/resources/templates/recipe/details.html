@@ -77,7 +77,7 @@
     </ol>
 
 
-    <section class="reviews-section" sec:authorize="isAuthenticated()">
+    <section class="reviews-section">
 
         <header class="reviews-header">
             <h2>Reviews</h2>
@@ -127,6 +127,7 @@
                 th:action="@{/recipes/{recipeId}/reviews(recipeId=${recipe.id})}"
                 th:if="${loggedIn}"
                 th:object="${reviewForm}"
+                sec:authorize="isAuthenticated()"
         >
             <fieldset class="rating-fieldset">
                 <legend>Your rating</legend>

@@ -8,7 +8,6 @@ import lv.superchef.app.repository.IFollowRepo;
 import lv.superchef.app.repository.IProfileRepo;
 import lv.superchef.app.repository.IRecipeRepo;
 import lv.superchef.app.service.IProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,14 +17,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProfileServiceImpl implements IProfileService {
-    @Autowired
-    private IProfileRepo profileRepo;
 
-    @Autowired
-    private IFollowRepo followRepo;
+    private final IProfileRepo profileRepo;
+    private final IFollowRepo followRepo;
+    private final IRecipeRepo recipeRepo;
 
-    @Autowired
-    private IRecipeRepo recipeRepo;
+    public ProfileServiceImpl(IProfileRepo profileRepo, IFollowRepo followRepo, IRecipeRepo recipeRepo) {
+        this.profileRepo = profileRepo;
+        this.followRepo = followRepo;
+        this.recipeRepo = recipeRepo;
+    }
 
     public Optional<Profile> getProfileByUserId(Long userId) {
         return profileRepo.findByAppUser_Id(userId);
@@ -38,7 +39,7 @@ public class ProfileServiceImpl implements IProfileService {
 
     @Override
     public Profile getProfileById(Long id) {
-        if(id == null || id <= 0){
+        if (id == null || id <= 0) {
             throw new IllegalArgumentException("Incorrect params");
         }
 
