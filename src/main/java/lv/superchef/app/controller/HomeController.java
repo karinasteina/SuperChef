@@ -6,7 +6,6 @@ import lv.superchef.app.security.AppUserDetails;
 import lv.superchef.app.service.IFavoriteRecipeService;
 import lv.superchef.app.service.IProfileService;
 import lv.superchef.app.service.IRecipeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

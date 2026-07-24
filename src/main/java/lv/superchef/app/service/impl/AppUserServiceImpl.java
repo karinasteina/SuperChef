@@ -24,7 +24,7 @@ public class AppUserServiceImpl implements IAppUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-   
+
     @Override
     @Transactional
     public AppUser register(RegisterRequest registerRequest) {
