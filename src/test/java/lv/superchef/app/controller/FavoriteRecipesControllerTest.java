@@ -36,8 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Import(SecurityConfig.class)
 @DisplayName("Favorite Recipes Controller Tests")
-public class FavoriteRecipesControllerTest
-{
+public class FavoriteRecipesControllerTest {
 
     @Autowired
     MockMvc mockMvc;
