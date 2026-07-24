@@ -1,4 +1,4 @@
-package lv.superchef.app.controller;
+package lv.superchef.app.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,11 +24,8 @@ public class GlobalExceptionHandler {
         HttpStatusCode status = resolveStatus(exception);
         String message = resolveMessage(exception, status);
 
-        if (status.is5xxServerError()) {
-            logger.error("Request failed with status {}", status.value(), exception);
-        } else {
-            logger.warn("Request failed with status {}: {}", status.value(), exception.getMessage());
-        }
+
+        logger.error("Request failed with status {} {}", status.value(), exception.getMessage());
 
         response.setStatus(status.value());
         response.setContentType(MediaType.TEXT_HTML_VALUE);

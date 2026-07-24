@@ -1,6 +1,7 @@
 package lv.superchef.app.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import lv.superchef.app.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;

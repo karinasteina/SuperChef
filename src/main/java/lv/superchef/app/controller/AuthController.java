@@ -24,13 +24,13 @@ public class AuthController {
     }
 
     @GetMapping("/register")
-    public String getControllerRegisterUser(Model model) {
+    public String getRegisterUser(Model model) {
         model.addAttribute("registerRequest", new RegisterRequest());
         return "register-form-view";
     }
 
     @PostMapping("/register")
-    public String postControllerRegisterUser(@Valid RegisterRequest registerRequest, BindingResult result, Model model) {
+    public String registerUser(@Valid RegisterRequest registerRequest, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "register-form-view";
         }
