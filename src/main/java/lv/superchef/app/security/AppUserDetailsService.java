@@ -4,7 +4,6 @@ import lv.superchef.app.model.AppUser;
 import lv.superchef.app.repository.IAppUserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,7 +21,7 @@ public class AppUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if(!userRepo.existsByUsername(username)){
+        if (!userRepo.existsByUsername(username)) {
             throw new UsernameNotFoundException("Incorrect credentials");
         }
         AppUser appUser = userRepo.findByUsername(username);

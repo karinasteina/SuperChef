@@ -8,7 +8,6 @@ import lv.superchef.app.repository.IFollowRepo;
 import lv.superchef.app.repository.IProfileRepo;
 import lv.superchef.app.repository.IRecipeRepo;
 import lv.superchef.app.service.IProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,7 +39,7 @@ public class ProfileServiceImpl implements IProfileService {
 
     @Override
     public Profile getProfileById(Long id) {
-        if(id == null || id <= 0){
+        if (id == null || id <= 0) {
             throw new IllegalArgumentException("Incorrect params");
         }
 
